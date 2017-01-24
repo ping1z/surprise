@@ -2,12 +2,14 @@
 
 This repository is a school project for practising database design and web programming.
 
+
 ## Dependence
 [Node.js](https://nodejs.org/en/)with [Express.js](https://expressjs.com/) framework.
 Use [Passport](http://passportjs.org/) for authentication module.
 Use [Mysql](https://www.mysql.com/) as database.
 
 PS: Suggest Use [Visual Studio Code](http://code.visualstudio.com/) as and IDE for this project.
+
 
 ## Useful Documents
 Node.js: 
@@ -29,12 +31,14 @@ https://www.sitepoint.com/simple-inheritance-javascript/
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
 
 
+
 ## Install
 
 ```bash
 $ cd <path to dir>/surprice
 $ npm install 
 ```
+
 
 ## Start Server
 
