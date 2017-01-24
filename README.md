@@ -38,7 +38,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prot
 $ cd <path to dir>/surprice
 $ npm install 
 ```
-
+Use mysql workbench to import file surprise.mwb
 
 ## Start Server
 
