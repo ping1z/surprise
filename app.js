@@ -19,7 +19,7 @@ passport.use(new LocalStrategy(
     });
   }
 ));
-
+///asdfadsfs
 passport.serializeUser(function(user, cb) {
   cb(null, user.userId);
 });
