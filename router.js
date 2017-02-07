@@ -34,4 +34,22 @@ router.get('/profile',auth.ensureLoggedIn(),
     res.send(req.user );
 });
 
+var AddressDao = require("./dao/AddressDao.js");
+var Address = new AddressDao();
+router.get('/listAddress',//auth.ensureLoggedIn(),
+  function(req, res){
+    Address.findByCustomerId(1,function(err,address){
+      res.send(address);
+    });
+    
+});
+
+router.get('/addAddress',//auth.ensureLoggedIn(),
+  function(req, res){    
+});
+
+router.get('/deleteAddress',//auth.ensureLoggedIn(),
+  function(req, res){
+});
+
 module.exports = router;
