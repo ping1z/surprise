@@ -1,16 +1,19 @@
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
-var UserDao = require("./dao/userDao.js");
-var User = new UserDao();
+var CustomerDao = require("./dao/CustomerDao.js");
+var Customer = new CustomerDao();
 
 var Authorize = function(){
-  passport.use(new LocalStrategy(
-    function(userId, password, done) {
-      User.findByUserId(userId,function(err, user){
+  passport.use(new LocalStrategy({
+      usernameField: 'userIdentity',
+      passwordField: 'password',
+    },
+    function(userIdentity, password, done) {
+      Customer.findOneWithPassword(userIdentity,function(err, user){
           if (err) { return done(err); }
           if (!user) {
-              return done(null, false, { message: 'Incorrect username.' });
+              return done(null, false, { message: 'Incorrect userIdentity.' });
           }
           if (user.password!=password) {
               return done(null, false, { message: 'Incorrect password.' });
@@ -21,11 +24,11 @@ var Authorize = function(){
   ));
 
   passport.serializeUser(function(user, cb) {
-    cb(null, user.userId);
+    cb(null, user.id);
   });
 
   passport.deserializeUser(function(id, cb) {
-    User.findByUserId(id, function (err, user) {
+    Customer.findOneById(id, function (err, user) {
       if (err) { return cb(err); }
       cb(null, user);
     });

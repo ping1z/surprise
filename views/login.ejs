@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Surprise</title>
-    </head>
+    <%- include('global/_head', {title:"Login to Surprise!"}); %>
     <body>        
         <form action="/login" method="post">
             <h1>Login to Surprise!</h1>
             <div>
             <label>Username:</label>
-            <input type="text" name="username"/><br/>
+            <input type="text" name="userIdentity"/><br/>
             </div>
             <div>
             <label>Password:</label>

@@ -88,6 +88,22 @@ SQLBuilder.prototype.toSQL = function(){
     }
     return sql;
 }
+BaseDao.prototype.execute  = function(sql, values, callback){
+    if(values){
+        sql = mysql.format(sql, values);
+    }
+    console.log("sql: "+sql);
+    this.pool.getConnection(function(err, connection) {
+        // Use the connection
+        connection.query(sql, function (error, results, fields) {
+            // And done with the connection.
+            connection.release();
+
+            callback && callback (error, results);
+            // Don't use the connection here, it has been returned to the pool.
+        });
+    });
+};
 
 BaseDao.prototype.find = function(columns, query, orderBy, limit, offset, callback){
     var sqlBuilder = new SQLBuilder();

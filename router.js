@@ -7,13 +7,14 @@ router.use(function timeLog (req, res, next) {
   next()
 })
 var auth = require('./auth');
+
 router.get("/", auth.ensureLoggedIn(),
     function(req,res){
-    res.sendFile(__dirname+"/views/index.html");
+    res.render("index");
 });
 
 router.get('/login', function(req, res) {
-   res.sendFile(__dirname+"/views/login.html");
+   res.render("login");
 });
 
 router.post('/login', 
