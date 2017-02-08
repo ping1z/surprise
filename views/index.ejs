@@ -2,8 +2,34 @@
 <html>
     <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
     <body>
-        <p><a href="/profile">Profile</a></p>
+        <header class="top-banner">
+            <div class="top-banner-title">Surprise</div>
+            <ul class="top-login-group">
+                <li><a href="/login">Login</a></li>
+                <li>|</li>
+                <li><a href="/signUp">Sign Up</a></li>
+            </ul>
+        </header>
+
+        <section class="main-content">
+        <div class="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item">
+                    <img src="public/image/c1.jpg">
+                </div>
+            </div>
+        </div>
+
+            
+        </section>
+        <footer class="site-footer">
+            <ul class="site-footer-content">
+                <li>All rights reserved © 2017</li>
+                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
+            </ul>
+        </footer>
+        <!--<p><a href="/profile">Profile</a></p>
         <p><a href="/logout">Logout</a></p>
-        <h1>Surprise Surprise!!!</h1>
+        <h1>Surprise Surprise!!!</h1>!-->
     </body>
 </html>
