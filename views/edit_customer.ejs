@@ -1,0 +1,57 @@
+<html>
+<%- include('global/_head', {title:"Customer Information"}); %>
+
+<script>
+    function cancelEdit()
+    {
+        window.history.back(-1);
+    }
+</script>
+
+<body>
+<div class="page-data">
+    <div class="page-data">
+
+        <form method="post" action="/profile/edit">
+            <table cellpadding="11">
+                <tr>
+                    <td class="label">CustomerID</td><td>: <input type="hidden" name="id" value="<%=data.id%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">UserName</td><td>: <input type="text" name="username" value="<%=data.username%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">FirstName</td><td>: <input type="text" name="firstName" value="<%=data.firstName%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">MiddleName</td><td>: <input type="text" name="middleName" value="<%=data.middleName%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">LastName</td><td>: <input type="text" name="lastName" value="<%=data.lastName%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">Email</td><td>: <input type="text" value="<%=data.email%>" name="email" required></td>
+                </tr>
+                <tr>
+                    <td class="label">Telephone</td><td>: <input type="text" name="phone" value="<%=data.telephone%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">CreatedTime</td><td>: <input type="text" name="createdTime" value="<%=data.createdTime%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label">LastModifiedTime</td><td>: <input type="text" name="lastModifiedTime" value="<%=data.lastModifiedTime%>" required></td>
+                </tr>
+                <tr>
+                    <td class="label"></td>
+                    <td>
+                        <input type="submit" name="submit" value="Save" >
+                        <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelEdit()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>
