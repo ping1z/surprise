@@ -32,6 +32,7 @@ router.post('/createaccount',
   function(req, res) {
     console.log(req); 
 
+    // get data from request.
     // get data enclosed in the json body of the request message from the submit of a web form.
      var username = req.body.Username;
      var email = req.body.Email;
@@ -41,14 +42,35 @@ router.post('/createaccount',
 
     // call signUp method and send the parameter values to the method.
     // res refers to the result from database.
-    customer.signUp(username,email,firstName,lastName,password,function(error, res){
+    customer.signUp(username,email,firstName,lastName,password, function(error, res){
+     
+    function fetchID(callback) {
+
+      //  fetch customerID.
      var sql = "SELECT id FROM surprise.customer WHERE email = ?;"
      var values = [email];
      customer.execute(sql,values,function(error, res){
-         user.createUser(res, password, function(error, user) {
-           console.log("succeeded.");
-         });
+       if(error) {
+         callback(error, null);
+       } else {
+         callback(null, res[0]);
+       }
      });
+
+    }
+
+     fetchID(function(err, customerID) {
+       if(err) {
+        console.log("ERROR: ", err);
+       } else {
+        //  code to execute on data retrieval
+        user.createUser(customerID, password, function(error, user) {
+           console.log("succeeded.");
+        });
+       }
+     })
+     
+
     });
 
     res.redirect('/login');    
