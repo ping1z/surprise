@@ -3,6 +3,7 @@ var BaseDao = require("./baseDao.js");
 var CustomerDao = function(){
     this.table = 'Customer';
 }
+
 CustomerDao.prototype = Object.create(BaseDao.prototype);
 CustomerDao.prototype.findOneWithPassword = function(userIdentity,callback){
     var sql = "SELECT id, username, email, telephone, password"
@@ -15,6 +16,20 @@ CustomerDao.prototype.findOneWithPassword = function(userIdentity,callback){
         callback && callback(error, item);
     });
 };
+
+// get current time method: GETDATE().
+// callback refers to the function in router.js, 
+// when the result is generated, it will callback the function in router.js.
+CustomerDao.prototype.signUp = function(username,email,firstName,lastName,password,callback){
+//    "?" represent values to be input.
+// execute(sql,values) let the values insert into the correspongding place. This is a function defined in baseDao.js.
+    var sql="INSERT INTO surprise.Customer (username, firstName, lastName, email, createdTime)"
+          +" VALUES (?, ?, ?, ?, ?, ?);"
+    var values=[username,email,firstName,lastName,'GETDATE()'];
+    this.execute(sql,values,function(error, res){
+         callback && callback(error, res);
+    });
+}
 
 CustomerDao.prototype.findOneById = function(id,callback){
     this.findOne(null, "`id`=\""+id+"\"",function(error, user){

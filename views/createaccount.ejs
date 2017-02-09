@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+
+   <form class="center"  action="/createaccount" method="post">
+   <legend>CREATE A NEW ACCOUNT</legend><br><br>
+    Username:<br>
+    <input type="text" name="Username"><br>
+    Firstname:<br>
+    <input type="text" name="Firstname"><br>
+    Lastname:<br>
+    <input type="text" name="Lastname"><br>
+    E-MAIL:<br>
+    <input type="text" name="Email"><br>
+    PASSWORD:<br>
+    <input type="password" name="Password"><br><br>
+    <input type="submit" value="CREATE" class="button">
+    <p>
+      Already hava an account? 
+      <a href="/login">login</a>
+    </p>
+  </form>
+
+    </body>
+</html>
