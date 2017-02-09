@@ -23,57 +23,22 @@ router.get("/",
     res.render("index",{hasLogin:hasLogin});
 });
 
-router.get('/createaccount', function(req, res) {
-   res.render("createaccount");
-});
-
-router.post('/createaccount', 
-  //auth.authenticate('local', { failureRedirect: '/createaccount' }),
+router.post('/signUp', 
   function(req, res) {
-    console.log(req); 
-
     // get data from request.
     // get data enclosed in the json body of the request message from the submit of a web form.
-     var username = req.body.Username;
-     var email = req.body.Email;
-     var firstName = req.body.Firstname;
-     var lastName = req.body.Lastname;
-     var password = req.body.Password;
+     var email = req.body.email;
+     var firstName = req.body.firstName;
+     var lastName = req.body.lastName;
+     var telephone = req.body.telephone;
+     var password = req.body.password;
+     var confirmPassword = req.body.confirmPassword;
 
     // call signUp method and send the parameter values to the method.
     // res refers to the result from database.
-    customer.signUp(username,email,firstName,lastName,password, function(error, res){
-     
-    function fetchID(callback) {
-
-      //  fetch customerID.
-     var sql = "SELECT id FROM surprise.customer WHERE email = ?;"
-     var values = [email];
-     customer.execute(sql,values,function(error, res){
-       if(error) {
-         callback(error, null);
-       } else {
-         callback(null, res[0]);
-       }
-     });
-
-    }
-
-     fetchID(function(err, customerID) {
-       if(err) {
-        console.log("ERROR: ", err);
-       } else {
-        //  code to execute on data retrieval
-        user.createUser(customerID, password, function(error, user) {
-           console.log("succeeded.");
-        });
-       }
-     })
-     
-
+    customer.signUp(email, firstName, lastName, telephone, password, function(e, r){
+      res.render('login');    
     });
-
-    res.redirect('/login');    
   });
 
 router.get('/login', function(req, res) {
@@ -81,7 +46,7 @@ router.get('/login', function(req, res) {
 });
 
 // send the input information back server via post. then if it failed, get back to 
-//  the login page. if succeeded, get back to home page.
+// the login page. if succeeded, get back to home page.
 // the autentication of it is local.
 router.post('/login', 
   auth.authenticate('local', { failureRedirect: '/login' }),
@@ -89,7 +54,7 @@ router.post('/login',
     res.redirect('/');
   });
 
-router.get('/signOut',auth.ensureLoggedIn(),
+router.get('/logout',auth.ensureLoggedIn(),
   function(req, res){
     req.logout();
     res.redirect('/');
