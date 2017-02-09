@@ -1,29 +1,19 @@
-// Load module.
 var mysql = require('mysql');
-// Create a function object.
 var BaseDao = function(){
-    this.table= ''; //table is function object's property.
+    this.table= '';
 }
-
-// Create a MySQL connection by initializing a pool so that it can 
-// be used across the project.
-// Using prototype keyword to add 'pool' property to function object BaseDao's prototype.
 BaseDao.prototype.pool = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
   password : '0126',
   database : 'surprise'
 });
-
-// Using an object literal to create an object.
 var SQLAction = {
     SELECT:"SELECT",
     DELETE:"DELETE",
     UPDATE:"UPDATE",
     INSERT:"INSERT"
 }
-
-// Create a function object.
 var SQLBuilder = function(){
     //this.builder = this;
     this.table = "";
@@ -34,20 +24,16 @@ var SQLBuilder = function(){
     this.offset = "";
     this.action = null;//select, delete, update, insert
 }
-
 SQLBuilder.prototype.select = function(columns){
     this.action = SQLAction.SELECT;
-    if(!columns)this.columns = "*";
-    return this;
+    if(!columns)this.columns = "*";return this;
 
     if(typeof columns == "string"){
         columns = columns.split(',');
     }
-
     if(Array.isArray(columns) == false){
         throw new Error("Invalid input value.",columns);
     }
-
     var cols = "";
     columns.forEach(function(c){
         c = c.trim();
@@ -58,7 +44,6 @@ SQLBuilder.prototype.select = function(columns){
     this.columns = cols;
     return this;
 }
-
 SQLBuilder.prototype.from = function(table){
     if(!table){
         throw  new Error("Invalid input value.",table);
@@ -66,19 +51,16 @@ SQLBuilder.prototype.from = function(table){
     this.table = table;
     return this;
 }
-
 SQLBuilder.prototype.where = function(query){
     if(!query)return this;
     this.query = " WHERE "+query + " ";
     return this;
 }
-
 SQLBuilder.prototype.orderBy = function(sorts){
     if(!sorts)return this;
     this.sorts = " ORDER BY "+sorts + " ";
     return this;
 }
-
 SQLBuilder.prototype.setLimit = function(limit){
     if(!limit)return this;
     if(!Number.isInteger(limit) ||  limit <= 0){
@@ -87,7 +69,6 @@ SQLBuilder.prototype.setLimit = function(limit){
     this.limit = " LIMIT "+ limit + " ";
     return this;
 }
-
 SQLBuilder.prototype.setOffset = function(offset){
     if(!offset)return this;
     if(!Number.isInteger(offset) ||  offset <= 0){
@@ -96,7 +77,6 @@ SQLBuilder.prototype.setOffset = function(offset){
     this.offset = " OFFSET "+ offset + " ";
     return this;
 }
-
 SQLBuilder.prototype.toSQL = function(){
     if(!this.action){
         throw Error("Can not complie Unknow SQLAction.");
@@ -108,13 +88,11 @@ SQLBuilder.prototype.toSQL = function(){
     }
     return sql;
 }
-
 BaseDao.prototype.execute  = function(sql, values, callback){
     if(values){
         sql = mysql.format(sql, values);
     }
     console.log("sql: "+sql);
-
     this.pool.getConnection(function(err, connection) {
         // Use the connection
         connection.query(sql, function (error, results, fields) {
@@ -158,5 +136,4 @@ BaseDao.prototype.findAll = function(columns, orderBy, callback){
         callback && callback(error, results);
     });
 };
-
 exports = module.exports = BaseDao;
