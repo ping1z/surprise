@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title">Surprise</div>
+            <ul class="top-login-group">
+                <li><a href="/myAccount">My Account</a></li>
+                <li>|</li>
+                <li><a href="/signOut">Sign Out</a></li>
+            </ul>
+        </header>
+        <section class="main-content">
+            <div class="main-content-box">
+                    Address
+            </div>
+        </section>
+        <footer class="site-footer">
+            <ul class="site-footer-content">
+                <li>All rights reserved © 2017</li>
+                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
+            </ul>
+        </footer>
+        <script type="text/javascript">
+            $("#enableEdit").on("click",function(event){
+                event.preventDefault();
+                $(".form-profile input[type=text]").attr("readonly",false);
+                $("#enableEdit").hide();
+                $("#submit").show();
+                $(".form-profile input[type=text]").first().focus();
+                $(".form-profile").addClass("editing");
+            });
+    </script>
+    </body>
+</html>
