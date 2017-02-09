@@ -145,7 +145,7 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     border: 1px solid #000;
     box-sizing: border-box;
     cursor: pointer;
-    -webkit-transition: 0.5s; /* Safari */
+    -webkit-transition: 0.5s;
     transition: 0.5s;
 }
 .account-manage-item:hover{
@@ -172,3 +172,7 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
 .form-profile .editing input{
     border-bottom:1px solid #000
 }
+
+
+
+

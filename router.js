@@ -1,6 +1,13 @@
+// load up all we need.
 var express = require('express');
 var router = express.Router();
 var auth = require('./auth');
+var CustomerDao = require("./dao/customerDao.js");
+var UserDao = require("./dao/userDao.js");
+
+// create a new instance.
+var customer = new CustomerDao();
+var user = new UserDao();
 
 var CustomerDao = require("./dao/CustomerDao.js");
 var customer = new CustomerDao();
@@ -9,7 +16,6 @@ var customer = new CustomerDao();
 router.use(function timeLog (req, res, next) {
   next()
 })
-var auth = require('./auth');
 
 router.get("/",
     function(req,res){
@@ -17,17 +23,38 @@ router.get("/",
     res.render("index",{hasLogin:hasLogin});
 });
 
+router.post('/signUp', 
+  function(req, res) {
+    // get data from request.
+    // get data enclosed in the json body of the request message from the submit of a web form.
+     var email = req.body.email;
+     var firstName = req.body.firstName;
+     var lastName = req.body.lastName;
+     var telephone = req.body.telephone;
+     var password = req.body.password;
+     var confirmPassword = req.body.confirmPassword;
+
+    // call signUp method and send the parameter values to the method.
+    // res refers to the result from database.
+    customer.signUp(email, firstName, lastName, telephone, password, function(e, r){
+      res.render('login');    
+    });
+  });
+
 router.get('/login', function(req, res) {
    res.render("login");
 });
 
+// send the input information back server via post. then if it failed, get back to 
+// the login page. if succeeded, get back to home page.
+// the autentication of it is local.
 router.post('/login', 
   auth.authenticate('local', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
   });
 
-router.get('/signOut',auth.ensureLoggedIn(),
+router.get('/logout',auth.ensureLoggedIn(),
   function(req, res){
     req.logout();
     res.redirect('/');
