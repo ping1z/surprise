@@ -38,11 +38,6 @@ router.get('/myAccount',auth.ensureLoggedIn(),
     res.render("myAccount");
 });
 
-router.get('/profile',auth.ensureLoggedIn(),
-  function(req, res){
-    res.render("profile",{profile:req.user});
-});
-
 router.get('/address',auth.ensureLoggedIn(),
   function(req, res){
     res.render("address",{profile:req.user});
@@ -66,6 +61,68 @@ router.get('/addAddress',auth.ensureLoggedIn(),
 
 router.get('/deleteAddress',auth.ensureLoggedIn(),
   function(req, res){
+});
+
+router.get('/profile',auth.ensureLoggedIn(),
+  function(req, res){
+    res.render("customer",{data:req.user});
+});
+
+router.get('/profile/edit',auth.ensureLoggedIn(),
+  function(req, res){
+    res.render("edit_customer",{data:req.user});
+});
+
+router.post('/profile/edit',function(req,res){
+
+    console.log(req.body);
+    var input = JSON.parse(JSON.stringify(req.body));
+
+    //timeConvert
+    var createdTimeFormat = new Date(input.createdTime);
+    var lastModifiedTimeFormat = new Date(input.lastModifiedTime);
+    input.createdTime = createdTimeFormat;
+    input.lastModifiedTime = lastModifiedTimeFormat;
+
+    console.log(input);
+    var data = {
+       id    : input.id,
+       username : input.username,
+       firstName   : input.firstName,
+       middleName   : input.middleName,
+       lastName    : input.lastName,
+       email   : input.email,
+       telephone   : input.telephone,
+       createdTime : input.createdTime,
+       lastModifiedTime    : input.lastModifiedTime
+    };
+
+    var id = req.body.id;
+    customer.update(id, data,function(error,res1){
+        if(error)
+            console.log(error,res1);
+        customer.findOneById(id, function(err, dataInfo){
+            res.render("customer", {data:dataInfo});
+        });
+    });
+});
+
+router.get('/profile/delete',function(req,res){
+  customer.delete(req.user.id,function(error,res){
+    console.log(error,res);
+  });
+    req.logout();
+    res.render('login');
+});
+
+var AddressDao = require("./dao/AddressDao.js");
+var Address = new AddressDao();
+router.get('/listAddress',//auth.ensureLoggedIn(),
+  function(req, res){
+    Address.findByCustomerId(1,function(err,address){
+      res.send(address);
+    });
+    
 });
 
 module.exports = router;

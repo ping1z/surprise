@@ -16,17 +16,29 @@ CustomerDao.prototype.findOneWithPassword = function(userIdentity,callback){
     });
 };
 
-CustomerDao.prototype.findOneById = function(id,callback){
+CustomerDao.prototype.findOneById = function(id, callback){
     this.findOne(null, "`id`=\""+id+"\"",function(error, user){
         callback && callback(error, user);
     });
 };
 
-CustomerDao.prototype.update = function(id,firstName,callback){
+CustomerDao.prototype.update = function(id, data, callback){
     var sql = "UPDATE Customer "
-            +"SET firstName=? "
-            +"WHERE id=?;";
-    var values = [firstName,id];
+            +"SET ? "
+            +"WHERE id = ?;";
+    var values = [data, id];
+    this.execute(sql, values, function(error, res){
+        callback && callback(error, res);
+    });
+}
+
+CustomerDao.prototype.delete = function(id, callback){
+
+    //var sql = "DELETE FROM Customer "
+     //   +"WHERE id = ?;";
+    var sql = "DELETE customer,user FROM customer LEFT JOIN user ON customer.id=user.customerId WHERE user.customerId=?;"
+    var values = id;
+
     this.execute(sql, values, function(error, res){
         callback && callback(error, res);
     });
