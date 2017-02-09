@@ -6,8 +6,9 @@ body{
     font-size: 12px;
     
 }
+
 ul{list-style-type:none;margin: 0;padding: 0}
-a{color: inherit;text-decoration: inherit;cursor: inherit;color: #000;cursor: pointer;}
+a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
 .top-banner{
     position:relative;
     background-color:#fff;
@@ -32,8 +33,16 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;color: #000;cursor: po
 
 .main-content{
     min-height:550px;
+    text-align:center;
+    width:100%;
 }
-
+.main-content-box{
+    width:800px;
+    margin:0 auto;
+}
+.main-content-title{
+    text-align: left;
+}
 .site-footer{
     background-color: #212121;
     color: #999999;
@@ -41,24 +50,125 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;color: #000;cursor: po
 }
 .site-footer-content{
     padding-top:40px;
+    padding-bottom:50px;
     text-align: right;
     letter-spacing: 1px;
 }
+
 .carousel{
     position:relative;
 }
 .carousel-inner{
     position:relative;
     width:100%;
+    height: 550px;
     overflow: hidden;
 }
 .carousel-item{
-    width:100%;
-    height: 550px;
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    opacity: 1;    
     text-align: center;
 }
 .carousel-item img{
-    vertical-align:  middle;
     width:100%;
     height:auto;
+}
+
+.login-page{
+   text-align: center; 
+   width:100%;
+   background:#fff;
+   padding-top:12%;
+
+}
+.form-wrapper{
+    width:300px;
+    position: relative;
+    z-index: 1;
+    background: #212121;
+    margin: 0 auto 100px;
+    padding: 0 45px 30px;
+    text-align: center;
+}
+
+.form-wrapper form{
+    position: relative;
+}
+.form-wrapper input{
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border-bottom:1px solid #f2f2f2;
+}
+
+.form-wrapper  button{
+    text-transform: uppercase;
+    outline: 0;
+    background: #fff;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #000;
+    font-size: 14px;
+    cursor: pointer;
+}
+.form-wrapper .form-title{
+    color:#fff;
+    height:65px;
+    line-height:55px;
+    font-size: 1.5em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.login-page .form-wrapper .message{
+    color:#ccc
+}
+.login-page .form-wrapper .message a{
+    color:#fff;
+    font-weight:bold;
+}
+
+.account-manage-item{
+    width:200px;
+    float:left;
+    height:100px;
+    line-height:100px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    cursor: pointer;
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+}
+.account-manage-item:hover{
+    background:#000;
+    color:#fff
+}
+
+.form-login{
+    width:100%;
+}
+
+.form-wrapper.form-profile{
+    background:none;
+    text-align: left;
+}
+.form-profile .form-title{
+    text-align: left;
+    color:#000;
+}
+.form-profile button{
+   background:#000;
+   color:#fff;
+}
+.form-profile .editing input{
+    border-bottom:1px solid #000
 }

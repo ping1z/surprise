@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title">Surprise</div>
+            <ul class="top-login-group">
+                <li><a href="/myAccount">My Account</a></li>
+                <li>|</li>
+                <li><a href="/signOut">Sign Out</a></li>
+            </ul>
+        </header>
+        <section class="main-content">
+            <div class="main-content-box">
+                <div class="main-content-title">
+                    <h1>Your Account</h1>
+                </div>
+                <ul class="account-manage">
+                    <li class="account-manage-item">Orders</li>
+                    <li class="account-manage-item"><a href="/address">Shipping Address</a></li>
+                    <li class="account-manage-item"><a href="/payment">Payment Method</a></li>
+                    <li class="account-manage-item"><a href="/profile">Manage Profile</a></li>
+                </ul>
+            </div>
+        </section>
+        <footer class="site-footer">
+            <ul class="site-footer-content">
+                <li>All rights reserved © 2017</li>
+                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
+            </ul>
+        </footer>
+    </body>
+</html>

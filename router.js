@@ -11,9 +11,10 @@ router.use(function timeLog (req, res, next) {
 })
 var auth = require('./auth');
 
-router.get("/", auth.ensureLoggedIn(),
+router.get("/",
     function(req,res){
-    res.render("index");
+    var hasLogin = req.user?true:false;
+    res.render("index",{hasLogin:hasLogin});
 });
 
 router.get('/login', function(req, res) {
@@ -26,52 +27,44 @@ router.post('/login',
     res.redirect('/');
   });
 
-router.get('/logout',auth.ensureLoggedIn(),
+router.get('/signOut',auth.ensureLoggedIn(),
   function(req, res){
     req.logout();
     res.redirect('/');
 });
 
+router.get('/myAccount',auth.ensureLoggedIn(),
+  function(req, res){
+    res.render("myAccount");
+});
+
 router.get('/profile',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("customer",{data:req.user});
+    res.render("profile",{profile:req.user});
 });
-router.get('/profile/edit',auth.ensureLoggedIn(),
+
+router.get('/address',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("edit_customer",{data:req.user});
+    res.render("address",{profile:req.user});
 });
 
-router.post('/profile/edit',function(req,res){
-  console.log(req);
-  var id = req.body.id;
-  var username = req.body.username;
-  var firstName = req.body.firstName;
-  customer.update(id,firstName,function(error,res){
-    console.log(error,res);
-  });
+router.get('/payment',auth.ensureLoggedIn(),
+  function(req, res){
+    res.render("payment",{profile:req.user});
 });
 
-router.delete('/profile/delete',function(req,res){
-  customer.delete(req.user.id,function(error,res){
-    console.log(error,res);
-  });
-});
-
-var AddressDao = require("./dao/AddressDao.js");
-var Address = new AddressDao();
-router.get('/listAddress',//auth.ensureLoggedIn(),
+router.get('/listAddress',auth.ensureLoggedIn(),
   function(req, res){
     Address.findByCustomerId(1,function(err,address){
       res.send(address);
     });
-    
 });
 
-router.get('/addAddress',//auth.ensureLoggedIn(),
+router.get('/addAddress',auth.ensureLoggedIn(),
   function(req, res){    
 });
 
-router.get('/deleteAddress',//auth.ensureLoggedIn(),
+router.get('/deleteAddress',auth.ensureLoggedIn(),
   function(req, res){
 });
 
