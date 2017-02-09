@@ -1,0 +1,14 @@
+var BaseDao = require("./baseDao.js");
+
+var cardDao = function(){
+    this.table = 'card';
+}
+cardDao.prototype = Object.create(BaseDao.prototype);
+cardDao.prototype.findByCustomerId = function(id,callback){
+    //columns, query, orderBy, limit, offset, callback
+    this.find(null, "`customerId`=\""+id+"\"",null, null, null,function(error, addr){
+        console.log(error);
+        callback && callback(error, addr);
+    });
+};
+exports = module.exports = cardDao;
