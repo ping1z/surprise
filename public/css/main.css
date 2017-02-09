@@ -157,6 +157,13 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     width:100%;
 }
 
+.horizontal-line{
+    width:100%;
+    border-bottom:1px solid #ddd;
+    margin:20px 0;
+}
+
+
 .form-wrapper.form-profile{
     background:none;
     text-align: left;
@@ -173,6 +180,135 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     border-bottom:1px solid #000
 }
 
+.address-list{
+    width:100%;
+    text-align: left;
+}
 
+.address-list-title{
+    color:#000;
+    height:65px;
+    line-height:55px;
+    font-size: 1.5em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.address-item{
+    border: 1px solid #000;
+    border-radius: 2px;
+    padding:10px;
+    min-height: 147px;
+    margin-bottom: 15px;
+}
+.address-item-content{
+    width:50%;
+    display:inline-block;
+}
+.address-item-content li{
+    width:100%;
+    line-height:25px;
+    height:25px;
+    font-size: 1.2em;
+}
+.address-item-default{
+    font-size: 2em;
+    margin-bottom:10px;
+}
+.address-item-action{
+    float:right;
+    padding-right:20px;
+}
+.address-item-action li{
+    width:150px;
+    text-align: center;
+    outline: 0;
+    background: #000;
+    border: 0;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 15px
+}
+.address-add-button{
+    text-align: center;
+    outline: 0;
+    background: #000;
+    border: 0;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 15px
+}
 
+.gform-wrapper{
+    width:100%;
+    color:#000;
+}
+.gform-title{
+    text-align: left;
+    height:45px;
+    line-height:45px;
+    font-size: 1.5em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.gform-wrapper form{
+    position:relative;
+    text-align:left;
+}
+.gform-row{
+    width:100%;
+    padding-bottom:10px;
+    float:left;
+}
+.gform-col-12,
+.gform-col-8,
+.gform-col-6,
+.gform-col-4{
+    padding:0 10px;
+    float:left;
+    box-sizing: border-box;
+}
 
+.gform-col-12{
+    width:100%;
+}
+.gform-col-8{
+    width:70%;   
+}
+.gform-col-6{
+    width:50%;   
+}
+.gform-col-4{
+    width:30%;   
+}
+.gform-input-group{
+    width:100%;
+}
+.gform-input-group label{
+    width:100%;
+}
+.gform-input-group input{
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border-bottom:1px solid #f2f2f2;
+}
+.gform-wrapper button{
+    text-transform: uppercase;
+    outline: 0;
+    background: #000;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}

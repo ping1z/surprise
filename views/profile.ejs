@@ -3,7 +3,7 @@
     <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
     <body>
         <header class="top-banner">
-            <div class="top-banner-title">Surprise</div>
+            <div class="top-banner-title"><a href="/">Surprise</a></div>
             <ul class="top-login-group">
                 <li><a href="/myAccount">My Account</a></li>
                 <li>|</li>
@@ -15,22 +15,18 @@
                     <div class="form-wrapper form-profile">
                         <div class="form-title">Your Profile</div>
                         <form class="form-profile" action="/updateProfile" method="post">
-                            <input type="hidden" name="id" value=/>
+                            <input type="hidden" name="id" value=<%= profile.id %> >
                             <div class="contro-group">
                                 <label for="firstName">First Male</label>
-                                <input type="text" name="firstName" readonly value=<%= profile.firstName %> />
+                                <input type="text" name="firstName" readonly value=<%= profile.firstName %> >
                             </div>
                             <div class="contro-group">
                                  <label for="MiddleName">Middle Male</label>
-                                <input type="text" name="middleName" readonly value=<%= profile.middleName %> />
+                                <input type="text" name="middleName" readonly value=<%= profile.middleName %> >
                             </div>
                             <div class="contro-group">
                                  <label for="lastName">Last Name</label>
-                                <input type="text" name="lastName" readonly value=<%= profile.lastName %> />
-                            </div>
-                            <div class="contro-group">
-                                  <label for="telephone">Telephone</label>
-                                <input type="text" name="telephone" readonly value=<%= profile.telephone %> />
+                                <input type="text" name="lastName" readonly value=<%= profile.lastName %> >
                             </div>
                             <button id="enableEdit">Edit</button>
                             <button id="submit" type="submit" style="display:none">Save</button>

@@ -5,18 +5,19 @@
         <div class="form-wrapper">
             <div class="form-title"><a href="/">Surprise</a></div>
             <form class="form-login" action="/login" method="post">
-                <input type="text" name="userIdentity" placeholder="Email"/>
-                <input type="password" name="password" placeholder="Password"/>
+                <input type="text" name="userIdentity" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
                 <button>login</button>
-                <p id="show-signUp" class="message">Not registered? <a href="#">Create an account</a></p>
+                <p id="forget-password" class="message"><a href="#">Forgot password?</a></p>
+                <div class="horizontal-line"></div>
+                <button id="show-signUp">Create an account</button>
             </form>
             <form class="form-signUp" action="/signUp" method="post" style="display:none">
-                <input type="text" name="firstName" placeholder="FirstName"/>
-                <input type="text" name="lastName" placeholder="LastName"/>
-                <input type="text" name="email" placeholder="Email"/>
-                <input type="text" name="telephone" placeholder="Phone"/>
-                <input type="password" name="password" placeholder="Password"/>
-                <input type="password" name="confirmPassword" placeholder="Confirm Password"/>
+                <input type="text" name="firstName" placeholder="FirstName" >
+                <input type="text" name="lastName" placeholder="LastName" >
+                <input type="text" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
+                <input type="password" name="confirmPassword" placeholder="Confirm Password">
                 <button>Sign Up</button>
                 <p id="show-login" class="message">Already have an account? <a href="#">Login</a></p>
             </form>
@@ -24,12 +25,18 @@
     </body>
     <script type="text/javascript">
         $("#show-signUp").on("click",function(event){
+           event.preventDefault();
            $(".form-login").hide();
            $(".form-signUp").show();
         });
-         $("#show-login").on("click",function(event){
+        $("#show-login").on("click",function(event){
+            event.preventDefault();
            $(".form-signUp").hide();
            $(".form-login").show();
+        });
+        $("#forget-password").on("click",function(event){
+           event.preventDefault();
+           alert("Sorry, we are still working on it. \nPlease search your brain first. \nThanks!");
         });
     </script>
 </html>
