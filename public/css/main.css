@@ -129,6 +129,13 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     font-weight: 700;
     letter-spacing: 2px;
 }
+.form-wrapper .message{
+    color:#4a4a4a;
+    text-align: center;
+}
+.form-wrapper .message a{
+    font-weight:bold;
+}
 .login-page .form-wrapper .message{
     color:#ccc
 }
