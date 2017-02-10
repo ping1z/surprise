@@ -181,7 +181,7 @@ router.post('/saveCard',auth.ensureLoggedIn(),
   function(req, res){
     var customerId = parseInt(req.body.customerId);
     if(customerId!=req.user.id){
-      res.redirect('/listCard');
+      res.redirect('listCard');
     }
     var id = req.body.id;
     var name = req.body.name;
@@ -190,19 +190,36 @@ router.post('/saveCard',auth.ensureLoggedIn(),
     var line2 = req.body.line2;
     var city = req.body.city;
     var state = req.body.state;
-    var country = req.body.country;
     var zipcode = req.body.zipcode;
     var expirationDate = req.body.expirationDate;
     var cvv = req.body.cvv;
     if(!id||id=="add"){
-       card.addCard(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
-          res.redirect('/listCard');
+       card.addCard(customerId,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,function(e,r){
+          res.redirect('listCard');
       });
     }else{
-       card.updateCard(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
-          res.redirect('/listCard');
+       card.updateCard(id,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,function(e,r){
+          res.redirect('listCard');
       });
     }
+});
+
+router.get('/setAsDefaultCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    card.setAsDefault(id,customerId,function(e,r){
+          res.redirect('listCard');
+    });
+});
+router.get('/deleteCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    card.deleteCard(id,customerId,function(e,r){
+          res.redirect('listCard');
+    });
+
 });
 
 module.exports = router;

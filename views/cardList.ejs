@@ -14,7 +14,7 @@
             <div class="main-content-box">
                 <div class="card-list">
 
-                    <div class="card-list-title">Your card</div>
+                    <div class="card-list-title">Your Card</div>
                     <% cardList.forEach(function(card){ %>
                         <div class="card-item">
                             <% if(card.isDefault){ %>
@@ -26,23 +26,21 @@
                                 <% if(card.line2){ %>
                                    <li><%= card.line2 %></li>
                                 <% } %>
-                                <li><%= card.city %>, <%= card.state %>, <%= card.zipcode %></li>
-                                <li><%= card.country %></li>
-                                <li>Phone: <%= card.telephone %></li>
+                                <li><%= card.city %>, <%= card.state %>, <%= card.zipcode %></li>                                                   
                             </ul>
                             <ul class="card-item-action">
                                 <% if(!card.isDefault){ %>
-                                    <li><a href="/setAsDefaultcard?id=<%= card.id %>">Set as default card</a></li>
+                                    <li><a href="/setAsDefaultCard?id=<%= card.id %>">Set as default card</a></li>
                                 <% } %>
-                                <li><a href="/editcard?id=<%= card.id %>">Edit</a></li>
+                                <li><a href="/editCard?id=<%= card.id %>">Edit</a></li>
                                 <% if(!card.isDefault){ %>
-                                    <li><a href="/deletecard?id=<%= card.id %>">Delete</a></li>
+                                    <li><a href="/deleteCard?id=<%= card.id %>">Delete</a></li>
                                 <% } %>
                             </ul>
                         </div>
                     <% }); %>
 
-                    <div class="card-add-button"><a href="/addcard">Add card</a></div>
+                    <div class="card-add-button"><a href="/addCard">Add Card</a></div>
                 </div>      
             </div>
         </section>
