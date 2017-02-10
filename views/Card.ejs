@@ -14,41 +14,59 @@
             <div class="main-content-box">
                 <div class="gform-wrapper">
                     
-                    <form action="/saveAddress" method="post">
+                    <form action="/saveCard" method="post">
                         <div class="gform-row">
                             <div class="gform-col-12">
-                                <div class="gform-title">Address</div>
+                                <div class="gform-title">Card Information</div>
                             </div>
                         </div>
-                        <input type="hidden" name="id" value=<%= address.id %>>
-                        <input type="hidden" name="customerId" value=<%= address.customerId %>>
+                        <input type="hidden" name="id" value=<%= card.id %>>
+                        <input type="hidden" name="customerId" value=<%= card.customerId %>>
                         <div class="gform-row">
                             <div class="gform-col-4">
                                 <div class="gform-input-group">
                                     <label for="name">Full Name</label>
-                                    <input type="text" name="name" value=<%= address.name %>>
+                                    <input type="text" name="name" value=<%= card.name %>>
                                 </div>
                             </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-8">
+                                <div class="gform-input-group">
+                                    <label for="cardNumber">Card Number</label>
+                                    <input type="text" name="cardNumber" value=<%= card.cardNumber %>>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
                             <div class="gform-col-4">
                                 <div class="gform-input-group">
-                                    <label for="telephone">Phone</label>
-                                    <input type="text" name="telephone" value=<%= address.telephone %>>
+                                    <label for="name">Expiration Date</label>
+                                    <input type="text" name="expirationDate" value=<%= card.expirationDate %>>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-4">
+                                <div class="gform-input-group">
+                                    <label for="name">CVV</label>
+                                    <input type="text" name="cvv" value=<%= card.cvv %>>
                                 </div>
                             </div>
                         </div>
                         <div class="gform-row">
                             <div class="gform-col-8">
                                 <div class="gform-input-group">
-                                    <label for="line1">Line1</label>
-                                    <input type="text" name="line1" value=<%= address.line1 %>>
+                                    <label for="line1">Address 1</label>
+                                    <input type="text" name="line1" value=<%= card.line1 %>>
                                 </div>
                             </div>
                         </div>
                         <div class="gform-row">
                             <div class="gform-col-8">
                                 <div class="gform-input-group">
-                                    <label for="line2">Line2</label>
-                                    <input type="text" name="line2" value=<%= address.line2 %>>
+                                    <label for="line2">Address 2</label>
+                                    <input type="text" name="line2" value=<%= card.line2 %>>
                                 </div>
                             </div>
                         </div>
@@ -56,27 +74,20 @@
                             <div class="gform-col-4">
                                 <div class="gform-input-group">
                                     <label for="city">City</label>
-                                    <input type="text" name="city" value=<%= address.city %>>
+                                    <input type="text" name="city" value=<%= card.city %>>
                                 </div>
                             </div>
                             <div class="gform-col-4">
                                 <div class="gform-input-group">
                                     <label for="state">State</label>
-                                    <input type="text" name="state" value=<%= address.state %>>
+                                    <input type="text" name="state" value=<%= card.state %>>
                                 </div>
                             </div>
                         </div>
-                        <div class="gform-row">
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="country">Country</label>
-                                    <input type="text" name="country" readonly value="United States">
-                                </div>
-                            </div>
                             <div class="gform-col-4">
                                 <div class="gform-input-group">
                                     <label for="zipcode">Zipcode</label>
-                                    <input type="text" name="zipcode" value=<%= address.zipcode %>>
+                                    <input type="text" name="zipcode" value=<%= card.zipcode %>>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +97,7 @@
                             </div>
                         </div>
                     </form>
-                </div>      
+                </div>   
             </div>
         </section>
         <footer class="site-footer">
@@ -96,6 +107,14 @@
             </ul>
         </footer>
         <script type="text/javascript">
+            $("#enableEdit").on("click",function(event){
+                event.preventDefault();
+                $(".form-profile input[type=text]").attr("readonly",false);
+                $("#enableEdit").hide();
+                $("#submit").show();
+                $(".form-profile input[type=text]").first().focus();
+                $(".form-profile").addClass("editing");
+            });
     </script>
     </body>
 </html>

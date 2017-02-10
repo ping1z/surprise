@@ -6,6 +6,8 @@ var CustomerDao = require("./dao/customerDao.js");
 var customer = new CustomerDao();
 var AddressDao = require("./dao/addressDao.js");
 var address = new AddressDao();
+var CardDao = require("./dao/cardDao.js");
+var card = new CardDao();
 
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
@@ -102,6 +104,7 @@ router.get('/listAddress',auth.ensureLoggedIn(),
 
 router.get('/addAddress',auth.ensureLoggedIn(),
   function(req, res){
+    // jade syntax
     res.render("address",{address:{id:"add",customerId:req.user.id}});
 });
 
@@ -156,9 +159,72 @@ router.get('/deleteAddress',auth.ensureLoggedIn(),
     });
 });
 
-router.get('/payment',auth.ensureLoggedIn(),
+router.get('/listCard',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("payment",{profile:req.user});
+    card.findByCustomerId(req.user.id,function(err,card){
+      res.render("cardList",{cardList:card});
+    });
+    
+});
+
+router.get('/addCard',auth.ensureLoggedIn(),
+  function(req, res){
+    // jade syntax
+    res.render("card",{card:{id:"add",customerId:req.user.id}});
+});
+
+router.get('/editCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    address.findById(id,customerId,function(e,address){
+        res.render("card",{card:card});
+    });
+});
+
+router.post('/saveCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var customerId = parseInt(req.body.customerId);
+    if(customerId!=req.user.id){
+      res.redirect('listCard');
+    }
+    var id = req.body.id;
+    var name = req.body.name;
+    var cardNumber = req.body.cardNumber;
+    var line1 = req.body.line1;
+    var line2 = req.body.line2;
+    var city = req.body.city;
+    var state = req.body.state;
+    var zipcode = req.body.zipcode;
+    var expirationDate = req.body.expirationDate;
+    var cvv = req.body.cvv;
+    if(!id||id=="add"){
+       card.addCard(customerId,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,function(e,r){
+          res.redirect('listCard');
+      });
+    }else{
+       card.updateCard(id,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,function(e,r){
+          res.redirect('listCard');
+      });
+    }
+});
+
+router.get('/setAsDefaultCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    card.setAsDefault(id,customerId,function(e,r){
+          res.redirect('listCard');
+    });
+});
+router.get('/deleteCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    card.deleteCard(id,customerId,function(e,r){
+          res.redirect('listCard');
+    });
+  
 });
 
 module.exports = router;
