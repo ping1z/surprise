@@ -154,25 +154,34 @@ router.get('/deleteAddress',auth.ensureLoggedIn(),
 
 });
 
-
 router.get('/listCard',auth.ensureLoggedIn(),
   function(req, res){
-    var id = parseInt(req.query.id);
-    address.deleteAddress(id,function(e,r){
-          res.redirect('listCard');
+    card.findByCustomerId(req.user.id,function(err,card){
+      res.render("cardList",{cardList:card});
     });
+    
 });
 
 router.get('/addCard',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("addCard",{card:{id:"add",customerId:req.user.id}});
+    // jade syntax
+    res.render("card",{card:{id:"add",customerId:req.user.id}});
 });
 
-router.post('/addCard',auth.ensureLoggedIn(),
+router.get('/editCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    address.findById(id,customerId,function(e,address){
+        res.render("card",{card:card});
+    });
+});
+
+router.post('/saveCard',auth.ensureLoggedIn(),
   function(req, res){
     var customerId = parseInt(req.body.customerId);
     if(customerId!=req.user.id){
-      res.redirect('/addCard');
+      res.redirect('/listCard');
     }
     var id = req.body.id;
     var name = req.body.name;

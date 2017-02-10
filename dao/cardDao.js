@@ -19,6 +19,7 @@ CardDao.prototype.findByCustomerId = function(id,callback){
         callback && callback(error, addr);
     });
 };
+
 CardDao.prototype.addCard = function(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,callback){
     var sql="INSERT INTO surprise.Card (customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,isDefault)"
           +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?,?,?,0)";
