@@ -9,7 +9,6 @@
   "author": "Ping, <add your names here>",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.2",
     "body-parser": "^1.16.0",
     "connect-ensure-login": "^0.1.1",
     "ejs": "^2.5.5",
