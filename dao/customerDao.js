@@ -20,26 +20,54 @@ CustomerDao.prototype.findOneWithPassword = function(userIdentity,callback){
 // get current time method: GETDATE().
 // callback refers to the function in router.js, 
 // when the result is generated, it will callback the function in router.js.
-CustomerDao.prototype.signUp = function(email, firstName, lastName, password, callback){
-//    "?" represent values to be input.
-// execute(sql,values) let the values insert into the correspongding place. This is a function defined in baseDao.js.
-    var sql="INSERT INTO surprise.Customer (email, firstName, lastName, createdTime)"
-          +" VALUES ( ?, ?, ?, NOW())"
-    var values=[email,firstName,lastName];
+CustomerDao.prototype.signUp = function(email, firstName, lastName, password,callback){
+    var pool = this.pool;
     var _ = this;
-    _.execute(sql,values,function(error, res){
-        console.log(1,error,res,res.affectedRows!=1);
-        if(error||res.affectedRows!=1){
-            callback && callback(error, res);
-        }
-        var newCustomId = res.insertId;
-        
-        sql="INSERT INTO surprise.User (customerId, password)"
-          +" VALUES ( ?, ?)"
-        values=[newCustomId,password];
-        _.execute(sql,values,function(e, r){
-            console.log(2,e, r);
-            callback && callback(e, r);
+    pool.getConnection(function(err, connection) {
+        connection.beginTransaction(function(err) {
+            if (err) { throw err; }
+            var sql="INSERT INTO surprise.Customer (email, firstName, lastName, createdTime)"
+                +" VALUES ( ?, ?, ?, NOW())"
+            var values=[email,firstName,lastName];
+            connection.query(sql,values,function(error, results, fields){
+                console.log(1,error,results,results.affectedRows!=1);
+                if (error) {
+                    return connection.rollback(function() {
+                        throw error;
+                    });
+                }
+                if(results.affectedRows!=1){
+                    return connection.rollback(function() {
+                        throw new Error('Insert Customer Failed: '+sql);
+                    });
+                }
+                var newCustomId = results.insertId;
+                
+                sql="INSERT INTO surprise.User (customerId, password)"
+                +" VALUES ( ?, ?)"
+                values=[newCustomId,password];
+                connection.query(sql,values,function(e, r, f){
+                    if (e) {
+                        return connection.rollback(function() {
+                            throw error;
+                        });
+                    }
+                    if(r.affectedRows!=1){
+                        return connection.rollback(function() {
+                            throw new Error('Insert User Failed: '+sql);
+                        });
+                    }
+                    connection.commit(function(err) {
+                        if (err) {
+                            return connection.rollback(function() {
+                                throw err;
+                            });
+                        }
+                        connection.release();
+                        callback && callback(err);
+                    });
+                });
+            });
         });
     });
 }
