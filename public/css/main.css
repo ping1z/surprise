@@ -319,3 +319,65 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     font-size: 14px;
     cursor: pointer;
 }
+
+.card-list{
+    width:100%;
+    text-align: left;
+}
+
+.card-list-title{
+    color:#000;
+    height:65px;
+    line-height:55px;
+    font-size: 1.5em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.card-item{
+    border: 1px solid #000;
+    border-radius: 2px;
+    padding:10px;
+    min-height: 147px;
+    margin-bottom: 15px;
+}
+.card-item-content{
+    width:50%;
+    display:inline-block;
+}
+.card-item-content li{
+    width:100%;
+    line-height:25px;
+    height:25px;
+    font-size: 1.2em;
+}
+.card-item-default{
+    font-size: 2em;
+    margin-bottom:10px;
+}
+.card-item-action{
+    float:right;
+    padding-right:20px;
+}
+.card-item-action li{
+    width:150px;
+    text-align: center;
+    outline: 0;
+    background: #000;
+    border: 0;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 15px
+}
+.card-add-button{
+    text-align: center;
+    outline: 0;
+    background: #000;
+    border: 0;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 15px
+}

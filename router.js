@@ -6,6 +6,8 @@ var CustomerDao = require("./dao/customerDao.js");
 var customer = new CustomerDao();
 var AddressDao = require("./dao/addressDao.js");
 var address = new AddressDao();
+var CardDao = require("./dao/cardDao.js");
+var card = new CardDao();
 
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
@@ -157,5 +159,38 @@ router.get('/payment',auth.ensureLoggedIn(),
     res.render("payment",{profile:req.user});
 });
 
+router.get('/saveCard',auth.ensureLoggedIn(),
+  function(req, res){
+    res.render("payment",{profile:req.user});
+});
+
+
+router.post('/saveCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var customerId = parseInt(req.body.customerId);
+    if(customerId!=req.user.id){
+      res.redirect('listCard');
+    }
+    var id = req.body.id;
+    var name = req.body.name;
+    var cardNumber = req.body.cardNumber;
+    var line1 = req.body.line1;
+    var line2 = req.body.line2;
+    var city = req.body.city;
+    var state = req.body.state;
+    var country = req.body.country;
+    var zipcode = req.body.zipcode;
+    var expirationDate = req.body.expirationDate;
+    var cvv = req.body.cvv;
+    if(!id||id=="add"){
+       address.addCard(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
+          res.redirect('listCard');
+      });
+    }else{
+       address.updateCard(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
+          res.redirect('listCard');
+      });
+    }
+});
 
 module.exports = router;

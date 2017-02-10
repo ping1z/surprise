@@ -11,7 +11,7 @@ var BaseDao = function(){
 BaseDao.prototype.pool = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
-  password : 'root123',
+  password : 'abc1234',
   database : 'surprise'
 });
 
