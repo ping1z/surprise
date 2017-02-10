@@ -30,11 +30,16 @@ router.post('/signUp',
      var password = req.body.password;
      var confirmPassword = req.body.confirmPassword;
 
-    // call signUp method and send the parameter values to the method.
-    // res refers to the result from database.
-    customer.signUp(email, firstName, lastName, password, function(e, r){
-      res.render('login');    
-    });
+     if(password!=confirmPassword){
+       res.render('login');    
+     }
+     auth.generateHash(password,function(error,hash){
+        // call signUp method and send the parameter values to the method.
+        // res refers to the result from database.
+        customer.signUp(email, firstName, lastName, hash, function(e, r){
+          res.render('login');    
+        });
+     });
   });
 
 router.get('/login', function(req, res) {
@@ -126,12 +131,13 @@ router.post('/saveAddress',auth.ensureLoggedIn(),
     var state = req.body.state;
     var country = req.body.country;
     var zipcode = req.body.zipcode;
+    var telephone = req.body.telephone;
     if(!id||id=="add"){
-       address.addAddress(customerId,name,line1,line2,city,state,country,zipcode,function(e,r){
+       address.addAddress(customerId,name,line1,line2,city,state,country,zipcode,telephone,function(e,r){
           res.redirect('listAddress');
       });
     }else{
-       address.updateAddress(id,name,line1,line2,city,state,country,zipcode,function(e,r){
+       address.updateAddress(id,name,line1,line2,city,state,country,zipcode,telephone,function(e,r){
           res.redirect('listAddress');
       });
     }
@@ -151,7 +157,6 @@ router.get('/deleteAddress',auth.ensureLoggedIn(),
     address.deleteAddress(id,customerId,function(e,r){
           res.redirect('listAddress');
     });
-
 });
 
 router.get('/listCard',auth.ensureLoggedIn(),
@@ -219,7 +224,7 @@ router.get('/deleteCard',auth.ensureLoggedIn(),
     card.deleteCard(id,customerId,function(e,r){
           res.redirect('listCard');
     });
-
+  
 });
 
 module.exports = router;
