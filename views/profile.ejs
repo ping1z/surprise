@@ -30,6 +30,7 @@
                             </div>
                             <button id="enableEdit">Edit</button>
                             <button id="submit" type="submit" style="display:none">Save</button>
+                            <p class="message">Want to delete your account? <a id="deleteProfile">Yes,delete it.</a></p>
                         </form>
                     </div>      
             </div>
@@ -49,6 +50,13 @@
                 $(".form-profile input[type=text]").first().focus();
                 $(".form-profile").addClass("editing");
             });
+            $("#deleteProfile").on("click",function(event){
+                var result = confirm("Are you sure want to delete your account?\nOnce deleted, all account information will be remove from our system permanently.");
+                if (result) {
+                    window.location.href = "/deleteProfile";
+                }
+            });
+            
     </script>
     </body>
 </html>

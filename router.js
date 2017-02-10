@@ -78,6 +78,15 @@ router.post('/updateProfile',auth.ensureLoggedIn(),
     });
 });
 
+router.get('/deleteProfile',auth.ensureLoggedIn(),
+  function(req, res){
+     var id = req.user.id;
+     customer.delete(id, function(e, r){
+      req.logout();
+      res.redirect('/');
+    });
+});
+
 router.get('/listAddress',auth.ensureLoggedIn(),
   function(req, res){
     address.findByCustomerId(req.user.id,function(err,address){

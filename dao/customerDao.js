@@ -49,7 +49,7 @@ CustomerDao.prototype.signUp = function(email, firstName, lastName, password,cal
                 connection.query(sql,values,function(e, r, f){
                     if (e) {
                         return connection.rollback(function() {
-                            throw error;
+                            throw e;
                         });
                     }
                     if(r.affectedRows!=1){
@@ -89,4 +89,51 @@ CustomerDao.prototype.findOneById = function(id,callback){
     });
 };
 
+
+CustomerDao.prototype.delete = function(id,callback){
+    var pool = this.pool;
+    var _ = this;
+    pool.getConnection(function(err, connection) {
+        connection.beginTransaction(function(err) {
+            if (err) { throw err; }
+            var sql="DELETE FROM Customer WHERE id=?";
+            var values=[id];
+            connection.query(sql,values,function(error, results, fields){
+                if (error) {
+                    return connection.rollback(function() {
+                        throw error;
+                    });
+                }
+                
+                sql="DELETE FROM Address WHERE CustomerId=?";
+                values=[id];
+                connection.query(sql,values,function(e, r, f){
+                    if (e) {
+                        return connection.rollback(function() {
+                            throw e;
+                        });
+                    }
+                    sql="DELETE FROM Card WHERE CustomerId=?";
+                    values=[id];
+                    connection.query(sql,values,function(e, r, f){
+                        if (e) {
+                            return connection.rollback(function() {
+                                throw e;
+                            });
+                        }
+                        connection.commit(function(err) {
+                            if (err) {
+                                return connection.rollback(function() {
+                                    throw err;
+                                });
+                            }
+                            connection.release();
+                            callback && callback(err);
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
 exports = module.exports = CustomerDao;
