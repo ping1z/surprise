@@ -28,11 +28,16 @@ router.post('/signUp',
      var password = req.body.password;
      var confirmPassword = req.body.confirmPassword;
 
-    // call signUp method and send the parameter values to the method.
-    // res refers to the result from database.
-    customer.signUp(email, firstName, lastName, password, function(e, r){
-      res.render('login');    
-    });
+     if(password!=confirmPassword){
+       res.render('login');    
+     }
+     auth.generateHash(password,function(error,hash){
+        // call signUp method and send the parameter values to the method.
+        // res refers to the result from database.
+        customer.signUp(email, firstName, lastName, hash, function(e, r){
+          res.render('login');    
+        });
+     });
   });
 
 router.get('/login', function(req, res) {
