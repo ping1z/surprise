@@ -160,6 +160,18 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     color:#fff
 }
 
+.account-manage-title{
+    text-align: center;
+    padding: 20px;
+}
+
+.account-manage-div {
+    margin: auto;
+    width: 50%;
+    border: 1px solid #999999;
+    padding: 10px;
+}
+
 .form-login{
     width:100%;
 }

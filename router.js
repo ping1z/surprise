@@ -99,6 +99,7 @@ router.get('/listAddress',auth.ensureLoggedIn(),
 
 router.get('/addAddress',auth.ensureLoggedIn(),
   function(req, res){
+    // jade syntax
     res.render("address",{address:{id:"add",customerId:req.user.id}});
 });
 
@@ -154,22 +155,24 @@ router.get('/deleteAddress',auth.ensureLoggedIn(),
 });
 
 
-router.get('/payment',auth.ensureLoggedIn(),
+router.get('/listCard',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("payment",{profile:req.user});
+    var id = parseInt(req.query.id);
+    address.deleteAddress(id,function(e,r){
+          res.redirect('listCard');
+    });
 });
 
-router.get('/saveCard',auth.ensureLoggedIn(),
+router.get('/addCard',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("payment",{profile:req.user});
+    res.render("addCard",{card:{id:"add",customerId:req.user.id}});
 });
-
 
 router.post('/saveCard',auth.ensureLoggedIn(),
   function(req, res){
     var customerId = parseInt(req.body.customerId);
     if(customerId!=req.user.id){
-      res.redirect('listCard');
+      res.redirect('/addCard');
     }
     var id = req.body.id;
     var name = req.body.name;
@@ -184,11 +187,11 @@ router.post('/saveCard',auth.ensureLoggedIn(),
     var cvv = req.body.cvv;
     if(!id||id=="add"){
        address.addCard(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
-          res.redirect('listCard');
+          res.redirect('/listCard');
       });
     }else{
        address.updateCard(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
-          res.redirect('listCard');
+          res.redirect('/listCard');
       });
     }
 });

@@ -20,42 +20,43 @@ CardDao.prototype.findByCustomerId = function(id,callback){
     });
 };
 CardDao.prototype.addCard = function(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,callback){
-    var sql="INSERT INTO surprise.Address (customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,isDefault)"
+    var sql="INSERT INTO surprise.Card (customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,isDefault)"
           +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?,?,?,0)";
     var values=[customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv];
     var _=this;
     _.execute(sql,values,function(error, res){
-        console.log("addAddresse",error,res);
+        console.log("addCard",error,res);
         callback && callback(error, res);
     });
 };
 
-CardDao.prototype.updateAddress = function(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,callback){
-   var sql="UPDATE Address SET name=?, cardNumber=?, line1=?, line2=?, city=?, state=?, country=?, zipcode=?, expirationDate=?, cvv=?"
+CardDao.prototype.updateCard = function(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,callback){
+   var sql="UPDATE Card SET name=?, cardNumber=?, line1=?, line2=?, city=?, state=?, country=?, zipcode=?, expirationDate=?, cvv=?"
           +" WHERE id=?";
     var values=[name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,id];
     var _=this;
     _.execute(sql,values,function(error, res){
-        console.log("updateAddress",error,res);
+        console.log("updateCard",error,res);
         callback && callback(error, res);
     });
 };
-CardDao.prototype.deleteAddress = function(id,customerId,callback){
-   var sql="DELETE FROM Address WHERE id=? AND customerId=? AND isDefault=0";
+
+CardDao.prototype.deleteCard = function(id,customerId,callback){
+   var sql="DELETE FROM Card WHERE id=? AND customerId=? AND isDefault=0";
     var values=[id,customerId];
     var _=this;
     _.execute(sql,values,function(error, res){
-        console.log("deleteAddress",error,res);
+        console.log("deleteCard",error,res);
         callback && callback(error, res);
     });
 };
 CardDao.prototype.setAsDefault = function(id,customerId,callback){
-    var sql="UPDATE Address SET isDefault=0"
+    var sql="UPDATE Card SET isDefault=0"
           +" WHERE customerId=? AND isDefault=1";
     var values=[customerId];
     var _=this;
     _.execute(sql,values,function(error, res){
-        sql="UPDATE Address SET isDefault=1"
+        sql="UPDATE Card SET isDefault=1"
           +" WHERE id=? AND customerId=? AND isDefault=0" ;
         values=[id, customerId];
          _.execute(sql,values,function(e, r){
@@ -63,4 +64,16 @@ CardDao.prototype.setAsDefault = function(id,customerId,callback){
         });
     });
 };
+
+CardDao.prototype.listCard = function(id){
+   var sql="SELECT * FROM surprise.card"
+          +" WHERE id=?";
+    var values=[id];
+    var _=this;
+    _.execute(sql,values,function(error, res){
+        console.log("listCard",error,res);
+        callback && callback(error, res);
+    });
+};
+
 exports = module.exports = CardDao;
