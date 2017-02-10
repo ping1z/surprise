@@ -168,7 +168,7 @@ router.get('/addCard',auth.ensureLoggedIn(),
     res.render("addCard",{card:{id:"add",customerId:req.user.id}});
 });
 
-router.post('/saveCard',auth.ensureLoggedIn(),
+router.post('/addCard',auth.ensureLoggedIn(),
   function(req, res){
     var customerId = parseInt(req.body.customerId);
     if(customerId!=req.user.id){
@@ -186,11 +186,11 @@ router.post('/saveCard',auth.ensureLoggedIn(),
     var expirationDate = req.body.expirationDate;
     var cvv = req.body.cvv;
     if(!id||id=="add"){
-       address.addCard(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
+       card.addCard(customerId,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
           res.redirect('/listCard');
       });
     }else{
-       address.updateCard(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
+       card.updateCard(id,name,cardNumber,line1,line2,city,state,country,zipcode,expirationDate,cvv,function(e,r){
           res.redirect('/listCard');
       });
     }
