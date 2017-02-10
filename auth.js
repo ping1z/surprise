@@ -5,7 +5,7 @@ var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 
 //bcrypt for passwaord encryption
-var bcrypt = require('bcrypt');
+//var bcrypt = require('bcrypt');
 
 // load up the models we need: CustomerDao model.
 var CustomerDao = require("./dao/CustomerDao.js");
@@ -35,9 +35,12 @@ var Authorize = function(){
           if (!user) {
               return done(null, false, { message: 'Incorrect userIdentity.' });
           }
-          var match =bcrypt.compareSync(password, user.password); // true 
-          if (!match) {
-              return done(null, false, { message: 'Incorrect password.' });
+          //var match =bcrypt.compareSync(password, user.password); // true 
+          //if (!match) {
+              //return done(null, false, { message: 'Incorrect password.' });
+          //}
+          if(password!=user.password){
+            return done(null, false, { message: 'Incorrect password.' });
           }
           return done(null, user);
       });
@@ -75,9 +78,10 @@ Authorize.prototype.authenticate = function(type, opt){
 };
 
 Authorize.prototype.generateHash = function(password,callback){
-  bcrypt.hash(password, 10, function(err, hash) {
-    callback && callback(err,hash);   
-  });
+  callback && callback(null,password);   
+  // bcrypt.hash(password, 10, function(err, hash) {
+  //   callback && callback(err,hash);   
+  // });
 }
 
 // expose this function to our app using module.exports
