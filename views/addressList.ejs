@@ -32,11 +32,11 @@
                             </ul>
                             <ul class="address-item-action">
                                 <% if(!address.isDefault){ %>
-                                    <li><a href="/setAsDefaultAddress?id=<%= address.id %>">Set as default Address</a></li>
+                                    <li><a class="address-item-action-default" href="/setAsDefaultAddress?id=<%= address.id %>">Set as default Address</a></li>
                                 <% } %>
                                 <li><a href="/editAddress?id=<%= address.id %>">Edit</a></li>
                                 <% if(!address.isDefault){ %>
-                                    <li><a href="/deleteAddress?id=<%= address.id %>">Delete</a></li>
+                                    <li><a class="address-item-action-delete" href="/deleteAddress?id=<%= address.id %>">Delete</a></li>
                                 <% } %>
                             </ul>
                         </div>
@@ -53,14 +53,19 @@
             </ul>
         </footer>
         <script type="text/javascript">
-            // $("#enableEdit").on("click",function(event){
-            //     event.preventDefault();
-            //     $(".form-profile input[type=text]").attr("readonly",false);
-            //     $("#enableEdit").hide();
-            //     $("#submit").show();
-            //     $(".form-profile input[type=text]").first().focus();
-            //     $(".form-profile").addClass("editing");
-            // });
+            $(".address-item-action-default").on("click",function(event){
+                var result = confirm("Are you sure ant to change your default address?");
+                if (!result) {
+                    event.preventDefault();
+                }
+            });
+
+            $(".address-item-action-delete").on("click",function(event){
+                var result = confirm("Are you sure ant to delete this address?");
+                if (!result) {
+                    event.preventDefault();
+                }
+            });
     </script>
     </body>
 </html>
