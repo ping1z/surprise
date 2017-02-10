@@ -18,10 +18,10 @@ AddressDao.prototype.findByCustomerId = function(id,callback){
         callback && callback(error, addr);
     });
 };
-AddressDao.prototype.addAddress = function(customerId,name,line1,line2,city,state,country,zipcode,callback){
-    var sql="INSERT INTO surprise.Address (customerId,name,line1,line2,city,state,country,zipcode,isDefault)"
-          +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,0)";
-    var values=[customerId,name,line1,line2,city,state,country,zipcode];
+AddressDao.prototype.addAddress = function(customerId,name,line1,line2,city,state,country,zipcode,telephone,callback){
+    var sql="INSERT INTO surprise.Address (customerId,name,line1,line2,city,state,country,zipcode,telephone,isDefault)"
+          +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?,0)";
+    var values=[customerId,name,line1,line2,city,state,country,zipcode,telephone,];
     var _=this;
     _.execute(sql,values,function(error, res){
         console.log("addAddresse",error,res);
@@ -29,10 +29,10 @@ AddressDao.prototype.addAddress = function(customerId,name,line1,line2,city,stat
     });
 };
 
-AddressDao.prototype.updateAddress = function(id,name,line1,line2,city,state,country,zipcode,callback){
-   var sql="UPDATE Address SET name=?, line1=?, line2=?, city=?, state=?, country=?, zipcode=?"
+AddressDao.prototype.updateAddress = function(id,name,line1,line2,city,state,country,zipcode,telephone,callback){
+   var sql="UPDATE Address SET name=?, line1=?, line2=?, city=?, state=?, country=?, zipcode=?, telephone=?"
           +" WHERE id=?";
-    var values=[name,line1,line2,city,state,country,zipcode,id];
+    var values=[name,line1,line2,city,state,country,zipcode,telephone,id];
     var _=this;
     _.execute(sql,values,function(error, res){
         console.log("updateAddress",error,res);

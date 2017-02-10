@@ -123,12 +123,13 @@ router.post('/saveAddress',auth.ensureLoggedIn(),
     var state = req.body.state;
     var country = req.body.country;
     var zipcode = req.body.zipcode;
+    var telephone = req.body.telephone;
     if(!id||id=="add"){
-       address.addAddress(customerId,name,line1,line2,city,state,country,zipcode,function(e,r){
+       address.addAddress(customerId,name,line1,line2,city,state,country,zipcode,telephone,function(e,r){
           res.redirect('listAddress');
       });
     }else{
-       address.updateAddress(id,name,line1,line2,city,state,country,zipcode,function(e,r){
+       address.updateAddress(id,name,line1,line2,city,state,country,zipcode,telephone,function(e,r){
           res.redirect('listAddress');
       });
     }
@@ -148,14 +149,11 @@ router.get('/deleteAddress',auth.ensureLoggedIn(),
     address.deleteAddress(id,customerId,function(e,r){
           res.redirect('listAddress');
     });
-
 });
-
 
 router.get('/payment',auth.ensureLoggedIn(),
   function(req, res){
     res.render("payment",{profile:req.user});
 });
-
 
 module.exports = router;
