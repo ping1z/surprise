@@ -20,10 +20,10 @@ CardDao.prototype.findByCustomerId = function(id,callback){
     });
 };
 
-CardDao.prototype.addCard = function(customerId,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,callback){
-    var sql="INSERT INTO surprise.Card (customerId,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,isDefault)"
-          +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?,?,0)";
-    var values=[customerId,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv];
+CardDao.prototype.addCard = function(customerId,type, name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,callback){
+    var sql="INSERT INTO surprise.Card (customerId,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,isDefault)"
+          +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,0)";
+    var values=[customerId,type, name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv];
     var _=this;
     _.execute(sql,values,function(error, res){
         console.log("addCard",error,res);
@@ -31,10 +31,10 @@ CardDao.prototype.addCard = function(customerId,name,cardNumber,line1,line2,city
     });
 };
 
-CardDao.prototype.updateCard = function(id,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,callback){
-   var sql="UPDATE Card SET name=?, cardNumber=?, line1=?, line2=?, city=?, state=?,=?, zipcode=?, expirationDate=?, cvv=?"
+CardDao.prototype.updateCard = function(id,type, name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,callback){
+   var sql="UPDATE Card SET type=?, name=?, cardNumber=?, line1=?, line2=?, city=?, state=?,=?, zipcode=?, expirationDate=?, cvv=?"
           +" WHERE id=?";
-    var values=[name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,id];
+    var values=[type, name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,id];
     var _=this;
     _.execute(sql,values,function(error, res){
         console.log("updateCard",error,res);

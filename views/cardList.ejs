@@ -21,7 +21,8 @@
                                 <div class="card-item-default">Default Card</div>
                             <% } %>
                             <ul class="card-item-content">
-                                <li><strong><%= card.name %></strong></li>
+                                <li><strong><%= card.type %></strong>&nbsp; &nbsp;<%= card.cardNumber %></li>
+                                <li><%= card.name %></li>
                                 <li><%= card.line1 %></li>
                                 <% if(card.line2){ %>
                                    <li><%= card.line2 %></li>
@@ -32,14 +33,10 @@
                                 <% if(!card.isDefault){ %>
                                     <li><a href="/setAsDefaultCard?id=<%= card.id %>">Set as default card</a></li>
                                 <% } %>
-                                <li><a href="/editCard?id=<%= card.id %>">Edit</a></li>
-                                <% if(!card.isDefault){ %>
-                                    <li><a href="/deleteCard?id=<%= card.id %>">Delete</a></li>
-                                <% } %>
+                                <li><a href="/deleteCard?id=<%= card.id %>">Delete</a></li>
                             </ul>
                         </div>
                     <% }); %>
-
                     <div class="card-add-button"><a href="/addCard">Add Card</a></div>
                 </div>      
             </div>
