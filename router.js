@@ -3,19 +3,18 @@ var express = require('express');
 var router = express.Router();
 var auth = require('./auth');
 var CustomerDao = require("./dao/customerDao.js");
-var UserDao = require("./dao/userDao.js");
-
-// create a new instance.
 var customer = new CustomerDao();
-var user = new UserDao();
-
-var CustomerDao = require("./dao/CustomerDao.js");
-var customer = new CustomerDao();
+var AddressDao = require("./dao/addressDao.js");
+var address = new AddressDao();
+var CardDao = require("./dao/cardDao.js");
+var card = new CardDao();
+var CatalogDao = require("./dao/catalogDao.js");
+var catalog = new CatalogDao();
 
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
-})
+});
 
 router.get("/",
     function(req,res){
@@ -30,19 +29,40 @@ router.post('/signUp',
      var email = req.body.email;
      var firstName = req.body.firstName;
      var lastName = req.body.lastName;
-     var telephone = req.body.telephone;
      var password = req.body.password;
      var confirmPassword = req.body.confirmPassword;
 
-    // call signUp method and send the parameter values to the method.
-    // res refers to the result from database.
-    customer.signUp(email, firstName, lastName, telephone, password, function(e, r){
-      res.render('login');    
-    });
+     if(password!=confirmPassword){
+       res.render('login');    
+     }
+     auth.generateHash(password,function(error,hash){
+        // call signUp method and send the parameter values to the method.
+        // res refers to the result from database.
+        customer.signUp(email, firstName, lastName, hash, function(e, r){
+          res.render('login');    
+        });
+     });
   });
 
 router.get('/login', function(req, res) {
    res.render("login");
+});
+
+
+
+router.get('/inventory', function(req, res) {
+    catalog.findAll(null,null,function(err,results) {
+        //console.log(results);
+        res.render("inventory",{inventory:results});
+    });
+});
+
+router.post('/inventory', function(req, res) {
+    var text = req.body.search;
+    catalog.findone(text,function(err,results) {
+        // console.log(results);
+        res.render("inventory",{inventory:results});
+    });
 });
 
 // send the input information back server via post. then if it failed, get back to 
@@ -50,8 +70,8 @@ router.get('/login', function(req, res) {
 // the autentication of it is local.
 router.post('/login', 
   auth.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
+  function(req, res){
+   res.redirect('/');
   });
 
 router.get('/logout',auth.ensureLoggedIn(),
@@ -65,91 +85,169 @@ router.get('/myAccount',auth.ensureLoggedIn(),
     res.render("myAccount");
 });
 
-router.get('/address',auth.ensureLoggedIn(),
+router.get('/profile',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("address",{profile:req.user});
+    res.render("profile",{profile:req.user});
 });
 
-router.get('/payment',auth.ensureLoggedIn(),
+router.post('/updateProfile',auth.ensureLoggedIn(),
   function(req, res){
-    res.render("payment",{profile:req.user});
+     var id = req.body.id;
+     if(id!=req.user.id){
+       res.redirect('profile');
+     }
+     var firstName = req.body.firstName;
+     var middleName = req.body.middleName;
+     var lastName = req.body.lastName;
+     customer.update(id, firstName, middleName, lastName, function(e, r){
+      res.redirect('profile');
+    });
+});
+
+router.get('/deleteProfile',auth.ensureLoggedIn(),
+  function(req, res){
+     var id = req.user.id;
+     customer.delete(id, function(e, r){
+      req.logout();
+      res.redirect('/');
+    });
 });
 
 router.get('/listAddress',auth.ensureLoggedIn(),
   function(req, res){
-    Address.findByCustomerId(1,function(err,address){
-      res.send(address);
+    address.findByCustomerId(req.user.id,function(err,address){
+      res.render("addressList",{addressList:address});
     });
+    
 });
 
 router.get('/addAddress',auth.ensureLoggedIn(),
-  function(req, res){    
+  function(req, res){
+    // jade syntax
+    res.render("address",{address:{id:"add",customerId:req.user.id}});
 });
 
+router.get('/editAddress',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    address.findById(id,customerId,function(e,address){
+        res.render("address",{address:address});
+    });
+});
+
+router.post('/saveAddress',auth.ensureLoggedIn(),
+  function(req, res){
+    var customerId = parseInt(req.body.customerId);
+    if(customerId!=req.user.id){
+      res.redirect('listAddress');
+    }
+    var id = req.body.id;
+    var name = req.body.name;
+    var line1 = req.body.line1;
+    var line2 = req.body.line2;
+    var city = req.body.city;
+    var state = req.body.state;
+    var country = req.body.country;
+    var zipcode = req.body.zipcode;
+    var telephone = req.body.telephone;
+    if(!id||id=="add"){
+       address.addAddress(customerId,name,line1,line2,city,state,country,zipcode,telephone,function(e,r){
+          res.redirect('listAddress');
+      });
+    }else{
+       address.updateAddress(id,name,line1,line2,city,state,country,zipcode,telephone,function(e,r){
+          res.redirect('listAddress');
+      });
+    }
+});
+router.get('/setAsDefaultAddress',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    address.setAsDefault(id,customerId,function(e,r){
+          res.redirect('listAddress');
+    });
+});
 router.get('/deleteAddress',auth.ensureLoggedIn(),
   function(req, res){
-});
-
-router.get('/profile',auth.ensureLoggedIn(),
-  function(req, res){
-    res.render("customer",{data:req.user});
-});
-
-router.get('/profile/edit',auth.ensureLoggedIn(),
-  function(req, res){
-    res.render("edit_customer",{data:req.user});
-});
-
-router.post('/profile/edit',function(req,res){
-
-    console.log(req.body);
-    var input = JSON.parse(JSON.stringify(req.body));
-
-    //timeConvert
-    var createdTimeFormat = new Date(input.createdTime);
-    var lastModifiedTimeFormat = new Date(input.lastModifiedTime);
-    input.createdTime = createdTimeFormat;
-    input.lastModifiedTime = lastModifiedTimeFormat;
-
-    console.log(input);
-    var data = {
-       id    : input.id,
-       username : input.username,
-       firstName   : input.firstName,
-       middleName   : input.middleName,
-       lastName    : input.lastName,
-       email   : input.email,
-       telephone   : input.telephone,
-       createdTime : input.createdTime,
-       lastModifiedTime    : input.lastModifiedTime
-    };
-
-    var id = req.body.id;
-    customer.update(id, data,function(error,res1){
-        if(error)
-            console.log(error,res1);
-        customer.findOneById(id, function(err, dataInfo){
-            res.render("customer", {data:dataInfo});
-        });
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    address.deleteAddress(id,customerId,function(e,r){
+          res.redirect('listAddress');
     });
 });
 
-router.get('/profile/delete',function(req,res){
-  customer.delete(req.user.id,function(error,res){
-    console.log(error,res);
-  });
-    req.logout();
-    res.render('login');
-});
-
-var AddressDao = require("./dao/AddressDao.js");
-var Address = new AddressDao();
-router.get('/listAddress',//auth.ensureLoggedIn(),
+router.get('/listCard',auth.ensureLoggedIn(),
   function(req, res){
-    Address.findByCustomerId(1,function(err,address){
-      res.send(address);
+    card.findByCustomerId(req.user.id,function(err,card){
+      res.render("cardList",{cardList:card});
     });
     
+});
+
+router.get('/addCard',auth.ensureLoggedIn(),
+  function(req, res){
+    // jade syntax
+    res.render("card",{card:{id:"add",customerId:req.user.id}});
+});
+
+router.get('/editCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    address.findById(id,customerId,function(e,address){
+        res.render("card",{card:card});
+    });
+});
+
+router.post('/saveCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var customerId = parseInt(req.body.customerId);
+    if(customerId!=req.user.id){
+      res.redirect('listCard');
+    }
+    var id = req.body.id;
+    var type = req.body.type;
+    var name = req.body.name;
+    var cardNumber = req.body.cardNumber;
+    var line1 = req.body.line1;
+    var line2 = req.body.line2;
+    var city = req.body.city;
+    var state = req.body.state;
+    var zipcode = req.body.zipcode;
+    var expirationDate = req.body.expirationDate;
+    var cvv = req.body.cvv;
+
+    auth.generateHash(cvv,function(error,hash){
+        if(!id||id=="add"){
+          card.addCard(customerId,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,hash,function(e,r){
+              res.redirect('listCard');
+          });
+        }else{
+          card.updateCard(id,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,hash,function(e,r){
+              res.redirect('listCard');
+          });
+        }
+     });
+});
+
+router.get('/setAsDefaultCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    card.setAsDefault(id,customerId,function(e,r){
+          res.redirect('listCard');
+    });
+});
+router.get('/deleteCard',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+    var customerId = req.user.id;
+    card.deleteCard(id,customerId,function(e,r){
+          res.redirect('listCard');
+    });
+  
 });
 
 module.exports = router;
