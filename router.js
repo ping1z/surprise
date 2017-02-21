@@ -16,7 +16,7 @@ router.use(function timeLog (req, res, next) {
 
 router.get("/",
     function(req,res){
-    var hasLogin = req.user?true:false;
+    var hasLogin = (req.user&&req.user.type=='customer')?true:false;
     res.render("index",{hasLogin:hasLogin});
 });
 

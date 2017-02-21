@@ -11,6 +11,10 @@ auth.init(app);
 var router = require('./router');
 app.use('/', router);
 
+//initalize admin router module
+var routerAdmin = require('./router-admin');
+app.use('/', routerAdmin);
+
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'))
 

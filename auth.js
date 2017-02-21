@@ -13,6 +13,11 @@ var CustomerDao = require("./dao/CustomerDao.js");
 // create a new instance
 var Customer = new CustomerDao();
 
+// load up the models we need: CustomerDao model.
+var AdminDao = require("./dao/AdminDao.js");
+
+// create a new instance
+var Admin = new AdminDao();
 
 // passport session setup
 //  required for persistent login sessions
@@ -25,7 +30,7 @@ var Customer = new CustomerDao();
 var Authorize = function(){
   // by default, usernameField is username, here we change parameters - usernameField
   //  is userIdentity. It could be one of username, email, telephone.
-  passport.use(new LocalStrategy({
+  passport.use("local",new LocalStrategy({
       usernameField: 'userIdentity',
       passwordField: 'password',
     },
@@ -42,6 +47,25 @@ var Authorize = function(){
           if(password!=user.password){
             return done(null, false, { message: 'Incorrect password.' });
           }
+          user.type = "customer";
+          return done(null, user);
+      });
+    }
+  ));
+  passport.use("local.admin",new LocalStrategy({
+      usernameField: 'userIdentity',
+      passwordField: 'password',
+    },
+    function(userIdentity, password, done) {
+      Admin.findOneByEmail(userIdentity,function(err, user){
+          if (err) { return done(err); }
+          if (!user) {
+              return done(null, false, { message: 'Incorrect userIdentity.' });
+          }
+          if(password!=user.password){
+            return done(null, false, { message: 'Incorrect password.' });
+          }
+          user.type = "admin";
           return done(null, user);
       });
     }
@@ -49,15 +73,28 @@ var Authorize = function(){
 
 // used to serialize the user for the session.
   passport.serializeUser(function(user, cb) {
-    cb(null, user.id);
+    var key = {
+      id: user.id,
+      type: user.type
+    }
+    cb(null, key);
   });
 
 // used to deserialize the user
-  passport.deserializeUser(function(id, cb) {
-    Customer.findOneById(id, function (err, user) {
-      if (err) { return cb(err); }
-      cb(null, user);
-    });
+  passport.deserializeUser(function(key, cb) {
+    if(key.type === 'admin'){
+        Admin.findOneById(key.id, function (err, user) {
+          if (err) { return cb(err); }
+          user.type = "admin";
+          cb(null, user);
+        });
+    }else if(key.type === 'customer'){
+        Customer.findOneById(key.id, function (err, user) {
+          if (err) { return cb(err); }
+          user.type = "customer";
+          cb(null, user);
+        });
+    }
   });
   console.log("Authorize init.");
 }
@@ -68,9 +105,24 @@ Authorize.prototype.init = function(app){
   app.use(passport.initialize());
   app.use(passport.session());
 };
-
-Authorize.prototype.ensureLoggedIn = function(){
-  return ensureLoggedIn;
+Authorize.prototype.ensureLoggedIn = function(options){
+  if (typeof options == 'string') {
+    options = { redirectTo: options }
+  }
+  options = options || {type:"customer"};
+  
+  var url = options.redirectTo || '/login';
+  var setReturnTo = (options.setReturnTo === undefined) ? true : options.setReturnTo;
+  
+  return function(req, res, next) {
+    if (!req.isAuthenticated || !req.isAuthenticated()||req.user.type!=options.type) {
+      if (setReturnTo && req.session) {
+        req.session.returnTo = req.originalUrl || req.url;
+      }
+      return res.redirect(url);
+    }
+    next();
+  }
 };
 
 Authorize.prototype.authenticate = function(type, opt){
