@@ -409,3 +409,40 @@ a{color: inherit;text-decoration: inherit;cursor: inheri;cursor: pointer;}
     cursor: pointer;
     margin-bottom: 15px
 }
+.search-wrapper{
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    position: absolute;
+    z-index: 100;
+    background:none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+.search-box{
+    padding-top:28%;
+    width:430px;
+    margin: 0 auto;
+}
+.search-box .gform-input-group input{
+    background: #fff;
+}
+.search-box .gform-wrapper button{
+    text-transform: none;
+    margin: 0 10px;
+    width:40%;
+    transition:  background-color 0.5s,color 0.5s;
+}
+.search-box .gform-wrapper button.search{
+    background:#2196F3;
+}
+.search-box .gform-wrapper button.look{
+    background:#9E9E9E;
+}
+.search-box .gform-wrapper button:hover{
+    background:#fff;
+    color:#2196F3;
+}
