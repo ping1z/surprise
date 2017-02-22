@@ -12,9 +12,10 @@
         </header>
         <section class="main-content">
             <div class="main-content-box">
+                <div class="main-content-title">
+                    <h1>Your Address</h1>
+                </div>
                 <div class="address-list">
-
-                    <div class="address-list-title">Your Address</div>
                     <% addressList.forEach(function(address){ %>
                         <div class="address-item">
                             <% if(address.isDefault){ %>
@@ -46,12 +47,7 @@
                 </div>      
             </div>
         </section>
-        <footer class="site-footer">
-            <ul class="site-footer-content">
-                <li>All rights reserved © 2017</li>
-                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
-            </ul>
-        </footer>
+        <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
         <script type="text/javascript">
             $(".address-item-action-default").on("click",function(event){
                 var result = confirm("Are you sure ant to change your default address?");

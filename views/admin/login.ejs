@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../global/_head', {title:"Login to Surprise Admin!"}); %>
+    <body class="fullscreen">
+        <div class="login-box">
+            <div class="login-form login-form-admin">
+                <form class="gform-wrapper" action="/admin/login" method="post">
+                    <div class="gform-row">
+                         <div class="gform-col-12">
+                            <div class="gform-title gform-title-center gform-title-light"><a href="/">Surprise Admin</a></div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-input-group">
+                                <input type="text" name="userIdentity" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-input-group">
+                                <input type="password" name="password" placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <button class="light">login</button>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <p id="forget-password" class="message"><a href="#">Forgot password?</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        $("#forget-password").on("click",function(event){
+           event.preventDefault();
+           alert("Sorry, we are still working on it. \nPlease search your brain first. \nThanks!");
+        });
+    </script>
+</html>

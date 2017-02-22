@@ -11,90 +11,82 @@
             </ul>
         </header>
         <section class="main-content">
-            <div class="main-content-box">
-                <div class="gform-wrapper">
-                    
-                    <form action="/saveAddress" method="post">
-                        <div class="gform-row">
-                            <div class="gform-col-12">
-                                <div class="gform-title">Address</div>
+            <div class="main-content-box"> 
+                <form class="gform-wrapper" action="/saveAddress" method="post">
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-title">Address</div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value=<%= address.id %>>
+                    <input type="hidden" name="customerId" value=<%= address.customerId %>>
+                    <div class="gform-row">
+                        <div class="gform-col-4">
+                            <div class="gform-input-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" name="name" value=<%= address.name %>>
                             </div>
                         </div>
-                        <input type="hidden" name="id" value=<%= address.id %>>
-                        <input type="hidden" name="customerId" value=<%= address.customerId %>>
-                        <div class="gform-row">
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="name">Full Name</label>
-                                    <input type="text" name="name" value=<%= address.name %>>
-                                </div>
-                            </div>
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="telephone">Phone</label>
-                                    <input type="text" name="telephone" value=<%= address.telephone %>>
-                                </div>
+                        <div class="gform-col-4">
+                            <div class="gform-input-group">
+                                <label for="telephone">Phone</label>
+                                <input type="text" name="telephone" value=<%= address.telephone %>>
                             </div>
                         </div>
-                        <div class="gform-row">
-                            <div class="gform-col-8">
-                                <div class="gform-input-group">
-                                    <label for="line1">Line1</label>
-                                    <input type="text" name="line1" value=<%= address.line1 %>>
-                                </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-8">
+                            <div class="gform-input-group">
+                                <label for="line1">Line1</label>
+                                <input type="text" name="line1" value=<%= address.line1 %>>
                             </div>
                         </div>
-                        <div class="gform-row">
-                            <div class="gform-col-8">
-                                <div class="gform-input-group">
-                                    <label for="line2">Line2</label>
-                                    <input type="text" name="line2" value=<%= address.line2 %>>
-                                </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-8">
+                            <div class="gform-input-group">
+                                <label for="line2">Line2</label>
+                                <input type="text" name="line2" value=<%= address.line2 %>>
                             </div>
                         </div>
-                        <div class="gform-row">
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="city">City</label>
-                                    <input type="text" name="city" value=<%= address.city %>>
-                                </div>
-                            </div>
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="state">State</label>
-                                    <input type="text" name="state" value=<%= address.state %>>
-                                </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-4">
+                            <div class="gform-input-group">
+                                <label for="city">City</label>
+                                <input type="text" name="city" value=<%= address.city %>>
                             </div>
                         </div>
-                        <div class="gform-row">
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="country">Country</label>
-                                    <input type="text" name="country" readonly value="United States">
-                                </div>
-                            </div>
-                            <div class="gform-col-4">
-                                <div class="gform-input-group">
-                                    <label for="zipcode">Zipcode</label>
-                                    <input type="text" name="zipcode" value=<%= address.zipcode %>>
-                                </div>
+                        <div class="gform-col-4">
+                            <div class="gform-input-group">
+                                <label for="state">State</label>
+                                <input type="text" name="state" value=<%= address.state %>>
                             </div>
                         </div>
-                        <div class="gform-row">
-                            <div class="gform-col-4">
-                                <button>Save</button>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-4">
+                            <div class="gform-input-group">
+                                <label for="country">Country</label>
+                                <input type="text" name="country" readonly value="United States">
                             </div>
                         </div>
-                    </form>
-                </div>      
+                        <div class="gform-col-4">
+                            <div class="gform-input-group">
+                                <label for="zipcode">Zipcode</label>
+                                <input type="text" name="zipcode" value=<%= address.zipcode %>>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-4">
+                            <button>Save</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </section>
-        <footer class="site-footer">
-            <ul class="site-footer-content">
-                <li>All rights reserved © 2017</li>
-                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
-            </ul>
-        </footer>
+         <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
         <script type="text/javascript">
     </script>
     </body>

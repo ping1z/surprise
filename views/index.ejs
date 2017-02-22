@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
     <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
-    <body>
+    <body class="fullscreen">
         <header class="top-banner">
             <div class="top-banner-title"><a href="/">Surprise</a></div>
             <ul class="top-login-group">
                 <% if (!hasLogin) { %>
                     <li><a href="/login">Login</a></li>
-                    <li>|</li>
-                    <li><a href="/inventory">Manage Inventory</a></li>
                 <% } %>
                 <% if (hasLogin) { %>
                     <li><a href="/myAccount">My Account</a></li>
@@ -17,21 +15,42 @@
                 <% } %>
             </ul>
         </header>
-
-        <section class="main-content">
-            <div class="carousel">
-                <div class="carousel-inner">
+        <section class="landing-box">
+            <div class="landing-carousel-box">
+                <div class="carousel">
                     <div class="carousel-item carousel-item-1">
-                        <img src="public/image/c1.jpg">
                     </div>
                 </div>
             </div>
+            <div class="landing-footer-box">
+                 <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
+            </div>
+            <div class="search-box">
+                <div class="search-content">
+                <form class="gform-wrapper" action="/search" method="post">
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                 <div class="search-title">
+                                    Tell us a short story<br> we give you a big <br><strong>surprise</strong> 
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                 <div class="gform-input-group">
+                                    <input type="text" name="keyword" placeholder="Tell us a short story.">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                 <button class="search">Surprise Me</button>
+                                 <button class="look">Just have a look.</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </section>
-        <footer class="site-footer">
-            <ul class="site-footer-content">
-                <li>All rights reserved © 2017</li>
-                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
-            </ul>
-        </footer>
     </body>
 </html>

@@ -160,7 +160,7 @@ BaseDao.prototype.findLikeOne = function(columns, query, callback){
 };
 
 BaseDao.prototype.findAll = function(columns, orderBy, callback){
-    this.find(columns, null, orderBy, null, null, function(rerror, results){
+    this.find(columns, null, orderBy, null, null, function(rerror, esults){
         callback && callback(error, results);
     });
 };

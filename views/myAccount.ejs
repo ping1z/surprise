@@ -12,22 +12,17 @@
         </header>
         <section class="main-content">
             <div class="main-content-box">
-                <div class="account-manage-title">
+                <div class="main-content-title-center">
                     <h1>Your Account</h1>
                 </div>
                 <ul class="account-manage">
-                    <div class="account-manage-div">Orders</div><br>
-                    <div class="account-manage-div"><a href="/listAddress">Shipping Address</a></div><br>
-                    <div class="account-manage-div"><a href="/listCard">Payment Methods</a></div><br>
-                    <div class="account-manage-div"><a href="/profile">Manage Profile</a></div><br>
+                    <div class="account-manage-item">Orders</div>
+                    <div class="account-manage-item"><a href="/listAddress">Shipping Address</a></div>
+                    <div class="account-manage-item"><a href="/listCard">Payment Methods</a></div>
+                    <div class="account-manage-item"><a href="/profile">Manage Profile</a></div>
                 </ul>
             </div>
         </section>
-        <footer class="site-footer">
-            <ul class="site-footer-content">
-                <li>All rights reserved © 2017</li>
-                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
-            </ul>
-        </footer>
+        <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
     </body>
 </html>

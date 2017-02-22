@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../global/_head', {title:"Admin Landing Page"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title"><a href="/">Surprise</a></div>
+            <ul class="top-login-group">
+                <li><a href="/admin/logout">Sign Out</a></li>
+            </ul>
+        </header>
+
+        <section class="main-content">
+            <div class="main-content-box">
+                 <div class="main-content-title">
+                    <h1>Dashboard</h1>
+
+        <div class="form-center">
+            <form action="/admin/index" method="post" id="form-inven">
+                <div  class="form-left">
+
+                <p style="color: #f2f2f2;text-align: left"><a href="/addProduct"><span>Add a product</span></a></p>
+                <p style="color: #f2f2f2;text-align: left"><a href="/admin/index"><span>Show all product</span></a></p>
+                    <p style="color: #f2f2f2;text-align: left">Sort By</p>
+                    <select style="width: 150px;text-align: center" name="Gender" form="form-inven">
+                        <option>Gender</option>
+                        <option value ="0">female</option>
+                        <option value ="1">male</option>
+                    </select>
+                    <br>
+                    <br>
+                    <select style="width: 150px;text-align: center" name="Occassions" form="form-inven">
+                        <option>Occasions</option>
+                        <option value ="Mother's day">Mother's day</option>
+                        <option value ="Father's day">Father's day</option>
+                        <option value="President's day">President's day</option>
+                        <option value="New Year's day">New Year's day</option>
+                        <option value="Valentine's day">Valentine's day</option>
+                        <option value="Birthday">Birthday</option>
+                    </select>
+                    <br>
+                    <br>
+                    <input type="submit"  value="sort" class="form-button"/>
+                </div>
+                <div class="form-right">
+                    Name:<input type="text" name="search" class="form-text"/>
+                    <input type="submit" text="Submit" value="Search" class="form-button"/>
+                    <table border="1">
+                        <tr>
+                            <th>occasions</th>
+                            <th>name</th>
+                            <th>price</th>
+                            <th>description</th>
+                            <th>gender</th>
+                            <th>age</th>
+                            <th>department</th>
+                            <th>contents</th>
+                            <th>quantity</th>
+                            <th>sku</th>
+                            <th>picture</th>
+                            <th width="110" class="ac">Action</th>
+                        </tr>
+                        <%
+                        if(index.length != null){
+                        for(var i = 0 ; i < index.length ; i++){
+                        %>
+                        <tr>
+                            <th><%= index[i]['occasions']%></th>
+                            <th><%= index[i]['name']%></th>
+                            <th><%= index[i]['price']%></th>
+                            <th><%= index[i]['description']%></th>
+                            <th><%= index[i]['gender']%></th>
+                            <th><%= index[i]['age']%></th>
+                            <th><%= index[i]['department']%></th>
+                            <th><%= index[i]['contents']%></th>
+                            <th><%= index[i]['quantity']%></th>
+                            <th><%= index[i]['sku']%></th>
+                            <th><%= index[i]['picture']%></th>
+                            <td><a href="#">Edit</a></td>
+                        </tr>
+                        <%}}else{%>
+                        <tr>
+                            <th><%= index['occasions']%></th>
+                            <th><%= index['name']%></th>
+                            <th><%= index['price']%></th>
+                            <th><%= index['description']%></th>
+                            <th><%= index['gender']%></th>
+                            <th><%= index['age']%></th>
+                            <th><%= index['department']%></th>
+                            <th><%= index['contents']%></th>
+                            <th><%= index['quantity']%></th>
+                            <th><%= index['sku']%></th>
+                            <th><%= index['picture']%></th>
+                            <td><a href="#">Edit</a></td>
+                        </tr>
+                        <% }%>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+                 </div>
+            </div>
+        </section>
+         <%- include('../global/_footer'); %>
+    </body>
+</html>

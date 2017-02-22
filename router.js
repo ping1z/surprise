@@ -8,8 +8,6 @@ var AddressDao = require("./dao/addressDao.js");
 var address = new AddressDao();
 var CardDao = require("./dao/cardDao.js");
 var card = new CardDao();
-var CatalogDao = require("./dao/catalogDao.js");
-var catalog = new CatalogDao();
 
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
@@ -18,7 +16,7 @@ router.use(function timeLog (req, res, next) {
 
 router.get("/",
     function(req,res){
-    var hasLogin = req.user?true:false;
+    var hasLogin = (req.user&&req.user.type=='customer')?true:false;
     res.render("index",{hasLogin:hasLogin});
 });
 
@@ -48,30 +46,13 @@ router.get('/login', function(req, res) {
    res.render("login");
 });
 
-
-
-router.get('/inventory', function(req, res) {
-    catalog.findAll(null,null,function(err,results) {
-        //console.log(results);
-        res.render("inventory",{inventory:results});
-    });
-});
-
-router.post('/inventory', function(req, res) {
-    var text = req.body.search;
-    catalog.findone(text,function(err,results) {
-        // console.log(results);
-        res.render("inventory",{inventory:results});
-    });
-});
-
 // send the input information back server via post. then if it failed, get back to 
 // the login page. if succeeded, get back to home page.
 // the autentication of it is local.
 router.post('/login', 
   auth.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res){
-   res.redirect('/');
+  function(req, res) {
+    res.redirect('/');
   });
 
 router.get('/logout',auth.ensureLoggedIn(),
