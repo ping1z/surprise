@@ -11,7 +11,7 @@ var BaseDao = function(){
 BaseDao.prototype.pool = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
-  password : 'root123',
+  password : '123',
   database : 'surprise'
 });
 
@@ -150,6 +150,12 @@ BaseDao.prototype.findOne = function(columns, query, callback){
         var item = null;
         if(results.length > 0)item = results[0];
         callback && callback(error, results[0]);
+    });
+};
+
+BaseDao.prototype.findLikeOne = function(columns, query, callback){
+    this.find(columns,query,null,null,null,function(error, results){
+        callback && callback(error, results);
     });
 };
 
