@@ -12,43 +12,62 @@
         </header>
         <section class="main-content">
             <div class="main-content-box">
-                    <div class="form-wrapper form-profile">
-                        <div class="form-title">Your Profile</div>
-                        <form class="form-profile" action="/updateProfile" method="post">
-                            <input type="hidden" name="id" value=<%= profile.id %> >
-                            <div class="contro-group">
-                                <label for="firstName">First Male</label>
-                                <input type="text" name="firstName" readonly value=<%= profile.firstName %> >
+                <div class="profile-form">
+                   <form class="gform-wrapper" action="/updateProfile" method="post">
+                        <input type="hidden" name="id" value=<%= profile.id %> >
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <div class="gform-title"><a>Profile</a></div>
                             </div>
-                            <div class="contro-group">
-                                 <label for="MiddleName">Middle Male</label>
-                                <input type="text" name="middleName" readonly value=<%= profile.middleName %> >
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <div class="gform-input-group">
+                                    <label for="firstName">First Male</label>
+                                    <input type="text" name="firstName" readonly value=<%= profile.firstName %> >
+                                </div>
                             </div>
-                            <div class="contro-group">
-                                 <label for="lastName">Last Name</label>
-                                <input type="text" name="lastName" readonly value=<%= profile.lastName %> >
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <div class="gform-input-group">
+                                    <label for="MiddleName">Middle Male</label>
+                                    <input type="text" name="middleName" readonly value=<%= profile.middleName %> >
+                                </div>
                             </div>
-                            <button id="enableEdit">Edit</button>
-                            <button id="submit" type="submit" style="display:none">Save</button>
-                            <p class="message">Want to delete your account? <a id="deleteProfile">Yes, delete it.</a></p>
-                        </form>
-                    </div>      
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <div class="gform-input-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" name="lastName" readonly value=<%= profile.lastName %> >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <button id="enableEdit">Edit</button>
+                                <button id="submit" type="submit" style="display:none">Save</button>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <p class="message">Want to delete your account? <a id="deleteProfile">Yes, delete it.</a></p>
+                            </div>
+                        </div>
+                    </form>
+                <div>
             </div>
         </section>
-        <footer class="site-footer">
-            <ul class="site-footer-content">
-                <li>All rights reserved © 2017</li>
-                <li>CS6360 Group 4, Spring 2017, UTDallas</li>
-            </ul>
-        </footer>
+         <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
         <script type="text/javascript">
             $("#enableEdit").on("click",function(event){
                 event.preventDefault();
-                $(".form-profile input[type=text]").attr("readonly",false);
+                $(".profile-form input[type=text]").attr("readonly",false);
                 $("#enableEdit").hide();
                 $("#submit").show();
-                $(".form-profile input[type=text]").first().focus();
-                $(".form-profile").addClass("editing");
+                $(".profile-form input[type=text]").first().focus();
+                $(".profile-form").addClass("editing");
             });
             $("#deleteProfile").on("click",function(event){
                 var result = confirm("Are you sure want to delete your account?\nOnce deleted, all account information will be remove from our system permanently.");

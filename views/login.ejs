@@ -1,38 +1,117 @@
 <!DOCTYPE html>
 <html>
     <%- include('global/_head', {title:"Login to Surprise!"}); %>
-    <body class="login-page"> 
-        <div class="form-wrapper">
-            <div class="form-title"><a href="/">Surprise</a></div>
-            <form class="form-login" action="/login" method="post">
-                <input type="text" name="userIdentity" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <button>login</button>
-                <p id="forget-password" class="message"><a href="#">Forgot password?</a></p>
-                <div class="horizontal-line"></div>
-                <button id="show-signUp">Create an account</button>
-            </form>
-            <form class="form-signUp" action="/signUp" method="post" style="display:none">
-                <input type="text" name="firstName" placeholder="FirstName" >
-                <input type="text" name="lastName" placeholder="LastName" >
-                <input type="text" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <input type="password" name="confirmPassword" placeholder="Confirm Password">
-                <button>Sign Up</button>
-                <p id="show-login" class="message">Already have an account? <a href="#">Login</a></p>
-            </form>
-        </div>       
+    <body class="fullscreen">
+        <div class="login-box">
+            <div class="login-form">
+                <form class="gform-wrapper" action="/login" method="post">
+                    <div class="gform-row">
+                         <div class="gform-col-12">
+                            <div class="gform-title gform-title-center gform-title-light"><a href="/">Surprise</a></div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-input-group">
+                                <input type="text" name="userIdentity" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-input-group">
+                                <input type="password" name="password" placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <button class="light">login</button>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <p id="forget-password" class="message"><a href="#">Forgot password?</a></p>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-horizontal-line"></div>
+                      </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <button id="show-signUp" class="light">Create an account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="signup-form" style="display:none">
+                <form class="gform-wrapper" action="/signUp" method="post">
+                    <div class="gform-row">
+                         <div class="gform-col-12">
+                            <div class="gform-title gform-title-center gform-title-light"><a href="/">Sign Up</a></div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-input-group">
+                                <input type="text" name="firstName" placeholder="FirstName" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <div class="gform-input-group">
+                                <input type="text" name="lastName" placeholder="LastName" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                             <div class="gform-input-group">
+                                <input type="text" name="email" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                             <div class="gform-input-group">
+                                 <input type="password" name="password" placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+                     <div class="gform-row">
+                        <div class="gform-col-12">
+                             <div class="gform-input-group">
+                                 <input type="password" name="confirmPassword" placeholder="Confirm Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <button class="light">Sign Up</button>
+                      </div>
+                    </div>
+                    <div class="gform-row">
+                        <div class="gform-col-12">
+                            <p id="show-login" class="message">Already have an account? <a href="#">Login</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </body>
     <script type="text/javascript">
         $("#show-signUp").on("click",function(event){
            event.preventDefault();
-           $(".form-login").hide();
-           $(".form-signUp").show();
+           $(".login-form").hide();
+           $(".signup-form").show();
         });
         $("#show-login").on("click",function(event){
             event.preventDefault();
-           $(".form-signUp").hide();
-           $(".form-login").show();
+           $(".signup-form").hide();
+           $(".login-form").show();
         });
         $("#forget-password").on("click",function(event){
            event.preventDefault();
