@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title"><a href="/">Surprise</a></div>
+            <ul class="top-login-group">
+                <li><a href="/myAccount">My Account</a></li>
+                <li>|</li>
+                <li><a href="/logout">Sign Out</a></li>
+            </ul>
+        </header>
+        <section class="main-content">
+            <div class="product-container">
+                 <% productInfo.forEach(function(product){ %>
+                     <div class="product-container-left">
+                          <div class="main-content-title">
+                              <h1><%= product.name %></h1>
+                          </div>
+                          <div class="product-img">
+                              <%= product.picture %>
+                          </div>
+                          <div class="product-article">
+                              <p>Description</p>
+                              <p><%= product.description %></p>
+                          </div>
+                    </div>
+                <div class="product-container-right">                   
+                        <div class="product-item">
+                            <ul class="product-item-content">
+                                <li>Price: $<%= product.price %></li>
+                                <li>Quantity: <%= product.quantity %></li>                                                                                                       
+                            </ul>                          
+                        </div>
+                    <% }); %>
+                    <div class="product-add-button"><a href="/addToCart">Add to Cart</a></div>
+                </div>      
+            </div>
+        </section>
+         <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>
