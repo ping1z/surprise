@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title"><a href="/">Surprise</a></div>
+            <ul class="top-login-group">
+                <li><a href="/myAccount">My Account</a></li>
+                <li>|</li>
+                <li><a href="/logout">Sign Out</a></li>
+            </ul>
+        </header>
+        <section class="main-content">
+            <div class="product-container">
+                 <% productInfo.forEach(function(product){ %>
+                     <div class="product-container-left">
+                          <div class="main-content-title">
+                              <h1><%= product.name %></h1>
+                          </div>
+                          <div class="product-img">
+                              <%= product.picture %>
+                          </div>
+                          <div class="product-article">
+                              <p>Description</p>
+                              <p><%= product.description %></p>
+                          </div>
+                    </div>
+                <div class="product-container-right">                   
+                        <div class="product-item">
+                            <ul class="product-item-content">
+                                <li>Price: $<%= product.price %></li>
+                                <li>Quantity in stock: <%= product.quantity %></li>                                                                                                       
+                            </ul>
+                            <div class="gform-col-4">
+                                <div class="gform-input-group">
+                                    <label for="type">Qty</label>
+                                    <select name="quantity">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                </div>
+                            </div>                                                      
+                        </div>
+                    <% }); %>
+                    <div class="product-add-button"><a href="/addToCart">Add to Cart</a></div>
+                </div>      
+            </div>
+        </section>
+         <%- include('global/_footer', {title:"Welecom to Surprise!"}); %>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

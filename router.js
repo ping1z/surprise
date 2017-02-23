@@ -231,4 +231,14 @@ router.get('/deleteCard',auth.ensureLoggedIn(),
   
 });
 
+router.get('/product/:id', function(req, res){
+    product.findByProductSKU(req.product.sku,function(err,product){
+      res.render("productInfo",{productInfo:product}););
+});
+
+router.post('/product/:id', function(req, res){
+    product.addToCart(req.product.sku,function(err,product){
+      res.render("productInfo",{productInfo:product}););
+});
+
 module.exports = router;
