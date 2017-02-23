@@ -234,13 +234,18 @@ router.get('/deleteCard',auth.ensureLoggedIn(),
 });
 
 router.get('/product/:id', function(req, res){
-    product.findByProductSKU(req.product.sku,function(err,product){
-      res.render("productInfo",{productInfo:product}););
+    product.findByProductSKU(req.query.sku,function(err,product){
+      res.render("productInfo",{productInfo:product});
 });
 
 router.post('/product/:id', function(req, res){
-    product.addToCart(req.product.sku,function(err,product){
-      res.render("productInfo",{productInfo:product}););
+  var sku = req.body.sku;
+  var name = req.body.name;
+  var price = req.body.price;
+  var quantity = req.body.quantity;
+
+    product.addToCart(sku,name, price, quantity, function(e,r){
+      res.redirect("product/:id");
 });
 
 module.exports = router;
