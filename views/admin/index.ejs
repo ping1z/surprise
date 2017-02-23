@@ -2,18 +2,35 @@
 <html>
     <%- include('../global/_head', {title:"Admin Landing Page"}); %>
     <body>
-        <header class="top-banner">
-            <div class="top-banner-title"><a href="/">Surprise</a></div>
-            <ul class="top-login-group">
-                <li><a href="/admin/logout">Sign Out</a></li>
-            </ul>
+        <header class="admin-top-header">
+            <div class="admin-top-banner">
+                <div class="admin-top-banner-title"><a href="/">Surprise</a></div>
+                
+            </div>
+            <div class="admin-top-action-group">
+                <ul class="admin-top-menu">
+                    <li><a href="/admin/catalog">Catalog</a></li>
+                    <li><a href="/admin/order">Order</a></li>
+                    <li><a href="/admin/shipment">Shipment</a></li>
+                </ul>
+                <ul class="admin-top-login-group">
+                    <li><a>Super Admin</a></li>
+                    <li>|</li>
+                    <li><a href="/admin/logout">Sign Out</a></li>
+                </ul>
+            </div>
         </header>
-
         <section class="main-content">
             <div class="main-content-box">
-                 <div class="main-content-title">
-                    <h1>Dashboard</h1>
+                <div class="main-content-title-center">
+                    <h1>Your Account</h1>
                 </div>
+                <ul class="account-manage">
+                    <div class="account-manage-item">Orders</div>
+                    <div class="account-manage-item"><a href="/listAddress">Shipping Address</a></div>
+                    <div class="account-manage-item"><a href="/listCard">Payment Methods</a></div>
+                    <div class="account-manage-item"><a href="/profile">Manage Profile</a></div>
+                </ul>
             </div>
         </section>
          <%- include('../global/_footer'); %>

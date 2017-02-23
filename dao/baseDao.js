@@ -12,7 +12,8 @@ BaseDao.prototype.pool = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
   password : 'root123',
-  database : 'surprise'
+  database : 'surprise',
+  multipleStatements: true
 });
 
 // Using an object literal to create an object.
@@ -33,6 +34,7 @@ var SQLBuilder = function(){
     this.limit = "";
     this.offset = "";
     this.action = null;//select, delete, update, insert
+    this.returnTotal = false;
 }
 
 SQLBuilder.prototype.select = function(columns){
@@ -96,15 +98,23 @@ SQLBuilder.prototype.setOffset = function(offset){
     this.offset = " OFFSET "+ offset + " ";
     return this;
 }
+SQLBuilder.prototype.SetReturnTotal = function(){
+    this.returnTotal =true;
+}
 
 SQLBuilder.prototype.toSQL = function(){
     if(!this.action){
         throw Error("Can not complie Unknow SQLAction.");
     }
     var sql = "";
+
+    
     
     if(this.action == SQLAction.SELECT){
-        sql = "SELECT " + this.columns + " FROM " + this.table + this.query + this.sorts + this.limit + this.offset;
+        sql = "SELECT " +(this.returnTotal?" SQL_CALC_FOUND_ROWS ":"") + this.columns + " FROM " + this.table + this.query + this.sorts + this.limit + this.offset+"; ";
+        if(this.returnTotal){
+            sql+="SELECT FOUND_ROWS();"
+        }
     }
     return sql;
 }
@@ -139,6 +149,40 @@ BaseDao.prototype.find = function(columns, query, orderBy, limit, offset, callba
             // And done with the connection.
             connection.release();
 
+            callback && callback (error, results);
+            // Don't use the connection here, it has been returned to the pool.
+        });
+    });
+};
+
+BaseDao.prototype.findByPage = function(columns, query, orderBy, page, count, callback){
+    page = page?page:1;
+    count= count?count:5;
+    var limit = count;
+    var offset = (page-1)*count;
+    var sqlBuilder = new SQLBuilder();
+    sqlBuilder.select(columns).from(this.table).where(query).orderBy(orderBy).setLimit(limit).setOffset(offset).SetReturnTotal();
+        
+    var sql = sqlBuilder.toSQL();
+    console.log(sql);
+
+    this.pool.getConnection(function(err, connection) {
+        // Use the connection
+        connection.query(sql, function (error, results, fields) {
+    
+            // And done with the connection.
+            connection.release();
+            if(!error){
+                var totalCount = results[1][0]["FOUND_ROWS()"];
+                var r = {
+                    totalCount : totalCount,
+                    page:Math.floor(offset/limit)+1,
+                    totalPage:Math.ceil(totalCount/limit),
+                    count:limit,
+                    items:results[0]
+                }
+                results = r;
+            }
             callback && callback (error, results);
             // Don't use the connection here, it has been returned to the pool.
         });

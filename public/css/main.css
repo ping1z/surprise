@@ -477,3 +477,51 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     margin-bottom: 15px
 }
 
+.admin-top-banner{
+    position:relative;
+    background-color:#fff;
+    color:#000;
+    height: 30px;
+    line-height: 30px;
+    text-align: center; 
+}
+
+.admin-top-banner-title{
+    font-size: 1.5em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.admin-top-header li { display: inline-block}
+
+.admin-top-action-group{
+    background: #000;
+    height:40px;
+    text-align: left;
+    position: relative;
+    width: 100%;
+
+}
+.admin-top-menu li{
+    color:#fff;
+    background: #000;
+    height:40px;
+    line-height: 40px;
+    text-align: center;
+    width:100px;
+    font-size: 12px;
+    transition:  background-color 0.5s,color 0.5s;
+    float: left;
+}
+.admin-top-menu li:hover{
+    color:#000;
+    background: #fff;
+}
+.admin-top-login-group{
+    float: right;
+    top:0;
+    right:0;
+    padding-right:10px;
+    color:#fff;
+    height:40px;
+    line-height: 40px;
+}
