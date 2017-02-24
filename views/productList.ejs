@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title"><a href="/">Surprise</a></div>
+            <ul class="top-login-group">
+                <% if (!hasLogin) { %>
+                    <li><a href="/login">Login</a></li>
+                <% } %>
+                <% if (hasLogin) { %>
+                    <li><a href="/myAccount">My Account</a></li>
+                    <li>|</li>
+                    <li><a href="/logout">Sign Out</a></li>
+                <% } %>
+            </ul>
+        </header>
+        <section class="main-content">
+            <div class="main-content-box">
+                <div class="main-content-title">
+                    <h1>Surprises For You</h1>
+                </div>
+                <div class="search-result-list">
+                    <% productList.forEach(function(product){ %>
+                        <div class="search-result-list-item">
+                            <a href="/productDetail?sku=<%= product.sku %>">
+                            <img src="/public/image/<%= product.picture %>" width="200" height="200" alt="Product Details">
+                            <div class="search-result-list-item-row">
+                                <div class="search-result-list-item-price">
+                                    <sup class="search-result-list-item-price-currency">$</sup> <%= product.price %>
+                                </div>
+                                <div class="search-result-list-item-name">
+                                    <%= product.name %>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+                    <% }); %>
+                </div>    
+            </div>
+        </section>
+        <%- include('global/_footer'); %>
+        <script type="text/javascript">
+    
+        </script>
+    </body>
+</html>

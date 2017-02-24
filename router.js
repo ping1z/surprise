@@ -8,6 +8,8 @@ var AddressDao = require("./dao/addressDao.js");
 var address = new AddressDao();
 var CardDao = require("./dao/cardDao.js");
 var card = new CardDao();
+var ProductDao = require("./dao/productDao.js");
+var product = new ProductDao();
 
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
@@ -230,5 +232,17 @@ router.get('/deleteCard',auth.ensureLoggedIn(),
     });
   
 });
+
+router.get('/searchProduct',
+  function(req, res){
+    var keyword = req.query.keyword;
+    var hasLogin = (req.user&&req.user.type=='customer')?true:false;
+    product.search(keyword,function(e,r){
+          res.render("productList",{hasLogin:hasLogin,productList:r});
+    });
+  
+});
+
+
 
 module.exports = router;
