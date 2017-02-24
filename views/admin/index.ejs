@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html>
-    <%- include('../global/_head', {title:"Admin Landing Page"}); %>
-    <body>
+    <%- include('../global/_head-admin', {title:"Admin Landing Page"}); %>
+    <body ng-app="surpriseAdmin">
         <header class="admin-top-header">
             <div class="admin-top-banner">
                 <div class="admin-top-banner-title"><a href="/">Surprise</a></div>
                 
             </div>
-            <div class="admin-top-action-group">
-                <ul class="admin-top-menu">
-                    <li><a href="/admin/catalog">Catalog</a></li>
-                    <li><a href="/admin/order">Order</a></li>
-                    <li><a href="/admin/shipment">Shipment</a></li>
+            <div class="admin-top-action-group">	
+                <ul class="admin-top-menu" ng-controller="TopMenuController as top">
+                    <li 
+                        ng-repeat="module in top.modules" 
+                        ng-click="changeModules($index)"
+                        ng-class="$index==getModuleIndex()?'active':''"
+                        >
+                        <div class="top-menu-item-text">{{ module.name}}</div>
+                    </li>
                 </ul>
                 <ul class="admin-top-login-group">
                     <li><a>Super Admin</a></li>
@@ -20,14 +24,15 @@
                 </ul>
             </div>
         </header>
-        <section class="main-content">
+        <module-container></module-container>
+        <!--<section class="main-content">
             <div class="main-content-box">
                 <div class="main-content-title">
                     <h1>Dashboard</h1>
                 </div>
                 
             </div>
-        </section>
-         <%- include('../global/_footer'); %>
+        </section>!-->
+         <%- include('../global/_footer-admin'); %>
     </body>
 </html>
