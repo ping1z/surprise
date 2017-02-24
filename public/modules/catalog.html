@@ -1,0 +1,76 @@
+ <section class="admin-main-content">
+    <div class="admin-left-panel">
+        <div ng-show="moduleInfo.curSubmodule == 'product-list'">
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="occasion">Occasion</label>
+                    <select name="occasion" ng-model="filter.occasion">
+                        <option value=-1> - </option>
+                        <option value="VALENTINE_2017">VALENTINE_2017</option>
+                        <option value="EASTER_2017">EASTER_2017</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="department">Department</label>
+                    <select name="department" ng-model="filter.department">
+                        <option value=-1> - </option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="FOOD">Food</option>
+                        <option value="TOY">TOY</option>
+                        <option value="Home_Decoration">Home Decoration</option>
+                        <option value="Handcraft">Handcraft</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="gender">Gender</label>
+                    <select name="gender" ng-model="filter.gender">
+                        <option value=-1> - </option>
+                        <option value=0>Female</option>
+                        <option value=1>Male</option>
+                        <option value=3>Both</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="age">Age</label>
+                    <select name="age" ng-model="filter.age">
+                        <option value=-1> - </option>
+                        <option value=0>under 11</option>
+                        <option value=1>11 ~ 18</option>
+                        <option value=2>18 ~ 28</option>
+                        <option value=3>28 ~ 40</option>
+                        <option value=4>over 40</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="keyword">Keyword</label>
+                    <input name="keyword" ng-model="filter.keyword"></input>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <button ng-click="submitFilter()">Filter</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-row" ng-show="moduleInfo.curSubmodule == 'product-info'">
+             <div class="panel-input-group">
+                <button ng-click="BackToList()">Back to list</button>
+             </div>
+        </div>
+    </div>
+    <div class="admin-right-content-box">
+        <div ng-switch on="moduleInfo.curSubmodule">
+            <catalog-product-list-tmpl ng-switch-when="product-list"></catalog-product-list-tmpl>
+            <catalog-product-info-tmpl ng-switch-when="product-info"></catalog-product-info-tmpl>
+        </div>
+    </div>
+    
+</section>

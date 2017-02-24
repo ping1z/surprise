@@ -1,0 +1,128 @@
+<div>
+    <div class="admin-module-header">
+        Product Info
+    </div>
+    <div class="gform-wrapper">
+		<div class="gform-row">
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="sku">SKU</label>
+					<input type="text" name="sku" ng-model="product.sku" ng-readonly="isNewProduct">
+				</div>
+			</div>
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="picture">Picture</label>
+					<select name="picture" ng-model="product.picture">
+						<option value=-1> - </option>
+						<option value="product_1.png">product_1.png</option>
+						<option value="product_2.png">product_2.png</option>
+						<option value="product_3.png">product_3.png</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-8">
+				<div class="gform-input-group">
+					<label for="name">Name</label>
+					<input type="text" name="name" ng-model="product.name">
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="occasion">Occasion</label>
+					<select name="occasion" ng-model="product.occasion">
+						<option value=-1> - </option>
+						<option value="VALENTINE_2017">VALENTINE_2017</option>
+						<option value="EASTER_2017">EASTER_2017</option>
+					</select>
+				</div>
+			</div>
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="department">Department</label>
+					<select name="department" ng-model="product.department">
+						<option value=-1> - </option>
+						<option value="Electronic">Electronic</option>
+						<option value="FOOD">Food</option>
+						<option value="TOY">TOY</option>
+						<option value="Home_Decoration">Home Decoration</option>
+						<option value="Handcraft">Handcraft</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="gender">Gender</label>
+					<select name="gender" ng-model="product.gender" convert-to-number>
+						<option value=-1> - </option>
+						<option value=0>Female</option>
+						<option value=1>Male</option>
+						<option value=3>Both</option>
+					</select>
+				</div>
+			</div>
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="age">Age</label>
+					<select name="age" ng-model="product.age" convert-to-number>
+						<option value=-1> - </option>
+						<option value=0>under 11</option>
+						<option value=1>11 ~ 18</option>
+						<option value=2>18 ~ 28</option>
+						<option value=3>28 ~ 40</option>
+						<option value=4>over 40</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="price">Price</label>
+					<select name="price" ng-model="product.price" convert-to-number>
+						<option value=-1> - </option>
+						<option value=9.99>$9.99</option>
+						<option value=19.99>$19.99</option>
+						<option value=39.99>$39.99</option>
+					</select>
+				</div>
+			</div>
+			<div class="gform-col-4">
+				<div class="gform-input-group">
+					<label for="quantity">Quantity</label>
+					<input type="number" name="quantity" ng-model="product.quantity">
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-8">
+				<div class="gform-input-group">
+					<label for="description">Description</label>
+					<textarea name="description" rows="3" ng-model="product.description" ></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-8">
+				<div class="gform-input-group">
+					<label for="contents">Contents in the box</label>
+					<textarea name="contents" rows="3" ng-model="product.contents" ></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-4">
+				<button ng-click="save()">Save</button>
+			</div>
+			<div class="gform-col-4" ng-hide="isNewProduct">
+				<button ng-click="delete()">Delete</button>
+			</div>
+		</div>
+	</div>
+</div>

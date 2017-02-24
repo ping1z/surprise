@@ -35,7 +35,7 @@ router.get('/admin/logout',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/
     res.redirect('/admin');
 });
 
-router.get('/admin/listProduct',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+router.get('/admin/api/listProduct',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
   function(req, res){
     var columns = req.query.columns;
     var orderBy = req.query.orderBy;
@@ -123,14 +123,14 @@ router.post('/admin/api/createProduct',auth.ensureLoggedIn({type:"admin",redirec
       product.create(name,description,occasion,department,gender,age,price,contents,quantity,picture,function(e,result){
           if(e){
             var error={msg:e.message,stack:e.stack};
-            res.send(504,error);
+            res.send(500,error);
           }else{
             res.send(result);
           }
       });
     }catch(e){
       var error={msg:e.message,stack:e.stack};
-      res.send(503,error);
+      res.send(500,error);
     } 
 });
 
@@ -186,18 +186,18 @@ router.post('/admin/api/updateProduct',auth.ensureLoggedIn({type:"admin",redirec
       product.update(sku,name,description,occasion,department,gender,age,price,contents,quantity,picture,function(e,result){
           if(e){
             var error={msg:e.message,stack:e.stack};
-            res.send(504,error);
+            res.send(500,error);
           }else{
             res.send(result);
           }
       });
     }catch(e){
       var error={msg:e.message,stack:e.stack};
-      res.send(504,error);
+      res.send(500,error);
     }
 });
 
-router.get('/admin/api/deleteProduct',auth.ensureLoggedIn(),
+router.get('/admin/api/deleteProduct',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
   function(req, res){
     try{
       var sku = parseInt(req.query.sku);
@@ -207,14 +207,14 @@ router.get('/admin/api/deleteProduct',auth.ensureLoggedIn(),
       product.delete(sku,function(e,result){
           if(e){
             var error={msg:e.message,stack:e.stack};
-            res.send(504,error);
+            res.send(500,error);
           }else{
             res.send(result);
           }
       });
     }catch(e){
       var error={msg:e.message,stack:e.stack};
-      res.send(504,error);
+      res.send(500,error);
     }
 });
 module.exports = router;
