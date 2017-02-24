@@ -240,9 +240,16 @@ router.get('/searchProduct',
     product.search(keyword,function(e,r){
           res.render("productList",{hasLogin:hasLogin,productList:r});
     });
-  
 });
 
+router.get('/productDetail',
+  function(req, res){
+    var sku = req.query.sku;
+    var hasLogin = (req.user&&req.user.type=='customer')?true:false;
+    product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
+          res.render("productDetail",{hasLogin:hasLogin,product:r});
+    });
+});
 
 
 module.exports = router;
