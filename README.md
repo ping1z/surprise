@@ -1,4 +1,4 @@
-# surprise
+# Surprise
 
 This repository is a school project for practising database design and web programming. 
 Use [Node.js](https://nodejs.org/en/)with [Express.js](https://expressjs.com/) framework.
@@ -15,7 +15,8 @@ PS: Suggest Use [Visual Studio Code](http://code.visualstudio.com/) as and IDE f
 User Mysql Workbrench in import the schema file <path to dir>/surprise/schema/surprise-v2.3.mwb
 PS: please use the lastest version.
 
-Please use user:root password:root123 as you mysql account, or you can go to file <path to dir>/surprise/dao/baseDao.js and change the mysql user and password.
+Please use user:root  password:root123 as you mysql account.
+Or you can go to file <path to dir>/surprise/dao/baseDao.js and change the mysql user and password.
 
 ## Install
 
