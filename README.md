@@ -20,14 +20,14 @@ Please use user:root password:root123 as you mysql account, or you can go to fil
 ## Install
 
 ```bash
-$ cd <path to dir>/surprice
+$ cd <path to dir>/surprise
 $ npm install 
 ```
 
 ## Start Server
 
 ```bash
-$ cd <path to dir>/surprice
+$ cd <path to dir>/surprise
 $ node app.js
 ```
 
