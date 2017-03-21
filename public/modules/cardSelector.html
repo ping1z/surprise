@@ -1,0 +1,146 @@
+ <div class="checkout-mod gform-wrapper" ng-switch="mode">
+    <div ng-switch-when="display" class="checkout-mod-section gform-row">
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Payment Card</div>
+        </div>
+        <div class="gform-col-6">
+            <div class="checkout-mod-section-info">
+                <div>{{displayCard.name}}</div>
+                <div>{{displayCard.type}} {{displayCard.cardNumber}}</div>
+                <div>{{displayCard.line1}}</div>
+                <div>{{displayCard.line2}}</div>
+                <div>{{displayCard.city}}, {{displayCard.state}}, {{displayCard.zipcode}}</div>
+            </div>
+        </div>
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-action">
+                <button ng-click="enableSelector()">Change</button>
+            </div>
+        </div>
+    </div>
+    <div ng-switch-when="selector" class="checkout-mod-section gform-row">
+        
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Payment Card</div>
+        </div>
+        <div class="gform-col-9">
+            <div class="gform-col-12">
+                <ul class="checkout-mod-section-option-list">
+                    <li ng-repeat="item in cardList">
+                        <input type="radio" name="cardOptions" ng-model="displayCard" ng-value="item" ng-click="selectCard(item)">
+                        {{item.name}} &nbsp; {{item.type}} &nbsp; {{item.cardNumber}}           
+                    </li>
+                    <li class="checkout-mod-section-option-list-add">
+                        <a ng-click="enableEditor()"> + &nbsp;add new card<a>
+                    </li>
+                </ul>
+            </div>
+            <div class="gform-col-6">
+                <div class="checkout-mod-section-action" style="float:left;">
+                 <button ng-click="chooseCard()">Choose</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-switch-when="editor" class="checkout-mod-section checkout-mod-info-editor gform-row">
+         <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Add New Card</div>
+        </div>
+        <div class="gform-col-9"> 
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" name="name" ng-model="newCard.name">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="type">Type</label>
+                        <select name="type" ng-model="newCard.type">
+                            <option value="VISA">VISA</option>
+                            <option value="MasterCard">MasterCard</option>
+                            <option value="American Express">American Express</option>
+                            <option value="Discover">Discover</option>
+                            <option value="Discover">UnionPay</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-8">
+                    <div class="gform-input-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" name="cardNumber" ng-model="newCard.cardNumber">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="name">Expiration Date</label>
+                        <input type="text" name="expirationDate" ng-model="newCard.expirationDate">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="name">CVV</label>
+                        <input type="text" name="cvv" ng-model="newCard.cvv">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-8">
+                    <div class="gform-input-group">
+                        <label for="line1">Address Line 1</label>
+                        <input type="text" name="line1" ng-model="newCard.line1">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-8">
+                    <div class="gform-input-group">
+                        <label for="line2">Address Line 2</label>
+                        <input type="text" name="line2" ng-model="newCard.line2">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="city">City</label>
+                        <input type="text" name="city" ng-model="newCard.city">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="state">State</label>
+                        <input type="text" name="state" ng-model="newCard.state">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="country">Country</label>
+                        <input type="text" name="country" readonly value="United States">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="zipcode">Zipcode</label>
+                        <input type="text" name="zipcode" ng-model="newCard.zipcode">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <button ng-click="saveNewCard()">Save</button>
+                </div>
+                <div class="gform-col-4">
+                    <button ng-click="cancelEditer()" class="light">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

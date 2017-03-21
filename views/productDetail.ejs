@@ -2,19 +2,7 @@
 <html>
     <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
     <body>
-        <header class="top-banner">
-            <div class="top-banner-title"><a href="/">Surprise</a></div>
-            <ul class="top-login-group">
-                <% if (!hasLogin) { %>
-                    <li><a href="/login">Login</a></li>
-                <% } %>
-                <% if (hasLogin) { %>
-                    <li><a href="/myAccount">My Account</a></li>
-                    <li>|</li>
-                    <li><a href="/logout">Sign Out</a></li>
-                <% } %>
-            </ul>
-        </header>
+        <%- include('global/_topBanner'); %>
         <section class="main-content">
             <div class="main-content-box">
                 <div class="product-detail">
@@ -33,10 +21,10 @@
                                 <sup class="product-details-price-currency">$</sup> <%= product.price %>
                             </div>
                             <button>
-                                Buy Now
+                                <a href="/checkout?sku=<%= product.sku %>">Buy Now</a>
                             </button>
                             <button class="light">
-                                Add to Cart
+                                <a href="/addToCart?sku=<%= product.sku %>">Add to Cart</a>
                             </button>
                         </div>
                     </div>
@@ -46,7 +34,6 @@
         </section>
         <%- include('global/_footer'); %>
         <script type="text/javascript">
-    
         </script>
     </body>
 </html>

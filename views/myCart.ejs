@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <%- include('global/_topBanner'); %>
+        <section class="main-content">
+            <div class="main-content-box">
+                <div class="main-content-title">
+                    <h1>Your Shopping Cart</h1>
+                </div>
+                <div class="cart-list">
+                    <% cartList.forEach(function(item){ %>
+                        <div class="cart-list-item">
+                            <div class="cart-list-item-img">
+                                <a href="/productDetail?sku=<%= item.sku %>">
+                                <img src="/public/image/<%= item.picture %>" width="200" height="200" alt="Product Details">
+                                </a>
+                            </div>
+                         
+                            <div class="cart-list-item-info">
+                                <div class="cart-list-item-info-name"><a href="/productDetail?sku=<%= item.sku %>"><%= item.name %></a></div>
+                                <div class="cart-list-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.name %></a></div>
+
+                                <div class="cart-list-item-info-delete"><a href="/deleteFromCart?id=<%= item.id %>">Delete</a></div>
+                            </div>
+                            
+                            <div class="cart-list-item-price">
+                               Price: $<%= item.price %>
+                            </div>
+                            <div class="cart-list-item-quantity">
+                                Quantity: <select name="quantity" value="<%= item.quantity %>" data-id="<%= item.id %>">
+                                    <% if (item.quantity==1) { %>
+                                        <option value="1" selected="selected">1</option>
+                                    <% } %>
+                                    <% if (item.quantity!=1) { %>
+                                        <option value="1" >1</option>
+                                    <% } %>
+
+                                    <% if (item.quantity==2) { %>
+                                        <option value="1" selected="selected">2</option>
+                                    <% } %>
+                                    <% if (item.quantity!=2) { %>
+                                        <option value="1" >2</option>
+                                    <% } %>
+
+                                    <% if (item.quantity==3) { %>
+                                        <option value="3" selected="selected">3</option>
+                                    <% } %>
+
+                                    <% if (item.quantity!=3) { %>
+                                        <option value="3" >3</option>
+                                    <% } %>
+
+                                    <% if (item.quantity==4) { %>
+                                        <option value="4" selected="selected">4</option>
+                                    <% } %>
+                                    <% if (item.quantity!=4) { %>
+                                        <option value="4" >4</option>
+                                    <% } %>
+
+                                     <% if (item.quantity==5) { %>
+                                        <option value="5" selected="selected">5</option>
+                                    <% } %>
+                                    <% if (item.quantity!=5) { %>
+                                        <option value="5" >5</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>   
+                <div class="cart-summary">
+                    <div class="cart-summary-subtotal">Subtotal (<%= cartList.length %> item): $1345&nbsp;&nbsp; 
+                        <button><a href="/checkout">Checkout</a></button>
+                    </div>
+                </div> 
+            </div>
+        </section>
+        <%- include('global/_footer'); %>
+        <script type="text/javascript">
+             $(".cart-list-item-quantity select").on("change",function(event){
+                var cartId = $(this).data("id");
+                var quantity = $(this).val();
+                window.location = "/updateCartItemQuantity?id="+cartId+"&quantity="+quantity;
+            });
+        </script>
+    </body>
+</html>
