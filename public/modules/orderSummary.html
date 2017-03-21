@@ -1,0 +1,46 @@
+ <div class="checkout-mod gform-wrapper" ng-switch="mode">
+    <div class="checkout-mod-section gform-row">
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Order Summary</div>
+            
+            <button class="checkout-mod-summary-submit" ng-click="placeOrder()">Place your order</button>
+            
+        </div>
+        <div class="gform-col-9">
+            <div class="checkout-mod-section-info">
+                <div class="gform-row">
+                    <div class="checkout-mod-summary-label">
+                        Shipping
+                    </div>
+                    <div class="checkout-mod-summary-value">
+                        {{shippingCost | currency}}
+                    </div>
+                </div>
+                <div class="gform-row">
+                    <div class="checkout-mod-summary-label">
+                        Total before tax
+                    </div>
+                    <div class="checkout-mod-summary-value">
+                        {{totalBeforeTax | currency}}
+                    </div>
+                </div>
+                <div class="gform-row">
+                    <div class="checkout-mod-summary-label">
+                        Estimated tax to be collected
+                    </div>
+                    <div class="checkout-mod-summary-value">
+                        {{estimatedTax | currency}}
+                    </div>
+                </div>
+                <div class="gform-row checkout-mod-summary-total">
+                    <div class="checkout-mod-summary-label">
+                        Order total
+                    </div>
+                    <div class="checkout-mod-summary-value">
+                        {{total | currency}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

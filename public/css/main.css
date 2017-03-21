@@ -731,6 +731,7 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
 .checkout-mod-section-title{
     font-size:18px;
     font-weight: bold;
+    padding-bottom: 10px;
 }
 .checkout-mod-section-info{
     font-size:14px;
@@ -768,6 +769,38 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     height:30px;
     line-height:1;
 }
+
+.checkout-mod-summary-label{
+    float:left;
+    width:50%;
+    text-align: left;
+    font-size: 14px;
+    text-transform: none;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+.checkout-mod-summary-value{
+    float:left;
+    width:50%;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.checkout-mod-summary-total .checkout-mod-summary-label,
+.checkout-mod-summary-total .checkout-mod-summary-value
+{
+    border-top:1px solid #111;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+button.checkout-mod-summary-submit{
+    width: 160px;
+    height: 40px;
+    line-height: 1;
+}
+
 /* admin side */
 .admin-top-banner{
     position:relative;

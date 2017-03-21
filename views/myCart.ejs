@@ -19,7 +19,7 @@
                          
                             <div class="cart-list-item-info">
                                 <div class="cart-list-item-info-name"><a href="/productDetail?sku=<%= item.sku %>"><%= item.name %></a></div>
-                                <div class="cart-list-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.name %></a></div>
+                                <div class="cart-list-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.description %></a></div>
 
                                 <div class="cart-list-item-info-delete"><a href="/deleteFromCart?id=<%= item.id %>">Delete</a></div>
                             </div>
@@ -70,7 +70,7 @@
                     <% }); %>
                 </div>   
                 <div class="cart-summary">
-                    <div class="cart-summary-subtotal">Subtotal (<%= cartList.length %> item): $1345&nbsp;&nbsp; 
+                    <div class="cart-summary-subtotal">Subtotal (<%= cartList.length %> item): $<%= totalPrice%>&nbsp;&nbsp; 
                         <button><a href="/checkout">Checkout</a></button>
                     </div>
                 </div> 

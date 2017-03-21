@@ -1,19 +1,43 @@
 (function(){
 	var app = angular.module('surpriseCheckout', [ ]);	
-    var productSKU
-    var checkoutInfo = {
-        addressId:null,
-        cardId:null,
-        products:[]
+    var orderInfo = {
+        address:null,
+        card:null,
+        cartItems:[],
+
     }
     customerId = (customerId&&customerId!="guest")?customerId:"guest";
     if(customerId=="guest"&& sku==""){
         window.location = "/";
     }
+
+    app.controller('mainController',['$scope',function($scope){
+        $scope.updateSummary = function(){
+            $scope.orderInfo = orderInfo;
+            $scope.taxRate = 0.08;
+            $scope.totalBeforeTax = 0;
+            for(var i=0;i<orderInfo.cartItems.length;i++){
+                $scope.totalBeforeTax+=orderInfo.cartItems[i].price * orderInfo.cartItems[i].quantity;
+            }
+            $scope.estimatedTax = $scope.totalBeforeTax*$scope.taxRate;
+            $scope.total = $scope.totalBeforeTax+$scope.estimatedTax;
+
+            if($scope.total>50){
+                $scope.shippingCost = 0;
+            }else{
+                    $scope.shippingCost = 1.0;
+            }
+        }
+        $scope.$on('updateSummary', function(event, sku) {
+            $scope.updateSummary();
+        });
+        $scope.updateSummary();
+	}]);
+
     app.directive('modAddressSelector',function() {
 		return {
 			restrict: 'E',
-			scope: {},
+            scope:{},
 			controller: function($scope,$http) {
                 $scope.displayAddress = null;
                 $scope.listAddress = function(callback){
@@ -47,6 +71,9 @@
                         }
                     }
                     $scope.mode = "display";
+                    orderInfo.address = $scope.displayAddress;
+
+                    $scope.$emit('updateSummary');
                 }
                 $scope.enableSelector=function(){
                     if($scope.isGuest){
@@ -137,7 +164,7 @@
     app.directive('modCardSelector',function() {
 		return {
 			restrict: 'E',
-			scope: {},
+            scope:{},
 			controller: function($scope,$http) {
                 $scope.displayCard = null;
                 $scope.listCard = function(callback){
@@ -169,6 +196,7 @@
                         }
                     }
                     $scope.mode = "display";
+                    orderInfo.card = $scope.displayCard;
                 }
                 $scope.enableSelector=function(){
                     if($scope.isGuest){
@@ -258,11 +286,101 @@
     app.directive('modProductReview',function() {
 		return {
 			restrict: 'E',
-			scope: {},
+            scope:{},
 			controller: function($scope,$http) {
-                
+                var createCartItemFromProductDetails = function (product){
+                    var cart = angular.extend({id:"temp"},product);
+                    cart.productQuantity = cart.quantity;
+                    cart.quantity = 1;
+                    return cart;
+                }
+                $scope.listCart=function(){
+                    $scope.cartList = [];
+                    if(sku){
+                        var url= "/api/getProductDetail?sku="+sku+"&timestamp="+ new Date();
+                        $http.get(url)
+                        .then(function(result) {
+                            if(result){
+                                $scope.cartList.push(createCartItemFromProductDetails(result.data));
+                                orderInfo.cartItems = $scope.cartList;
+                                $scope.$emit('updateSummary');
+                            }else{
+                                alert("Product not found");  
+                            }
+                        }); 
+                    }else{
+                        if(customerId=="guest"){
+                            window.location = "/";
+                        }
+                        var url= "/api/listCart?customerId="+customerId+"&timestamp="+ new Date();
+                        $http.get(url)
+                        .then(function(result) {
+                            if(result){
+                                $scope.cartList = result.data;
+                                orderInfo.cartItems = $scope.cartList;
+                                $scope.$emit('updateSummary');
+                            }else{
+                                alert("Product not found");  
+                            }
+                        }); 
+                    }
+                }
+                $scope.listCart();
+
+                $scope.updateSummary=function(){
+                    $scope.$emit('updateSummary');
+                }
 			},
 			templateUrl:'/public/modules/checkoutProductReview.html'
 		};
 	});
+
+    app.directive('modOrderSummary',function() {
+		return {
+			restrict: 'E',
+			controller: function($scope,$http) {
+                
+                $scope.placeOrder=function(){
+                   var url='/api/placeOrder';
+                    $http({
+                        method:"POST",
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        transformRequest: function(obj) {
+                            var str = [];
+                            for(var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                            return str.join("&");
+                        },
+                        data: {
+                            address:JSON.stringify($scope.orderInfo.address),
+                            card:JSON.stringify($scope.orderInfo.card),
+                            cartItems:JSON.stringify($scope.orderInfo.cartItems),
+                        }
+                    }).then(function(result) {
+                        console.log(result);
+                        
+                    },function(result) {
+                        alert("Place order failed.\nPlease check the console log for more details.");
+                        console.error(result);
+                    });
+                }
+			},
+			templateUrl:'/public/modules/orderSummary.html'
+		};
+	});
+
+    app.directive('convertToNumber', function() {
+        return {
+            require: 'ngModel',
+            link: function(scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function(val) {
+                return val;//parseInt(val, 10);
+            });
+            ngModel.$formatters.push(function(val) {
+                return '' + val;
+            });
+            }
+        };
+    });
 })();

@@ -286,7 +286,11 @@ router.get('/addToCart',auth.ensureLoggedIn(),
 router.get('/myShoppingCart',auth.ensureLoggedIn(),
   function(req, res){
     cart.findByCustomerId(req.user.id,function(err,cart){
-        res.render("myCart",{hasLogin:true,cartCount:cart.length,cartList:cart});
+        var totalPrice=0;
+        for(var i=0;i<cart.length;i++){
+          totalPrice+=cart[i].price*cart[i].quantity;
+        }
+        res.render("myCart",{hasLogin:true,cartCount:cart.length,totalPrice:totalPrice,cartList:cart, });
     });
 });
 
@@ -307,7 +311,6 @@ router.get('/updateCartItemQuantity',auth.ensureLoggedIn(),
         res.redirect('myShoppingCart');
     });
 });
-
 
 router.get('/checkout',//auth.ensureLoggedIn(),
   function(req, res){
@@ -422,6 +425,63 @@ router.post('/api/addCard',auth.ensureLoggedIn(),
                 }
           });
       });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/api/getProductDetail',
+  function(req, res){
+    try{
+      var sku = req.query.sku;
+      product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
+            if(e){
+              var error={msg:e.message,stack:e.stack};
+              res.send(500,error);
+            }else{
+              res.send(200,r);
+            }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/api/listCart',auth.ensureLoggedIn(),
+  function(req, res){
+    try{
+      var customerId = parseInt(req.query.customerId);
+      if(customerId!=req.user.id){
+        throw new Error('Ivalide customerId='+customerId);
+      }
+      cart.findByCustomerId(req.user.id,function(e,r){
+            if(e){
+              var error={msg:e.message,stack:e.stack};
+              res.send(500,error);
+            }else{
+              res.send(200,r);
+            }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.post('/api/placeOrder',auth.ensureLoggedIn(),
+  function(req, res){
+    try{
+      var address = JSON.parse(req.body.address);
+      var card = JSON.parse(req.body.card);
+      var cartItems = JSON.parse(req.body.cartItems);
+      res.send(200,{
+          address:address,
+          card:card,
+          cartItems:cartItems
+        }
+      );
     }catch(e){
       var error={msg:e.message,stack:e.stack};
       res.send(500,error);
