@@ -26,7 +26,7 @@ ProductDao.prototype.findByFilter = function(columns, filters, orderBy, page, co
 
 ProductDao.prototype.findOneBySku = function(sku, columns, callback){
     //columns, query, orderBy, limit, offset, callback
-    this.findOne(null, "`sku`=\""+sku+"\"",function(error, addr){
+    this.findOne(columns, "`sku`=\""+sku+"\"",function(error, addr){
         console.log(error);
         callback && callback(error, addr);
     });

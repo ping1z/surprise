@@ -16,6 +16,10 @@ BaseDao.prototype.pool = mysql.createPool({
   multipleStatements: true
 });
 
+BaseDao.formatSQL = function(sql,values){
+    return mysql.format(sql, values);
+}
+
 // Using an object literal to create an object.
 var SQLAction = {
     SELECT:"SELECT",
@@ -39,9 +43,10 @@ var SQLBuilder = function(){
 
 SQLBuilder.prototype.select = function(columns){
     this.action = SQLAction.SELECT;
-    if(!columns)this.columns = "*";
-    return this;
-
+    if(!columns){
+        this.columns = "*";
+        return this;
+    }
     if(typeof columns == "string"){
         columns = columns.split(',');
     }
@@ -51,11 +56,16 @@ SQLBuilder.prototype.select = function(columns){
     }
 
     var cols = "";
+    var i = 0;
     columns.forEach(function(c){
         c = c.trim();
         if(c){
             cols += "`"+c+"`";
+            if(i<columns.length-1){
+                cols+=",";
+            }
         }
+        i++;
     })
     this.columns = cols;
     return this;

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <%- include('global/_topBanner'); %>
+        <section class="main-content">
+            <div class="main-content-box">
+                 <div class="main-content-title">
+                    <h1>Your Orders</h1>
+                </div>
+                <div class="order-line-item-list">
+                    <% lineItemList.forEach(function(item){ %>
+                        <div class="order-line-item gform-wrapper button">
+                            <div class="order-line-item-header gform-row">
+                                <div class="gform-col-3">
+                                    <a>#Order Details</a>
+                                </div>
+                                <div class="gform-col-3">
+                                    ORDER PLACED</BR><%= item.createdTime.toDateString() %>
+                                </div>
+                                <div class="gform-col-3">
+                                    TOTAL</BR>$<%= item.price * item.quantity %>
+                                </div>
+                                <div class="gform-col-3">
+                                    SHIP TO</BR><%= item.receiverName %>
+                                </div>
+                            </div>
+                            <div class="gform-row">
+                                 <% if (item.status>0) { %>
+                                 <% } %>
+                                 <% if (item.status==0) { %>
+                                    <div class="order-line-item-status">Preparing for shippment</div>
+                                 <% } %>
+                            </div>
+                            <div class="gform-row">
+                                <div class="order-line-item-img">
+                                    <a href="/productDetail?sku=<%= item.productSKU %>">
+                                    <img src="/public/image/<%= item.picture %>" width="150" height="150" alt="Product Details">
+                                    </a>
+                                </div>
+                                <div class="order-line-item-info">
+                                    <div class="order-line-item-info-name"><a href="/productDetail?sku=<%= item.sku %>"><%= item.productName %></a></div>
+                                    <div class="order-line-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.description %></a></div>
+                                    <div class="order-line-item-info-price">$<%= item.price %></div>
+                                </div>
+                                <div class="order-line-item-action">
+                                    <ul>
+                                        <% if (item.status<3) { %>
+                                            <li><button class="light"><a href="/order/return?lineItemId=<%= item.it %>">Return item</a></button></li>
+                                        <% } %>
+                                        <li> <button>Write a product review</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>      
+            </div>
+        </section>
+         <%- include('global/_footer'); %>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

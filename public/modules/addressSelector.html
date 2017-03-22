@@ -1,0 +1,118 @@
+ <div class="checkout-mod gform-wrapper" ng-switch="mode">
+    <div ng-switch-when="display" class="checkout-mod-section gform-row">
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Shipping Address</div>
+        </div>
+        <div class="gform-col-6">
+            <div class="checkout-mod-section-info">
+                <div>{{displayAddress.name}}</div>
+                <div>{{displayAddress.line1}}</div>
+                <div>{{displayAddress.line2}}</div>
+                <div>{{displayAddress.city}}, {{displayAddress.state}}, {{displayAddress.zipcode}}</div>
+            </div>
+        </div>
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-action">
+                <button ng-click="enableSelector()">Change</button>
+            </div>
+        </div>
+    </div>
+    <div ng-switch-when="selector" class="checkout-mod-section gform-row">
+        
+        <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Shipping Address</div>
+        </div>
+        <div class="gform-col-9">
+            <div class="gform-col-12">
+                <ul class="checkout-mod-section-option-list">
+                    <li ng-repeat="item in addressList">
+                        <input type="radio" name="addressOptions" ng-model="displayAddress" ng-value="item" ng-click="selectAddress(item)">
+                        {{item.name}}, {{item.line1}}, {{item.line2}}, {{item.city}}, {{item.state}}, {{item.zipcode}}          
+                    </li>
+                    <li class="checkout-mod-section-option-list-add">
+                        <a ng-click="enableEditor()"> + &nbsp;add new address<a>
+                    </li>
+                </ul>
+            </div>
+            <div class="gform-col-6">
+                <div class="checkout-mod-section-action" style="float:left;">
+                 <button ng-click="chooseAddress()">Choose</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-switch-when="editor" class="checkout-mod-section checkout-mod-info-editor gform-row">
+         <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Add New Address</div>
+        </div>
+        <div class="gform-col-9"> 
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" name="name" ng-model="newAddress.name">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="telephone">Phone</label>
+                        <input type="text" name="telephone" ng-model="newAddress.telephone">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-8">
+                    <div class="gform-input-group">
+                        <label for="line1">Line1</label>
+                        <input type="text" name="line1" ng-model="newAddress.line1">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-8">
+                    <div class="gform-input-group">
+                        <label for="line2">Line2</label>
+                        <input type="text" name="line2" ng-model="newAddress.line2">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="city">City</label>
+                        <input type="text" name="city" ng-model="newAddress.city">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="state">State</label>
+                        <input type="text" name="state" ng-model="newAddress.state">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="country">Country</label>
+                        <input type="text" name="country" readonly ng-model="newAddress.country">
+                    </div>
+                </div>
+                <div class="gform-col-4">
+                    <div class="gform-input-group">
+                        <label for="zipcode">Zipcode</label>
+                        <input type="text" name="zipcode" ng-model="newAddress.zipcode">
+                    </div>
+                </div>
+            </div>
+            <div class="gform-row">
+                <div class="gform-col-4">
+                    <button ng-click="saveNewAddress()">Save</button>
+                </div>
+                <div class="gform-col-4">
+                    <button ng-click="cancelEditer()" class="light">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
