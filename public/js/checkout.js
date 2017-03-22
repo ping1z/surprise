@@ -20,13 +20,14 @@
                 $scope.totalBeforeTax+=orderInfo.cartItems[i].price * orderInfo.cartItems[i].quantity;
             }
             $scope.estimatedTax = $scope.totalBeforeTax*$scope.taxRate;
-            $scope.total = $scope.totalBeforeTax+$scope.estimatedTax;
-
+            
             if($scope.total>50){
                 $scope.shippingCost = 0;
             }else{
                     $scope.shippingCost = 1.0;
             }
+            $scope.total = $scope.totalBeforeTax+$scope.estimatedTax + $scope.shippingCost;
+
         }
         $scope.$on('updateSummary', function(event, sku) {
             $scope.updateSummary();
@@ -355,9 +356,18 @@
                         data: {
                             address:JSON.stringify($scope.orderInfo.address),
                             card:JSON.stringify($scope.orderInfo.card),
-                            cartItems:JSON.stringify($scope.orderInfo.cartItems),
+                            cartItems:JSON.stringify($scope.orderInfo.cartItems)
                         }
                     }).then(function(result) {
+                        if(result.data=="OK"){
+                            if(customerId=="guest"){
+                                alert("Thank you!\n We will send you a email with the order information.");
+                                window.location = "/";
+                            }else{
+                                alert("Thank you!\n You order has been submitted successfully.")
+                                window.location = "/listOrder";
+                            }
+                        }
                         console.log(result);
                         
                     },function(result) {

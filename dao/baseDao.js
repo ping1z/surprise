@@ -16,6 +16,10 @@ BaseDao.prototype.pool = mysql.createPool({
   multipleStatements: true
 });
 
+BaseDao.formatSQL = function(sql,values){
+    return mysql.format(sql, values);
+}
+
 // Using an object literal to create an object.
 var SQLAction = {
     SELECT:"SELECT",

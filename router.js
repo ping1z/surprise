@@ -12,6 +12,10 @@ var ProductDao = require("./dao/productDao.js");
 var product = new ProductDao();
 var CartDao = require("./dao/cartDao.js");
 var cart = new CartDao();
+var OrderDao = require("./dao/orderDao.js");
+var order = new OrderDao();
+var LineItemDao = require("./dao/lineItemDao.js");
+var lineItem = new LineItemDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -251,10 +255,10 @@ router.get('/searchProduct',
     var hasLogin = (req.user&&req.user.type=='customer')?true:false;
     product.search(keyword,function(e,r){
           if(!hasLogin){
-              res.render("productList",{hasLogin:true,cartCount:0,productList:r});
+              res.render("productList",{hasLogin:hasLogin,cartCount:0,productList:r});
           }else{
               cart.getCartItemCount(req.user.id,function(err, count){
-                res.render("productList",{hasLogin:true,cartCount:0,productList:r});
+                res.render("productList",{hasLogin:hasLogin,cartCount:0,productList:r});
               })
           }
     });
@@ -266,10 +270,10 @@ router.get('/productDetail',
     var hasLogin = (req.user&&req.user.type=='customer')?true:false;
     product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
           if(!hasLogin){
-              res.render("productDetail",{hasLogin:true,cartCount:0,product:r});
+              res.render("productDetail",{hasLogin:hasLogin,cartCount:0,product:r});
           }else{
               cart.getCartItemCount(req.user.id,function(err, count){
-                res.render("productDetail",{hasLogin:true,cartCount:count,product:r});
+                res.render("productDetail",{hasLogin:hasLogin,cartCount:count,product:r});
               })
           }
     });
@@ -327,6 +331,16 @@ router.get('/checkout',//auth.ensureLoggedIn(),
     }else{
        res.render("checkout",{sku:sku,checkoutCount:1,customerId:"guest"});
     }
+    
+});
+
+router.get('/listOrder',auth.ensureLoggedIn(),
+  function(req, res){
+    lineItem.findByCustomerId(req.user.id,function(err,lineItems){
+        cart.getCartItemCount(req.user.id,function(err, count){
+            res.render("orderList",{hasLogin:true,cartCount:count,lineItemList:lineItems});
+        })
+    });
     
 });
 
@@ -470,18 +484,37 @@ router.get('/api/listCart',auth.ensureLoggedIn(),
     }
 });
 
-router.post('/api/placeOrder',auth.ensureLoggedIn(),
+router.post('/api/placeOrder',
   function(req, res){
     try{
       var address = JSON.parse(req.body.address);
       var card = JSON.parse(req.body.card);
       var cartItems = JSON.parse(req.body.cartItems);
-      res.send(200,{
-          address:address,
-          card:card,
-          cartItems:cartItems
-        }
-      );
+      
+      // calculate order info
+      var orderInfo = {
+        taxRate:0.08,
+        totalBeforeTax:0,
+        tax:0,
+        shippingCost:0,
+        total:0
+      };
+
+      for(var i=0;i<cartItems.length;i++){
+          orderInfo.totalBeforeTax+=cartItems[i].price * cartItems[i].quantity;
+      }
+      orderInfo.tax = orderInfo.totalBeforeTax * orderInfo.taxRate;
+      if(order.totalBeforeTax>50){
+          orderInfo.shippingCost = 0;
+      }else{
+              orderInfo.shippingCost = 1.0;
+      }
+      orderInfo.total = orderInfo.totalBeforeTax+orderInfo.tax + orderInfo.shippingCost;
+
+      var customerId = (req.user&&req.user.type=='customer')?req.user.id:0;
+      order.placeOrder(customerId, orderInfo, address, card, cartItems,function(){
+        res.send(200);
+      })
     }catch(e){
       var error={msg:e.message,stack:e.stack};
       res.send(500,error);

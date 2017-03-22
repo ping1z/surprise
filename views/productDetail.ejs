@@ -23,9 +23,11 @@
                             <button>
                                 <a href="/checkout?sku=<%= product.sku %>">Buy Now</a>
                             </button>
+                            <% if (hasLogin) { %>
                             <button class="light">
                                 <a href="/addToCart?sku=<%= product.sku %>">Add to Cart</a>
                             </button>
+                            <% } %>
                         </div>
                     </div>
                     
