@@ -86,8 +86,8 @@ OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,car
 
 OrderDao.prototype.saveshipment = function(connection, customerId, order,address, callback){
     var trackingNumber = uuid.v1();
-    var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,startTime,estimateTime,endTime,createdTime,lastModifiedTime)"
-            +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, null,null,null,NOW(),NOW())";
+    var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,packedTime,shippedTime,deliveredTime,estimatedTime,createdTime,lastModifiedTime)"
+            +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, null,null,null,null,NOW(),NOW())";
     var o = order;
     var values=[customerId,0,order.id,"COURIER","UPS", trackingNumber, address.name, address.line1, address.line2, address.city, address.state,"Unitied States",address.zipcode,address.telephone];
     console.log(BaseDao.formatSQL(sql, values));
@@ -137,17 +137,17 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
             if (err) { throw err; }
             if(customerId == 0){
                 //save address
-                OrderDao.prototype.saveGuestAddress(connection,address,function(a){
+                _.saveGuestAddress(connection,address,function(a){
                     address = a;
-                    OrderDao.prototype.saveGuestCard(connection,card,function(c){
+                    _.saveGuestCard(connection,card,function(c){
                         card = c;
-                        OrderDao.prototype.saveOrderInfo(connection,customerId,order,address,card,cartItems,function(o){
+                        _.saveOrderInfo(connection,customerId,order,address,card,cartItems,function(o){
                             order = o;
-                            OrderDao.prototype.saveOrderPayment(connection, customerId,order,card,function(paymentId){
+                            _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                                 
-                                OrderDao.prototype.saveshipment(connection, customerId, order,address,function(shipmentId){
+                                _.saveshipment(connection, customerId, order,address,function(shipmentId){
                                        
-                                    OrderDao.prototype.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
+                                    _.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
 
                                         connection.commit(function(err) {
                                             if (err) {
@@ -166,13 +166,13 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                 });      
             }else{
 
-                OrderDao.prototype.saveOrderInfo(connection,customerId,order,address,card,cartItems,function(o){
+                _.saveOrderInfo(connection,customerId,order,address,card,cartItems,function(o){
                     order = o;
-                    OrderDao.prototype.saveOrderPayment(connection, customerId,order,card,function(paymentId){
+                    _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                         
-                        OrderDao.prototype.saveshipment(connection, customerId, order,address,function(shipmentId){
+                        _.saveshipment(connection, customerId, order,address,function(shipmentId){
                                 
-                            OrderDao.prototype.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
+                            _.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
 
                                 connection.commit(function(err) {
                                     if (err) {

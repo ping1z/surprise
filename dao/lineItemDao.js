@@ -8,7 +8,7 @@ LineItemDao.prototype = Object.create(BaseDao.prototype);
 
 LineItemDao.prototype.findByCustomerId = function(customerId,callback){
 
-    var sql="SELECT l.*, p.description, p.picture, s.receiverName, s.trackingNumber"
+    var sql="SELECT l.*, p.description, p.picture, s.receiverName, s.trackingNumber, s.packedTime, s.shippedTime, s.deliveredTime, s.estimatedTime"
         +" FROM surprise.LineItem l "
         +"     JOIN surprise.product p "
         +"     ON p.sku = l.productSKU "
@@ -26,7 +26,7 @@ LineItemDao.prototype.findByCustomerId = function(customerId,callback){
 
 LineItemDao.prototype.findByShipmentId = function(shipmentId,callback){
 
-    var sql="SELECT l.*, p.description, p.picture, p.content"
+    var sql="SELECT l.*, p.description, p.picture, p.contents"
         +" FROM surprise.LineItem l "
         +"     JOIN surprise.product p "
         +"     ON p.sku = l.productSKU "

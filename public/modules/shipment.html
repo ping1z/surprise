@@ -1,10 +1,11 @@
 <section class="admin-main-content">
     <div class="admin-left-panel">
-        <div ng-show="moduleInfo.curSubmodule == 'product-list'">
+        <div ng-show="moduleInfo.curSubmodule == 'shipment-list'">
             <div class="panel-row">
                 <div class="panel-input-group">
                     <label for="status">Status</label>
-                    <select name="status" ng-model="filter.status">
+                    <select name="status" ng-model="filter.status" convert-to-number>
+                        <option value="-1">All</option>
                         <option value="0">Pending</option>
                         <option value="1">Packed</option>
                         <option value="2">Shipped</option>
