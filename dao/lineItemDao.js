@@ -7,13 +7,6 @@ var LineItemDao = function(){
 LineItemDao.prototype = Object.create(BaseDao.prototype);
 
 LineItemDao.prototype.findByCustomerId = function(customerId,callback){
-    //columns, query, orderBy, limit, offset, callback
-    // var sql ="SELECT * FROM "+
-    // "(SELECT * FROM surprise.LineItem WHERE `customerId`=?) c "
-    // +"INNER JOIN (SELECT sku, name, description, contents, picture FROM surprise.product) p "
-    // +"ON c.productSKU = p.sku "
-    // +"INNER JOIN (SELECT receiverName FROM surprise.shipment) s "
-    // +"ON c.orderId = s.orderId";
 
     var sql="SELECT l.*, p.description, p.picture, s.receiverName, s.trackingNumber"
         +" FROM surprise.LineItem l "
@@ -30,5 +23,21 @@ LineItemDao.prototype.findByCustomerId = function(customerId,callback){
         callback && callback(error, res);
     });
 };
+
+LineItemDao.prototype.findByShipmentId = function(shipmentId,callback){
+
+    var sql="SELECT l.*, p.description, p.picture, p.content"
+        +" FROM surprise.LineItem l "
+        +"     JOIN surprise.product p "
+        +"     ON p.sku = l.productSKU "
+        +" WHERE l.shipmentId=?";
+    var values=[shipmentId];
+    var _=this;
+    _.execute(sql,values,function(error, res){
+        console.log("findByShipmentId",error,res);
+        callback && callback(error, res);
+    });
+};
+
 
 exports = module.exports = LineItemDao;

@@ -306,7 +306,6 @@ router.get('/deleteFromCart',auth.ensureLoggedIn(),
     });
 });
 
-
 router.get('/updateCartItemQuantity',auth.ensureLoggedIn(),
   function(req, res){
     var id = req.query.id;

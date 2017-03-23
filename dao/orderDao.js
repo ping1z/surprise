@@ -87,7 +87,7 @@ OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,car
 OrderDao.prototype.saveshipment = function(connection, customerId, order,address, callback){
     var trackingNumber = uuid.v1();
     var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,startTime,estimateTime,endTime,createdTime,lastModifiedTime)"
-            +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, NOW(),NOW(),NOW(),NOW(),NOW())";
+            +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, null,null,null,NOW(),NOW())";
     var o = order;
     var values=[customerId,0,order.id,"COURIER","UPS", trackingNumber, address.name, address.line1, address.line2, address.city, address.state,"Unitied States",address.zipcode,address.telephone];
     console.log(BaseDao.formatSQL(sql, values));

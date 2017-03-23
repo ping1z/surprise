@@ -4,7 +4,10 @@ var router = express.Router();
 var auth = require('./auth');
 var ProductDao = require("./dao/productDao.js");
 var product = new ProductDao();
-
+var ShipmentDao = require("./dao/shipmentDao.js");
+var shipment = new ShipmentDao();
+var LineItemDao = require("./dao/lineItemDao.js");
+var lineItem = new LineItemDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -211,6 +214,60 @@ router.get('/admin/api/deleteProduct',auth.ensureLoggedIn({type:"admin",redirect
           }else{
             res.send(result);
           }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/listShipment',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+    try{
+      var columns = req.query.columns;
+      var orderBy = "status asc, createdTime desc";
+      var page = req.query.page?parseInt(req.query.page):null;
+      var count = req.query.count?parseInt(req.query.count):null;
+      var filters = [];
+      if(req.query.status){
+        filters.push({key:"status",value:parseInt(req.query.status)});
+      }
+
+      shipment.findByFilter(columns,filters,orderBy,page,count,function(e, result){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            res.send(result);
+          }
+      });
+     }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/getShipment',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+      
+      shipment.findOneById(id,function(e,s){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }
+          lineItem.findByShipmentId(id,function(e, i){
+            if(e){
+              var error={msg:e.message,stack:e.stack};
+              res.send(500,error);
+            }else{
+              res.send({
+                shipment:s,
+                lineItems:i
+              });
+            }
+          })
       });
     }catch(e){
       var error={msg:e.message,stack:e.stack};
