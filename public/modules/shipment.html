@@ -1,8 +1,34 @@
- <section class="main-content">
-    <div class="main-content-box">
-        <div class="main-content-title">
-            <h1>Shipment</h1>
+<section class="admin-main-content">
+    <div class="admin-left-panel">
+        <div ng-show="moduleInfo.curSubmodule == 'product-list'">
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="status">Status</label>
+                    <select name="status" ng-model="filter.status">
+                        <option value="0">Pending</option>
+                        <option value="1">Packed</option>
+                        <option value="2">Shipped</option>
+                        <option value="3">Delivered</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <button ng-click="submitFilter()">Filter</button>
+                </div>
+            </div>
         </div>
-        
+        <div class="panel-row" ng-show="moduleInfo.curSubmodule == 'shipment-info'">
+             <div class="panel-input-group">
+                <button ng-click="BackToList()">Back to list</button>
+             </div>
+        </div>
     </div>
+    <div class="admin-right-content-box">
+        <div ng-switch on="moduleInfo.curSubmodule">
+            <shipment-list-tmpl ng-switch-when="shipment-list"></shipment-list-tmpl>
+            <shipment-info-tmpl ng-switch-when="shipment-info"></shipment-info-tmpl>
+        </div>
+    </div>
+    
 </section>

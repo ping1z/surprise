@@ -1,6 +1,19 @@
 (function(){
 	var app = angular.module('surpriseAdmin', [ ]);	
 
+    app.filter('shipmentStatus', function() {
+        return function(input) {
+            var out;
+            switch(input){
+                case 0 :out="Pendding";break;
+                case 1 :out="Packed";break;
+                case 2 :out="Shipped";break;
+                case 3 :out="Delivered";break;
+            }
+            return out;
+        };
+    })
+
     app.factory('MenuService',function(){
 		var modules=[
 				{
@@ -24,7 +37,7 @@
 					url:"/admin/shipment",
 				}
 			];
-		var curModuleIndex = 1;
+		var curModuleIndex = 3;
 		var MenuService = {
 			initMenuService:function(){
 				console.log("initMenuService");
@@ -263,11 +276,100 @@
 			restrict: 'E',
 			scope: {},
 			controller: function($scope) {
+                $scope.moduleInfo={
+					curSubmodule:"shipment-list",
+					shipmentId:null
+				};
+                $scope.filter = {
+                    status:0
+                }
+                $scope.submitFilter=function(){
+                    $scope.$broadcast('renderList');
+                }
+                $scope.$on('selectshipment', function(event, id) {
+                    console.log(id);
+                    $scope.moduleInfo.shipmentId = id;
+                    $scope.moduleInfo.curSubmodule = "shipment-info";     
+                });
+                $scope.BackToList = function(){
+                    $scope.moduleInfo.shipmentId = null;
+                    $scope.moduleInfo.curSubmodule = "shipment-list"; 
+                }
 			},
-			templateUrl:'/public/modules/shipment.html'//,
-			//controllerAs: 'dashboardController'
+			templateUrl:'/public/modules/shipment.html'
 		};
 	});
+
+
+     app.directive('shipmentListTmpl',function(){
+		return {
+			restrict: 'E',
+			controller: function($scope,$http) {
+                $scope.pageInfo = {
+                   index:1,
+                   count:5,
+                   totalPage:100
+                }
+				$scope.$on('renderList', function(event, args) {
+                    console.log($scope.filter);
+                    $scope.render();
+                });
+                $scope.render = function(){
+                    var url = '/admin/api/listshipment?';
+                    if($scope.filter.status!="-1"){
+                        url+="status="+$scope.filter.status+"&";
+                    }
+                    
+                    url+="page="+$scope.pageInfo.index+"&count="+$scope.pageInfo.count+"timestamp="+ new Date();
+                    $http.get(url)
+					.then(function(result) {
+                        $scope.list=result.data;
+                        $scope.pageInfo.index=result.data.page;
+                        $scope.pageInfo.totalPage=result.data.totalPage;
+				    }); 
+                }
+                $scope.render();
+
+                $scope.showshipmentInfo = function(index){
+                    $scope.$emit('selectshipment',$scope.list.items[index].id);
+                }
+
+                $scope.pre = function(){
+                    $scope.pageInfo.index-=1;
+                    $scope.pageInfo.index = $scope.pageInfo.index<0?0:$scope.pageInfo.index;
+                    $scope.render();
+                }
+                $scope.next = function(){
+                    $scope.pageInfo.index+=1;
+                    if($scope.pageInfo.index>$scope.pageInfo.totalPage){
+                        $scope.pageInfo.index = $scope.pageInfo.totalPage;
+                        return;
+                    }
+                    $scope.render();
+                }
+
+			},
+			templateUrl:'/public/templates/shipmentListTmpl.html'
+		};
+	});
+
+    app.directive('shipmentInfoTmpl',function(){
+		return{
+			restrict: 'E',
+			controller: function($scope,$http){	
+                $scope.shipmentId = $scope.moduleInfo.shipmentId;
+                
+                var url= "/admin/api/getShipment?id="+$scope.shipmentId+"&timestamp="+ new Date();
+                $http.get(url)
+                .then(function(result) {
+                    $scope.shipment=result.data;
+                }); 
+                
+			},
+			templateUrl:'/public/templates/ShipmentInfoTmpl.html'
+		};
+	});
+
 
     app.directive('convertToNumber', function() {
         return {
