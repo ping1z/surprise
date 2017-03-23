@@ -129,7 +129,7 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     width: 100%;
     border: 0;
     height:48px;
-    line-height: 48px;
+    line-height: 1;
     text-align: center;
     color: #fff;
     font-size: 14px;
@@ -804,16 +804,27 @@ button.checkout-mod-summary-submit{
 .order-line-item{
     float:left;
     width:100%;
-    border:1px solid #f6f6f6;
+    border:1px solid #cec9c9;
     margin-bottom:10px;
     text-align: left;
     box-sizing: border-box;
+}
+.order-line-item .gform-row{
+    padding-bottom: 0;
 }
 .order-line-item-header{
     padding: 2px 5px;
     box-sizing: border-box;
     background-color: #f6f6f6;
     line-height: 1.5em;
+}
+.order-line-item-checkbox{
+    vertical-align: middle;
+    text-align: center;
+    height:100%;
+    margin-top:70px;
+    float:left;
+    width:100px;
 }
 .order-line-item-img{
     float:left;
@@ -839,11 +850,22 @@ button.checkout-mod-summary-submit{
     margin-bottom:10px;
 
 }
+.order-line-item-info-quantity label{
+    font-weight: bold;
+}
+.order-line-item-info-quantity input{
+    width:40px;
+
+    margin-top:3px;
+    text-align: center; 
+}
 .order-line-item-action{
     float: right;
     text-align: right;
     padding-right: 10px;
+    padding-top: 10px;
 }
+
 .order-line-item-action li{
     width:100%;
     margin-bottom:10px
@@ -873,7 +895,21 @@ button.checkout-mod-summary-submit{
     font-weight: normal;
 }
 
-
+.order-line-item-response{
+    float: right;
+    text-align: right;
+    padding: 10px 20px;
+}
+.order-line-item-response label{
+    font-size:14px;
+    font-weight: bold;
+}
+.order-line-item-response select{
+    height:30px;
+    padding: 2px 5px;
+    margin-top: 3px;
+    width:186;
+}
 
 /* admin side */
 .admin-top-banner{

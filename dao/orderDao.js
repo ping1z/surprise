@@ -84,7 +84,7 @@ OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,car
     });
 }
 
-OrderDao.prototype.saveshipment = function(connection, customerId, order,address, callback){
+OrderDao.prototype.saveShipment = function(connection, customerId, order,address, callback){
     var trackingNumber = uuid.v1();
     var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,packedTime,shippedTime,deliveredTime,estimatedTime,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, null,null,null,null,NOW(),NOW())";
@@ -145,7 +145,7 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                             order = o;
                             _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                                 
-                                _.saveshipment(connection, customerId, order,address,function(shipmentId){
+                                _.saveShipment(connection, customerId, order,address,function(shipmentId){
                                        
                                     _.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
 
@@ -170,7 +170,7 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                     order = o;
                     _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                         
-                        _.saveshipment(connection, customerId, order,address,function(shipmentId){
+                        _.saveShipment(connection, customerId, order,address,function(shipmentId){
                                 
                             _.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
 
