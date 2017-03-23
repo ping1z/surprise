@@ -16,6 +16,8 @@ var OrderDao = require("./dao/orderDao.js");
 var order = new OrderDao();
 var LineItemDao = require("./dao/lineItemDao.js");
 var lineItem = new LineItemDao();
+var ReturnDao = require("./dao/returnDao.js");
+var returnDao = new ReturnDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -341,6 +343,73 @@ router.get('/listOrder',auth.ensureLoggedIn(),
         })
     });
     
+});
+
+router.get('/returnItem',auth.ensureLoggedIn(),
+  function(req, res){
+    var lineItemId = req.query.lineItemId?req.query.lineItemId:null;
+
+    lineItem.findOneByIdAndUser(lineItemId, req.user.id, function(err,item){
+        
+        lineItem.findByShipmentId(item.shipmentId,function(err,lineItems){
+          
+          cart.getCartItemCount(req.user.id,function(err, count){
+            res.render("returnItems",{hasLogin:true,cartCount:count,lineItemList:lineItems});
+          })
+       
+       })
+    });
+    
+});
+
+router.post('/returnSubmit',auth.ensureLoggedIn(),
+  function(req, res){
+    try{
+      var data = req.body;
+      var ids = [];
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          if(key.startsWith("item_")){
+            var s = key.split("_");
+            var id = s[1];
+            ids.push(id);
+          }
+        }
+      }
+      lineItem.findByMultiId(ids, 3, function(err,items){
+          
+          //check userId,shipmentId
+          var shipmentId = items[0].shipmentId;
+
+          for(var i=0;i<items.length;i++){
+            if(items[i].customerId!=req.user.id){
+              throw new Error('Ivalide customerId='+items[i].customerId);
+            }
+            if(items[i].shipmentId!=shipmentId){
+              throw new Error('Ivalide shipmentId='+items[i].shipmentId);
+            }
+            var response = data["response_"+id];
+            var quantity = parseInt(data["quantity_"+id]);
+            if(!quantity || quantity>items[i].quantity){
+              throw new Error('Ivalide quantity='+quantity);
+            }
+            if(!response){
+               throw new Error('Ivalide response='+response);
+            }
+            items[i].returnQuantity=quantity;
+            items[i].response=response;
+            items[i].refundAmount = quantity* items[i].price *1.08;
+          }
+          returnDao.initReturnItems(items,function(e){
+            if(e){
+              throw new Error(e.message); 
+            }
+            res.redirect("/listOrder");
+          })
+      });
+    }catch(e){
+      res.redirect("/listOrder");
+    }
 });
 
 //api

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <%- include('global/_topBanner'); %>
+        <section class="main-content">
+            <div class="main-content-box">
+                 <div class="main-content-title">
+                    <h1>Choose items to return</h1>
+                </div>
+                <div class="gform-wrapper">
+                    <form action="/returnSubmit" method="post">
+                        <div class="order-line-item-list">
+                            <% lineItemList.forEach(function(item){ %>
+                                <% if (item.status=3) { %>
+                                <div class="order-line-item gform-wrapper button">
+                                    <div class="gform-row">
+                                        <div class="order-line-item-checkbox">
+                                            <input type="checkbox" id="item_<%= item.id %>" name="item_<%= item.id %>" value="lineItem_<%= item.id %>">
+                                        </div>
+                                    
+                                        <div class="order-line-item-img">
+                                            <a href="/productDetail?sku=<%= item.productSKU %>">
+                                            <img src="/public/image/<%= item.picture %>" width="150" height="150" alt="Product Details">
+                                            </a>
+                                        </div>
+                                        <div class="order-line-item-info">
+                                            <div class="order-line-item-info-name"><a href="/productDetail?sku=<%= item.sku %>"><%= item.productName %></a></div>
+                                            <div class="order-line-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.description %></a></div>
+                                            <div class="order-line-item-info-quantity">
+                                                
+                                                <label for="quantity">Quantity:</label>
+                                                
+                                                <input name="quantity_<%= item.id %>" type='text' data-max="<%= item.quantity %>"  value="<%= item.quantity %>" onkeypress='validateQuantity(event)'>                                               
+                                            </div>
+                                        </div>
+                                        <div class="order-line-item-response">
+                                            <div class="gform-input-group">
+                                                <div>
+                                                <label for="response">Why are you returning this?</label>
+                                                </div>
+                                                <select name="response_<%= item.id %>" >
+                                                    <option selected disabled>Choose a response</option>
+                                                    <option value="Bought by mistake">Bought by mistake</option>
+                                                    <option value="Item arrived too late">Item arrived too late</option>
+                                                    <option value="Wrong item was sent">Wrong item was sent</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                                <% }; %>
+                            <% }); %>
+                        </div> 
+                         <div class="gform-row">
+                            <div class="gform-col-4">
+                                <button>Submit</button>
+                            </div>
+                            <div class="gform-col-4">
+                                <button class="light">Cancel</button>
+                            </div>
+                        </div> 
+                 </form>
+                </div>  
+            </div>
+        </section>
+         <%- include('global/_footer'); %>
+        <script type="text/javascript">
+            function validateQuantity(evt) {
+                var theEvent = evt || window.event;
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode( key );
+                var regex = /[0-9]|\./;
+                
+                if( !regex.test(key) ) {
+                    theEvent.returnValue = false;
+                    if(theEvent.preventDefault) theEvent.preventDefault();
+                }
+            }
+              $(".order-line-item-info-quantity input").on("change",function(event){
+                var max = $(this).data("max");
+                var value = $(this).val();
+                if(max<value){
+                    $(this).val(max);
+                }
+                
+              });
+        </script>
+    </body>
+</html>

@@ -26,12 +26,17 @@
                                 </div>
                             </div>
                             <div class="gform-row">
-                                    <%=item.deliveredTime %>
-                                 <% if (item.status=2 && item.estimatedTime) { %>
+                                 <% if (item.status==2 && item.estimatedTime) { %>
                                     <div class="order-line-item-status">Shipped  <span>arriving on <%=item.estimatedTime.toDateString() %></span></div>
                                  <% } %>
-                                  <% if (item.status=3 && item.deliveredTime) { %>
+                                <% if (item.status==3 && item.deliveredTime) { %>
                                     <div class="order-line-item-status">Delievered  <span> on <%=item.deliveredTime.toDateString() %></span></div>
+                                 <% } %>
+                                 <% if (item.status==4) { %>
+                                    <div class="order-line-item-status">Returning  </div>
+                                 <% } %>
+                                 <% if (item.status==5) { %>
+                                    <div class="order-line-item-status">Returned  </div>
                                  <% } %>
                                  <% if (item.status<2) { %>
                                     <div class="order-line-item-status">Preparing for shipment</div>
@@ -50,10 +55,12 @@
                                 </div>
                                 <div class="order-line-item-action">
                                     <ul>
-                                        <% if (item.status<3) { %>
-                                            <li><button class="light"><a href="/order/return?lineItemId=<%= item.it %>">Return item</a></button></li>
+                                        <% if (item.status == 3) { %>
+                                            <li><button class="light"><a href="/returnItem?lineItemId=<%= item.id %>">Return item</a></button></li>
                                         <% } %>
+                                        <% if (item.status>=3) { %>
                                         <li> <button>Write a product review</button></li>
+                                        <% } %>
                                     </ul>
                                 </div>
                             </div>
