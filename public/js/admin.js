@@ -281,7 +281,7 @@
 					shipmentId:null
 				};
                 $scope.filter = {
-                    status:0
+                    status:-1
                 }
                 $scope.submitFilter=function(){
                     $scope.$broadcast('renderList');
@@ -362,8 +362,34 @@
                 var url= "/admin/api/getShipment?id="+$scope.shipmentId+"&timestamp="+ new Date();
                 $http.get(url)
                 .then(function(result) {
-                    $scope.shipment=result.data;
+                    $scope.shipment=result.data.shipment;
+                    $scope.lineItems=result.data.lineItems;
                 }); 
+
+                $scope.confirmPacked=function(){
+                    var url= "/admin/api/shippment/packed?id="+$scope.shipmentId+"&timestamp="+ new Date();
+                    $http.get(url)
+                    .then(function(result) {
+                        $scope.shipment=result.data.shipment;
+                        $scope.lineItems=result.data.lineItems;
+                    }); 
+                }
+                $scope.confirmShipped=function(){
+                    var url= "/admin/api/shippment/shipped?id="+$scope.shipmentId+"&timestamp="+ new Date();
+                    $http.get(url)
+                    .then(function(result) {
+                        $scope.shipment=result.data.shipment;
+                        $scope.lineItems=result.data.lineItems;
+                    }); 
+                }
+                $scope.confirmDelivered=function(){
+                    var url= "/admin/api/shippment/delivered?id="+$scope.shipmentId+"&timestamp="+ new Date();
+                    $http.get(url)
+                    .then(function(result) {
+                        $scope.shipment=result.data.shipment;
+                        $scope.lineItems=result.data.lineItems;
+                    }); 
+                }
                 
 			},
 			templateUrl:'/public/templates/ShipmentInfoTmpl.html'

@@ -251,27 +251,98 @@ router.get('/admin/api/getShipment',auth.ensureLoggedIn({type:"admin",redirectTo
   function(req, res){
    try{ 
       var id = parseInt(req.query.id);
-      
-      shipment.findOneById(id,function(e,s){
+
+      shipment.findOneWithLineItems(id,function(e,r){
           if(e){
             var error={msg:e.message,stack:e.stack};
             res.send(500,error);
+          }else{
+            res.send(r);
           }
-          lineItem.findByShipmentId(id,function(e, i){
-            if(e){
-              var error={msg:e.message,stack:e.stack};
-              res.send(500,error);
-            }else{
-              res.send({
-                shipment:s,
-                lineItems:i
-              });
-            }
-          })
       });
     }catch(e){
       var error={msg:e.message,stack:e.stack};
       res.send(500,error);
     }
 });
+
+
+router.get('/admin/api/shippment/packed',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+
+      shipment.confirmPacked(id,function(e){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            shipment.findOneWithLineItems(id,function(err,r){
+                if(err){
+                  var error={msg:err.message,stack:err.stack};
+                  res.send(500,error);
+                }else{
+                  res.send(r);
+                }
+            });
+          }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/shippment/shipped',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+
+      shipment.confirmShipped(id,function(e){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            shipment.findOneWithLineItems(id,function(err,r){
+                if(err){
+                  var error={msg:err.message,stack:err.stack};
+                  res.send(500,error);
+                }else{
+                  res.send(r);
+                }
+            });
+          }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/shippment/delivered',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+
+      shipment.confirmDelivered(id,function(e){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            shipment.findOneWithLineItems(id,function(err,r){
+                if(err){
+                  var error={msg:err.message,stack:err.stack};
+                  res.send(500,error);
+                }else{
+                  res.send(r);
+                }
+            });
+          }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
 module.exports = router;

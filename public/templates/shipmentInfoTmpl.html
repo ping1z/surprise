@@ -2,13 +2,89 @@
     <div class="admin-module-header">
         Shipment Info
     </div>
-    <div class="gform-wrapper">
+    <div class="admin-module-section gform-wrapper">
+		<div class="gform-row admin-module-section-header">
+			<div class="gform-col-12 ">
+				<div class="admin-shipment-status">
+					{{shipment.status | shipmentStatus }}
+					<span ng-show="shipment.status==0" class="admin-shipment-time">
+						{{shipment.createdTime | date:'medium'}}
+					</span>
+					<span ng-show="shipment.status==1" class="admin-shipment-time">
+						{{shipment.packedTime | date:'medium'}}
+					</span>
+					<span ng-show="shipment.status==2" class="admin-shipment-time">
+						{{shipment.shippedTime | date:'medium'}}
+					</span>
+					<span ng-show="shipment.status==3" class="admin-shipment-time">
+						{{shipment.deliveredTime | date:'medium'}}
+					</span>
+				</div>
+			</div>
+		</div>
 		<div class="gform-row">
 			<div class="gform-col-4">
-				
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header">Address</li>
+					<li>{{shipment.receiverName}}</li>
+					<li>{{shipment.line1}},{{shipment.line2}}</li>
+					<li>{{shipment.city}},{{shipment.state}},{{shipment.country}}</li>
+					<li>{{shipment.zipcode}},{{shipment.telepjhone}}</li>
+				</ul>
 			</div>
 			<div class="gform-col-4">
-				
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header">Tracking Number</li>
+					<li>{{shipment.trackingNumber}}</li>
+					<li class="admin-module-info-header">Shipping Method</li>
+					<li>{{shipment.shippingMethod}}</li>
+					<li class="admin-module-info-header">Shipping Company</li>
+					<li>{{shipment.shippingCompany}}</li>
+				</ul>
+			</div>
+			<div class="gform-col-4">
+				<ul class="admin-module-action">
+					<li ng-show="shipment.status==0" ng-click="confirmPacked()"><button>Packed</button></li>
+					<li ng-show="shipment.status==1" ng-click="confirmShipped()"><button>Shipped</button></li>
+					<li ng-show="shipment.status==2" ng-click="confirmDelivered()"><button>Deliverd</button></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="admin-module-section gform-wrapper">
+		<div class="gform-row admin-module-section-header">
+			<div class="gform-col-3 ">
+				<div class="admin-shipment-status">
+					<td>Line Items</td>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row" ng-repeat="item in lineItems">
+			<div class="gform-col-4">
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header">
+						 <div class="admin-line-item-img">
+                        	<img ng-src="/public/image/{{item.picture}}" width="150" height="150" alt="{{item.picture}}">
+                        </div>
+					</li>
+				</ul>
+			</div>
+			<div class="gform-col-4">
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header">SKU</li>
+					<li>{{item.productSKU}}</li>
+					<li class="admin-module-info-header">Item Name</li>
+					<li>{{item.productName}}</li>
+					<li class="admin-module-info-header">Contents</li>
+					<li>{{item.contents}}</li>
+					
+				</ul>
+			</div>
+			<div class="gform-col-4">
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header" style="text-align: center;">Quantity</li>
+					<li class="admin-line-item-quantity">{{item.quantity}}</li>
+				</ul>
 			</div>
 		</div>
 	</div>

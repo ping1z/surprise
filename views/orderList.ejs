@@ -26,9 +26,14 @@
                                 </div>
                             </div>
                             <div class="gform-row">
-                                 <% if (item.status>0) { %>
+                                    <%=item.deliveredTime %>
+                                 <% if (item.status=2 && item.estimatedTime) { %>
+                                    <div class="order-line-item-status">Shipped  <span>arriving on <%=item.estimatedTime.toDateString() %></span></div>
                                  <% } %>
-                                 <% if (item.status==0) { %>
+                                  <% if (item.status=3 && item.deliveredTime) { %>
+                                    <div class="order-line-item-status">Delievered  <span> on <%=item.deliveredTime.toDateString() %></span></div>
+                                 <% } %>
+                                 <% if (item.status<2) { %>
                                     <div class="order-line-item-status">Preparing for shipment</div>
                                  <% } %>
                             </div>
