@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <header class="top-banner">
+            <div class="top-banner-title"><a href="/">Surprise</a></div>
+            <ul class="top-login-group">
+                <li><a href="/myAccount">My Account</a></li>
+                <li>|</li>
+                <li><a href="/logout">Sign Out</a></li>
+                <li>|</li>
+                <li><a href="/shoppingCart"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</a></li>                
+            </ul>
+        </header>
+        <section class="main-content">
+            <div class="main-content-box">
+                <div class="main-content-title">
+                    <h1>Order Details</h1>
+                </div>
+                <div class="gform-row-4">
+                <ul class="order-detail-group">
+                     <li>Ordered on</li>
+                     <li><%= order.createdTime %></li>
+                     <li>|</li>
+                     <li>Order#</li>
+                     <li><%= order.orderId %></li>
+                     </ul>
+                </div>                
+                <div class="cart-list">
+                    
+                        <div class="order-list-item">                         
+                            <div class="cart-list-item-info">
+                                <div class="cart-list-item-info-name">Shipping Address</div>
+                                <div class="cart-list-item-info-description"><%= shipment.receiverName %></div>
+                                <div class="cart-list-item-info-description">
+                                <ul>
+                                <li><%= shipment.addressLine1 %></li>
+                                <li><%= shipment.addressLine2 %></li>
+                                </ul>
+                                </div>
+                                <div class="cart-list-item-info-description">
+                                <ul>
+                                <li><%= shipment.city %></li>
+                                <li>,</li>
+                                <li><%= shipment.state %></li>
+                                <li><%= shipment.zipcode %></li> 
+                                </ul>                       
+                                </div>
+                                <div class="cart-list-item-info-description"><%= shipment.country %></div>
+                            </div>
+                            
+                            <div class="cart-list-item-price">Payment Method</div>
+                            <div class="cart-list-item-info-description"><%= shipment.country %></div>
+                            <div class="cart-list-item-quantity">
+                                Order Summary 
+                            </div>
+                            <div class="cart-list-item-info-description">Subtotal: </div>
+                            <div class="cart-list-item-info-name">Grand Total:</div>
+                        </div>
+                   
+                </div>   
+ 
+            </div>
+        </section>
+        <%- include('global/_footer'); %>
+        <script type="text/javascript">
+             $(".cart-list-item-quantity select").on("change",function(event){
+                var cartId = $(this).data("id");
+                var quantity = $(this).val();
+                window.location = "/updateCartItemQuantity?id="+cartId+"&quantity="+quantity;
+            });
+        </script>
+    </body>
+</html>

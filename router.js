@@ -16,6 +16,11 @@ var OrderDao = require("./dao/orderDao.js");
 var order = new OrderDao();
 var LineItemDao = require("./dao/lineItemDao.js");
 var lineItem = new LineItemDao();
+var ShipmentDao = require("./dao/shipmentDao.js");
+var shipment = new ShipmentDao();
+var OrderPaymentDao = require("./dao/orderPaymentDao.js");
+var orderPayment = new OrderPaymentDao();
+
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -343,6 +348,18 @@ router.get('/listOrder',auth.ensureLoggedIn(),
     });
     
 });
+
+router.get('/orderDetail',auth.ensureLoggedIn(),
+  function(req, res){
+   
+      order.findByCustomerId(req.user.id,function(err, order){
+            shipment.findById(req.user.id, req.query.orderId,function(err, shipment){
+              res.render("orderDetail",{hasLogin:true,order:order,shipment:shipment});
+            })          
+      })
+    });
+
+
 
 //api
 router.get('/api/listAddress',auth.ensureLoggedIn(),
