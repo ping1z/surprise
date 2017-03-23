@@ -84,9 +84,9 @@ OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,car
     });
 }
 
-OrderDao.prototype.saveShippment = function(connection, customerId, order,address, callback){
+OrderDao.prototype.saveshipment = function(connection, customerId, order,address, callback){
     var trackingNumber = uuid.v1();
-    var sql="INSERT INTO surprise.Shippment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,startTime,estimateTime,endTime,createdTime,lastModifiedTime)"
+    var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,startTime,estimateTime,endTime,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, NOW(),NOW(),NOW(),NOW(),NOW())";
     var o = order;
     var values=[customerId,0,order.id,"COURIER","UPS", trackingNumber, address.name, address.line1, address.line2, address.city, address.state,"Unitied States",address.zipcode,address.telephone];
@@ -101,14 +101,14 @@ OrderDao.prototype.saveShippment = function(connection, customerId, order,addres
     });
 }
 
-OrderDao.prototype.saveLineItems = function(connection, customerId, order, shippmentId, cartItems, callback){
+OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipmentId, cartItems, callback){
     var queries = "";
     
     for(var i=0;i<cartItems.length;i++){
-        var sql="INSERT INTO surprise.LineItem (customerId, status,orderId,productSKU,shippmentId,productName,price,quantity,createdTime,lastModifiedTime)"
+        var sql="INSERT INTO surprise.LineItem (customerId, status,orderId,productSKU,shipmentId,productName,price,quantity,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,NOW(),NOW());";
         var c = cartItems[i];
-        var values=[customerId,0,order.id,c.sku,shippmentId,c.name, c.price, c.quantity];
+        var values=[customerId,0,order.id,c.sku,shipmentId,c.name, c.price, c.quantity];
         sql = BaseDao.formatSQL(sql, values);
         if(customerId!=0){
             var d ="DELETE FROM surprise.cart WHERE customerId=? AND productSKU=?;";
@@ -145,9 +145,9 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                             order = o;
                             OrderDao.prototype.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                                 
-                                OrderDao.prototype.saveShippment(connection, customerId, order,address,function(shippmentId){
+                                OrderDao.prototype.saveshipment(connection, customerId, order,address,function(shipmentId){
                                        
-                                    OrderDao.prototype.saveLineItems(connection, customerId, order, shippmentId, cartItems, function(){
+                                    OrderDao.prototype.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
 
                                         connection.commit(function(err) {
                                             if (err) {
@@ -170,9 +170,9 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                     order = o;
                     OrderDao.prototype.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                         
-                        OrderDao.prototype.saveShippment(connection, customerId, order,address,function(shippmentId){
+                        OrderDao.prototype.saveshipment(connection, customerId, order,address,function(shipmentId){
                                 
-                            OrderDao.prototype.saveLineItems(connection, customerId, order, shippmentId, cartItems, function(){
+                            OrderDao.prototype.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
 
                                 connection.commit(function(err) {
                                     if (err) {

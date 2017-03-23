@@ -12,14 +12,14 @@ LineItemDao.prototype.findByCustomerId = function(customerId,callback){
     // "(SELECT * FROM surprise.LineItem WHERE `customerId`=?) c "
     // +"INNER JOIN (SELECT sku, name, description, contents, picture FROM surprise.product) p "
     // +"ON c.productSKU = p.sku "
-    // +"INNER JOIN (SELECT receiverName FROM surprise.shippment) s "
+    // +"INNER JOIN (SELECT receiverName FROM surprise.shipment) s "
     // +"ON c.orderId = s.orderId";
 
     var sql="SELECT l.*, p.description, p.picture, s.receiverName, s.trackingNumber"
         +" FROM surprise.LineItem l "
         +"     JOIN surprise.product p "
         +"     ON p.sku = l.productSKU "
-        +"     JOIN surprise.shippment s "
+        +"     JOIN surprise.shipment s "
         +"     ON s.orderId = l.orderId "
         +" WHERE l.customerId=?";
 
