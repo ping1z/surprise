@@ -13,7 +13,7 @@
                         <div class="order-line-item gform-wrapper button">
                             <div class="order-line-item-header gform-row">
                                 <div class="gform-col-3">
-                                    <a>#Order Details</a>
+                                    <a href="/orderDetail?orderId=<%= item.orderId %>">#Order Details</a>
                                 </div>
                                 <div class="gform-col-3">
                                     ORDER PLACED</BR><%= item.createdTime.toDateString() %>
