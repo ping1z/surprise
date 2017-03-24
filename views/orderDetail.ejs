@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <%- include('global/_topBanner'); %>
+        <section class="main-content">
+            <div class="main-content-box">
+                 <div class="main-content-title">
+                    <h1>Order Details</h1>
+                </div>
+                <div class="order-line-item-list">
+                     <% orderDetail.forEach(function(item){ %>
+                        <div class="order-line-item gform-wrapper button">
+                            <div class="order-line-item-header gform-row">
+                                <div class="gform-col-8">
+                                    Ordered on <%= item.createdTime %> | Order# <%= item.orderId %>
+                                </div>
+                            </div>
+                            <div class="gform-row">
+
+                                <div class="gform-col-4">
+                                    <h3>Shipping Address</h3> 
+                                    <div class="order-line-item-info-description">
+                                        <%= item.receiverName %></BR>
+                                        <%= item.addressLine1 %>, <%= item.addressLine2 %></BR>
+                                        <%= item.city %>, <%= item.state %></BR>
+                                    </div>
+                                </div>  
+                                <div class="gform-col-4">
+                                    <h3>Payment Method</h3> 
+                                    <div class="order-line-item-info-description">
+                                        <%= item.cardNumber %></BR>
+                                    </div>
+                                </div>        
+                                <div class="gform-col-4">
+                                    <h3>Order Summary</h3> 
+                                    <div class="order-line-item-info-description">
+                                        <div class="gform-col-9">
+                                            Item(s) Subtotal: $</BR>
+                                            Shipping & Handling: $</BR>
+                                            Total before tax: $</BR>
+                                            Estimated tax to be: $</BR>
+                                            Grand Total: $
+                                        </div>
+                                        <div class="gform-col-3">
+                                            <%= item.totalBeforeTax %> </BR>
+                                            <%= item.shippingCost %> </BR>
+                                            <%= item.totalBeforeTax + item.shippingCost %> </BR>
+                                            <%= item.tax %> </BR>
+                                            <%= item.amount %>
+                                        </div>                                        
+                                    </div>    
+                                </div>                                                                                                                                                   
+
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>      
+            </div>
+        </section>
+         <%- include('global/_footer'); %>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>

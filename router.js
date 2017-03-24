@@ -345,6 +345,18 @@ router.get('/listOrder',auth.ensureLoggedIn(),
     
 });
 
+
+router.get('/orderDetail',auth.ensureLoggedIn(),
+  function(req, res){  
+     order.findById(req.user.id,req.query.orderId,function(err,orderDetail){
+         cart.getCartItemCount(req.user.id,function(err, count){
+            console.log(orderDetail);
+            res.render("orderDetail",{hasLogin:true,cartCount:count,orderDetail:orderDetail});
+         })
+     });           
+  });
+
+
 router.get('/returnItem',auth.ensureLoggedIn(),
   function(req, res){
     var lineItemId = req.query.lineItemId?req.query.lineItemId:null;

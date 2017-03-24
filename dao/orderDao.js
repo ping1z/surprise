@@ -193,4 +193,29 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
 }
 
 
+OrderDao.prototype.findById = function(customerId,orderId,callback){
+    //columns, query, orderBy, limit, offset, callback
+    // var sql ="SELECT * FROM "+
+    // "(SELECT * FROM surprise.LineItem WHERE `customerId`=?) c "
+    // +"INNER JOIN (SELECT sku, name, description, contents, picture FROM surprise.product) p "
+    // +"ON c.productSKU = p.sku "
+    // +"INNER JOIN (SELECT receiverName FROM surprise.shipment) s "
+    // +"ON c.orderId = s.orderId";
+
+    var sql="SELECT o.*, s.*, p.*"
+        +" FROM surprise.Order o "
+        +"     JOIN surprise.Shipment s "
+        +"     ON s.customerId = o.customerId and s.orderId = o.id "
+        +"     JOIN surprise.orderpayment p "
+        +"     ON p.customerId = o.customerId and p.orderId = o.id "        
+        +" WHERE o.customerId=? and o.id=?" ;
+
+    var values=[customerId,orderId];
+    var _=this;
+    _.execute(sql,values,function(error, res){
+        console.log("findById",error,res);
+        callback && callback(error, res);
+    });
+};
+
 exports = module.exports = OrderDao;
