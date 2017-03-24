@@ -353,6 +353,7 @@ router.get('/returnItem',auth.ensureLoggedIn(),
         
         lineItem.findByShipmentId(item.shipmentId,function(err,lineItems){
           
+          
           cart.getCartItemCount(req.user.id,function(err, count){
             res.render("returnItems",{hasLogin:true,cartCount:count,lineItemList:lineItems});
           })

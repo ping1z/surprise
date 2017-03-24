@@ -8,6 +8,8 @@ var ShipmentDao = require("./dao/shipmentDao.js");
 var shipment = new ShipmentDao();
 var LineItemDao = require("./dao/lineItemDao.js");
 var lineItem = new LineItemDao();
+var ReturnDao = require("./dao/returnDao.js");
+var returnDao = new ReturnDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -229,6 +231,11 @@ router.get('/admin/api/listShipment',auth.ensureLoggedIn({type:"admin",redirectT
       var page = req.query.page?parseInt(req.query.page):null;
       var count = req.query.count?parseInt(req.query.count):null;
       var filters = [];
+      if(req.query.status == "null")
+      {
+        res.send(200);
+        return;
+      }
       if(req.query.status){
         filters.push({key:"status",value:parseInt(req.query.status)});
       }
@@ -335,6 +342,124 @@ router.get('/admin/api/shippment/delivered',auth.ensureLoggedIn({type:"admin",re
                   res.send(500,error);
                 }else{
                   res.send(r);
+                }
+            });
+          }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/listReturn',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+    try{
+      var columns = req.query.columns;
+      var orderBy = "status asc, createdTime desc";
+      var page = req.query.page?parseInt(req.query.page):null;
+      var count = req.query.count?parseInt(req.query.count):null;
+      var filters = [];
+      if(req.query.status == "null")
+      {
+        res.send(200);
+        return;
+      }
+      if(req.query.status){
+        filters.push({key:"status",value:parseInt(req.query.status)});
+      }
+
+      returnDao.findByFilter(columns,filters,orderBy,page,count,function(e, result){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            res.send(result);
+          }
+      });
+     }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/getReturn',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+
+      returnDao.findOneWithJoinInfo(id,function(e,r){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            res.send(r);
+          }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/return/received',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+
+      returnDao.findOneWithJoinInfo(id,function(e,r){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            
+            returnDao.confirmReceived(r,function(e){
+                if(e){
+                  var error={msg:e.message,stack:e.stack};
+                  res.send(500,error);
+                }else{
+                  returnDao.findOneWithJoinInfo(id,function(e,r){
+                      if(e){
+                        var error={msg:e.message,stack:e.stack};
+                        res.send(500,error);
+                      }else{
+                        res.send(r);
+                      }
+                  });
+                }
+            });
+          }
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/return/refund',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+   try{ 
+      var id = parseInt(req.query.id);
+
+      returnDao.findOneWithJoinInfo(id,function(e,r){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            
+            returnDao.confirmRefund(r,function(e){
+                if(e){
+                  var error={msg:e.message,stack:e.stack};
+                  res.send(500,error);
+                }else{
+                  returnDao.findOneWithJoinInfo(id,function(e,r){
+                      if(e){
+                        var error={msg:e.message,stack:e.stack};
+                        res.send(500,error);
+                      }else{
+                        res.send(r);
+                      }
+                  });
                 }
             });
           }

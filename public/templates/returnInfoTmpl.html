@@ -1,0 +1,56 @@
+<div>
+    <div class="admin-module-header">
+        Return Info
+    </div>
+    <div class="admin-module-section gform-wrapper">
+		<div class="gform-row admin-module-section-header">
+			<div class="gform-col-12 ">
+				<div class="admin-shipment-status">
+					{{returnItem.status | returnStatus }}
+					<span ng-show="returnItem.status==0" class="admin-shipment-time">
+						{{returnItem.createdTime | date:'medium'}}
+					</span>
+					<span ng-show="returnItem.status==1" class="admin-shipment-time">
+						{{returnItem.receivedTime | date:'medium'}}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="gform-row">
+			<div class="gform-col-4">
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header">
+						 <div class="admin-line-item-img">
+                        	<img ng-src="/public/image/{{returnItem.picture}}" width="150" height="150" alt="{{returnItem.picture}}">
+                        </div>
+					</li>
+				</ul>
+			</div>
+			<div class="gform-col-4">
+				<ul class="admin-module-info">
+					<li class="admin-module-info-header">Tracking Number</li>
+					<li>{{returnItem.trackingNumber}}</li>
+					<li class="admin-module-info-header">SKU</li>
+					<li>{{returnItem.productSKU}}</li>
+					<li class="admin-module-info-header">Product Name</li>
+					<li>{{returnItem.name}}</li>
+					<li class="admin-module-info-header">Product Contents</li>
+					<li>{{returnItem.contents}}</li>
+					<li class="admin-module-info-header">Product Quantity</li>
+					<li>{{returnItem.returnQuantity}}</li>
+					<li class="admin-module-info-header">CustomerId</li>
+					<li>{{returnItem.customerId}}</li>
+					<li class="admin-module-info-header">OrderId</li>
+					<li>{{returnItem.orderId}}</li>
+				</ul>
+			</div>
+			<div class="gform-col-4">
+				<ul class="admin-module-action">
+					<li ng-show="returnItem.status==0" ng-click="confirmReceived()"><button>Received</button></li>
+					<li ng-show="returnItem.status==1" ng-click="confirmRefund()"><button>Refund</button></li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>

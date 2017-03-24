@@ -1,0 +1,51 @@
+<div>
+    <div class="admin-module-header">
+        Return List 
+    </div>
+	<div class="admin-list-table-header">
+		<ul class="admin-list-table-page-action-group">
+			<li>
+				<label for="count">Page Size:</label>
+				<select name="count" ng-model="pageInfo.count" convert-to-number ng-change="render()">
+					<option value=5> 5 </option>
+					<option value=10> 10 </option>
+					<option value=50> 50 </option>
+				</select>
+			</li>
+		</ul>
+	</div>
+    <table class="admin-list-table">
+		<thead>
+			<tr>
+				<th>Status</th>
+				<th>OrderId</th>
+				<th>SKU</th>
+				<th>Quantity</th>
+                <th>Refund</th>
+                <th>receivedTime</th>
+                <th>response</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in list.items" ng-click="showReturnInfo($index)">
+				<td>{{item.status | returnStatus }}</td>
+				<td>{{item.orderId}}</td>
+                <td>{{item.productSKU}}</td>
+                <td>{{item.returnQuantity}}</td>
+                <td>{{item.refundAmount}}</td>
+                <td>{{item.receivedTime | date:'medium'}}</td>
+                <td>{{item.response}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="admin-list-table-footer">
+		<ul class="admin-list-table-nav-action-group">
+			<li ng-click="pre()" ng-hide="pageInfo.index==1">
+				<<
+			</li>
+			<li ng-click="next()" ng-hide="pageInfo.index>=pageInfo.totalPage">
+				>>
+			</li>
+		</ul>
+	</div>
+</div>

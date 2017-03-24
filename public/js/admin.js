@@ -14,6 +14,19 @@
         };
     })
 
+     app.filter('returnStatus', function() {
+        return function(input) {
+            var out;
+            switch(input){
+                case 0 :out="Pendding";break;
+                case 1 :out="Received";break;
+                case 2 :out="Refunded";break;
+                case 3 :out="Cancel";break;
+            }
+            return out;
+        };
+    })
+
     app.factory('MenuService',function(){
 		var modules=[
 				{
@@ -27,14 +40,14 @@
 					url:"/admin/catalog",
 				},
                 {
-					id:"order",
-					name:"Order",
-					url:"/admin/shipment",
-				},
-                {
 					id:"shipment",
 					name:"Shipment",
 					url:"/admin/shipment",
+				},
+                {
+					id:"return",
+					name:"Return",
+					url:"/admin/return",
 				}
 			];
 		var curModuleIndex = 3;
@@ -267,8 +280,7 @@
 			scope: {},
 			controller: function($scope) {
 			},
-			templateUrl:'/public/modules/order.html'//,
-			//controllerAs: 'dashboardController'
+			templateUrl:'/public/modules/order.html'
 		};
 	});
     app.directive('moduleShipment',function() {
@@ -396,6 +408,119 @@
 		};
 	});
 
+    app.directive('moduleReturn',function() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: function($scope) {
+                $scope.moduleInfo={
+					curSubmodule:"return-list",
+					returnId:null
+				};
+                $scope.filter = {
+                    status:-1
+                }
+                $scope.submitFilter=function(){
+                    $scope.$broadcast('renderList');
+                }
+                $scope.$on('selectReturn', function(event, id) {
+                    console.log(id);
+                    $scope.moduleInfo.returnId = id;
+                    $scope.moduleInfo.curSubmodule = "return-info";     
+                });
+                $scope.BackToList = function(){
+                    $scope.moduleInfo.returnId = null;
+                    $scope.moduleInfo.curSubmodule = "return-list"; 
+                }
+			},
+			templateUrl:'/public/modules/return.html'
+		};
+	});
+
+    app.directive('returnListTmpl',function(){
+		return {
+			restrict: 'E',
+			controller: function($scope,$http) {
+                $scope.pageInfo = {
+                   index:1,
+                   count:5,
+                   totalPage:100
+                }
+				$scope.$on('renderList', function(event, args) {
+                    console.log($scope.filter);
+                    $scope.render();
+                });
+                $scope.render = function(){
+                    var url = '/admin/api/listReturn?';
+                    if($scope.filter.status!="-1"){
+                        url+="status="+$scope.filter.status+"&";
+                    }
+                    
+                    url+="page="+$scope.pageInfo.index+"&count="+$scope.pageInfo.count+"timestamp="+ new Date();
+                    $http.get(url)
+					.then(function(result) {
+                        $scope.list=result.data;
+                        $scope.pageInfo.index=result.data.page;
+                        $scope.pageInfo.totalPage=result.data.totalPage;
+				    }); 
+                }
+                $scope.render();
+
+                $scope.showReturnInfo = function(index){
+                    $scope.$emit('selectReturn',$scope.list.items[index].id);
+                }
+
+                $scope.pre = function(){
+                    $scope.pageInfo.index-=1;
+                    $scope.pageInfo.index = $scope.pageInfo.index<0?0:$scope.pageInfo.index;
+                    $scope.render();
+                }
+                $scope.next = function(){
+                    $scope.pageInfo.index+=1;
+                    if($scope.pageInfo.index>$scope.pageInfo.totalPage){
+                        $scope.pageInfo.index = $scope.pageInfo.totalPage;
+                        return;
+                    }
+                    $scope.render();
+                }
+
+			},
+			templateUrl:'/public/templates/returnListTmpl.html'
+		};
+	});
+
+
+     app.directive('returnInfoTmpl',function(){
+		return{
+			restrict: 'E',
+			controller: function($scope,$http){	
+                $scope.returnId = $scope.moduleInfo.returnId;
+                
+                var url= "/admin/api/getReturn?id="+$scope.returnId+"&timestamp="+ new Date();
+                $http.get(url)
+                .then(function(result) {
+                    $scope.returnItem=result.data;
+                }); 
+
+                $scope.confirmReceived=function(){
+                    var url= "/admin/api/return/received?id="+$scope.returnId+"&timestamp="+ new Date();
+                    $http.get(url)
+                    .then(function(result) {
+                        $scope.returnItem=result.data;
+                    }); 
+                }
+                $scope.confirmRefund=function(){
+                    var url= "/admin/api/return/refund?id="+$scope.returnId+"&timestamp="+ new Date();
+                    $http.get(url)
+                    .then(function(result) {
+                       $scope.returnItem=result.data;
+                    }); 
+                }
+                
+			},
+			templateUrl:'/public/templates/returnInfoTmpl.html'
+		};
+	});
 
     app.directive('convertToNumber', function() {
         return {
