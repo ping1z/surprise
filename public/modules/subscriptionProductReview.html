@@ -1,0 +1,45 @@
+ <div class="checkout-mod gform-wrapper" ng-switch="mode">
+    <div class="checkout-mod-section gform-row">
+       
+            <div class="gform-col-3">
+            <div class="checkout-mod-section-title">Review Subscription</div>
+            </div>
+            <div class="checkout-mod-section-info">
+                <div class="cart-list">
+                    <div class="cart-list-item">
+                        <div class="cart-list-item-img">
+                            <a target="_blank" ng-href="/productDetail?sku={{item.sku}}">
+                            <img ng-src="/public/image/{{item.picture}}" width="200" height="200" alt="Product Details">
+                            </a>
+                        </div>
+                        
+                        <div class="cart-list-item-info">
+                            <div class="cart-list-item-info-name"><a target="_blank" ng-href="/productDetail?sku={{item.sku}}">{{ item.name }}</a></div>
+                            <div class="cart-list-item-info-description"><a target="_blank" ng-href="/productDetail?sku={{item.sku}}">{{ item.description }}</a></div>
+                            <div class="cart-list-item-subscription-price">
+                            Price: ${{ item.price }}
+                            </div>
+                        </div>
+                        <div class="cart-list-item-subscription-option">
+                            <label for="quantity">Quantity</label>
+                            <select name="quantity" ng-model="item.quantity" ng-change="updateSummary()" convert-to-number>
+                                <option value="1" >1</option>
+                                <option value="2" >2</option>
+                                <option value="3" >3</option>
+                                <option value="4" >4</option>
+                                <option value="5" >5</option>
+                            </select>
+                        </div>
+                        <div class="cart-list-item-subscription-option">
+                            <label for="quantity">Deliver every</label>
+                            <select class="large"name="frequancy" ng-model="item.frequancy" ng-change="updateSummary()" convert-to-number>
+                                    <option value="1m" >1 month</option>
+                                    <option value="6m" >6 month</option>
+                                    <option value="12m" >1 year</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+    </div>
+</div>

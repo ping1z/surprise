@@ -565,11 +565,11 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     width:100%;
     text-align: left;
     font-size:14px;
-    min-height: 150px;
+    min-height: 100px;
 }
 
 .product-details-action-group{
-
+    width:100%;
 }
 .product-details-action-group button{
     float: left;
@@ -583,7 +583,7 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     color: #fff;
     font-size: 1.2em;
     cursor: pointer;
-    margin-left: 20px;
+    margin-right: 20px;
     transition: background-color 0.5s,color 0.5s;
     border:1px solid #000;
 }
@@ -600,16 +600,18 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
 }
 
 .product-details-price{
-    font-size: 40px;
-    font-weight: bold;
+    width:100%;
+    font-size: 14px;
+    font-weight: normal;
     color:#111;
-    float:left;
-    line-height:30px;
-    height:40px
+    line-height:1;
+    height:40px;
+    text-align:left;
+
 }
 .product-details-price-currency{
     font-size: 20px;
-    font-weight: normal;
+    font-weight: bold;
 }
 .cart-list-item{
     float:left;
@@ -649,6 +651,11 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     font-size:16px;
     font-weight: bold;
 }
+.cart-list-item-subscription-price{
+    font-size:16px;
+    font-weight: bold;
+    margin-top:30px;
+}
 .cart-list-item-quantity{
     float:left;
     width:178px;
@@ -656,6 +663,7 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     font-size:16px;
     font-weight: bold;
 }
+
 
 .cart-list-item-quantity select{
     float: right;
@@ -670,6 +678,38 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     border-radius: 0;
     -webkit-appearance: none;
     text-align: center;
+}
+
+.cart-list-item-subscription-option{
+    float:left;
+    width:178px;
+    text-align: center;
+    font-size:16px;
+    font-weight: bold;
+}
+.cart-list-item-subscription-option label{
+    width:100%;
+    text-align: left;
+    font-size:16px;
+    font-weight: bold;
+    display: inline-block;
+}
+.cart-list-item-subscription-option select{
+    float: left;
+    margin-right: 45px;
+    width:40px;
+    height:30px;
+    background: #fff;
+    padding: 0px 13px;
+    box-sizing: border-box;
+    font-size: 18px; 
+    border: 1px solid #000;
+    border-radius: 0;
+    -webkit-appearance: none;
+    text-align: center;
+}
+.cart-list-item-subscription-option select.large{
+    width:130px;
 }
 .cart-summary{
     float:left;

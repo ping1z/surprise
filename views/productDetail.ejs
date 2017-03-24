@@ -16,19 +16,37 @@
                         <div class="product-details-description">
                             <%= product.description %>
                         </div>
-                        <div class="product-details-action-group">
-                            <div class="product-details-price">
-                                <sup class="product-details-price-currency">$</sup> <%= product.price %>
-                            </div>
+                        <% if (hasLogin) { %>
+                        <div class="product-details-price">
+                            <input type="radio" name="buy" value="buy" checked> Buy now <span class="product-details-price-currency">$<%= product.price %> </span>
+                        </div>
+                        <div class="product-details-price">
+                            <input type="radio" name="buy" value="subscribe"> Subscribe&Save <span class="product-details-price-currency">$<%= product.price %> </span>
+                        </div>
+                        <div class="product-details-action-group" name="buy">
                             <button>
                                 <a href="/checkout?sku=<%= product.sku %>">Buy Now</a>
                             </button>
-                            <% if (hasLogin) { %>
                             <button class="light">
                                 <a href="/addToCart?sku=<%= product.sku %>">Add to Cart</a>
                             </button>
-                            <% } %>
                         </div>
+                        <div class="product-details-action-group" name="subscribe" style="display:none">
+                            <button>
+                                <a href="/subscribe?sku=<%= product.sku %>">Subscribe</a>
+                            </button>
+                        </div>
+                         <% } %>
+                         <% if (!hasLogin) { %>
+                            <div class="product-details-price">
+                                <input type="radio" name="buy" value="buy" checked> Buy now <span class="product-details-price-currency">$<%= product.price %> </span>
+                            </div>
+                            <div class="product-details-action-group">
+                                <button>
+                                    <a href="/checkout?sku=<%= product.sku %>">Buy Now</a>
+                                </button>
+                            </div>
+                          <% } %>
                     </div>
                     
                 </div>    
@@ -36,6 +54,20 @@
         </section>
         <%- include('global/_footer'); %>
         <script type="text/javascript">
+            $('.product-details-price input:radio[name="buy"]').change(
+                function(){
+                    if ($(this).is(':checked')&&$(this).val()=="buy") {
+                        // append goes here
+                        $(".product-details-action-group[name='subscribe']").hide();
+                        $(".product-details-action-group[name='buy']").show();
+                    }
+                    else if ($(this).is(':checked')&&$(this).val()=="subscribe") {
+                        // append goes here
+                        $(".product-details-action-group[name='buy']").hide();
+                        $(".product-details-action-group[name='subscribe']").show();
+                    }
+            });
+
         </script>
     </body>
 </html>
