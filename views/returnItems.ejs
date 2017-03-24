@@ -12,7 +12,7 @@
                     <form action="/returnSubmit" method="post">
                         <div class="order-line-item-list">
                             <% lineItemList.forEach(function(item){ %>
-                                <% if (item.status=3) { %>
+                                <% if (item.status==3) { %>
                                 <div class="order-line-item gform-wrapper button">
                                     <div class="gform-row">
                                         <div class="order-line-item-checkbox">

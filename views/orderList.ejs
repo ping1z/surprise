@@ -36,7 +36,10 @@
                                     <div class="order-line-item-status">Returning  </div>
                                  <% } %>
                                  <% if (item.status==5) { %>
-                                    <div class="order-line-item-status">Returned  </div>
+                                    <div class="order-line-item-status">Return received  </div>
+                                 <% } %>
+                                 <% if (item.status==6) { %>
+                                    <div class="order-line-item-status">Returned and refunded </div>
                                  <% } %>
                                  <% if (item.status<2) { %>
                                     <div class="order-line-item-status">Preparing for shipment</div>

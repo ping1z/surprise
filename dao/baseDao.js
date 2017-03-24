@@ -75,7 +75,7 @@ SQLBuilder.prototype.from = function(table){
     if(!table){
         throw  new Error("Invalid input value.",table);
     }
-    this.table = table;
+    this.table = "surprise."+table;
     return this;
 }
 

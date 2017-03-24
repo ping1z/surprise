@@ -1,0 +1,35 @@
+<section class="admin-main-content">
+    <div class="admin-left-panel">
+        <div ng-show="moduleInfo.curSubmodule == 'return-list'">
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <label for="status">Status</label>
+                    <select name="status" ng-model="filter.status" convert-to-number>
+                        <option value="-1">All</option>
+                        <option value="0">Pending</option>
+                        <option value="1">Received</option>
+                        <option value="2">Completed</option>
+                        <option value="3">Cancel</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-input-group">
+                    <button ng-click="submitFilter()">Filter</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-row" ng-show="moduleInfo.curSubmodule == 'return-info'">
+             <div class="panel-input-group">
+                <button ng-click="BackToList()">Back to list</button>
+             </div>
+        </div>
+    </div>
+    <div class="admin-right-content-box">
+        <div ng-switch on="moduleInfo.curSubmodule">
+            <return-list-tmpl ng-switch-when="return-list"></return-list-tmpl>
+            <return-info-tmpl ng-switch-when="return-info"></return-info-tmpl>
+        </div>
+    </div>
+    
+</section>
