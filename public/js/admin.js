@@ -50,7 +50,7 @@
 					url:"/admin/return",
 				}
 			];
-		var curModuleIndex = 3;
+		var curModuleIndex = 0;
 		var MenuService = {
 			initMenuService:function(){
 				console.log("initMenuService");
