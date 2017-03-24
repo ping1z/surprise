@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Checkout Your Surprise!</title>
+        <title>Subscribe Your Surprise!</title>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
         <script type="text/javascript">
             var sku="<%= sku %>";
             var customerId="<%= customerId %>";
-            var isSubscription = false;
+            var isSubscription="<%= isSubscription %>";
         </script>
         <script type="text/javascript" src="/public/js/checkout.js"></script>
         <link rel="stylesheet" type="text/css" href="/public/css/main.css">
@@ -15,7 +15,7 @@
     <body ng-app="surpriseCheckout">
 
         <header class="checkout-banner">
-            <div class="checkout-banner-title"><a onclick="goBack()">Checkout(<%= checkoutCount %> item)</a></div>
+            <div class="checkout-banner-title"><a onclick="goBack()">Subscription Order</a></div>
             <ul class="checkout-banner-left-group">
                 <li class="checkout-banner-logo"><a onclick="goBack()">Surprise</a></li>
             </ul>
@@ -24,7 +24,7 @@
             <div class="main-content-box" ng-controller="mainController">
                 <mod-address-selector></mod-address-selector>
                 <mod-card-selector></mod-card-selector>
-                <mod-product-review></mod-product-review>
+                <mod-subscription-product-review></mod-subscription-product-review>
                 <mod-order-summary></mod-order-summary>
             </div>
         </section>

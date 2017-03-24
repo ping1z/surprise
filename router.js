@@ -332,6 +332,14 @@ router.get('/checkout',//auth.ensureLoggedIn(),
     }else{
        res.render("checkout",{sku:sku,checkoutCount:1,customerId:"guest"});
     }
+});
+
+router.get('/subscribe',auth.ensureLoggedIn(),
+  function(req, res){
+    var sku = req.query.sku?req.query.sku:null;
+    cart.getCartItemCount(req.user.id,function(err, count){
+      res.render("subscribe",{sku:sku, customerId:req.user.id, isSubscription:true});
+    })
     
 });
 
@@ -352,15 +360,12 @@ router.get('/returnItem',auth.ensureLoggedIn(),
     lineItem.findOneByIdAndUser(lineItemId, req.user.id, function(err,item){
         
         lineItem.findByShipmentId(item.shipmentId,function(err,lineItems){
-          
-          
+           
           cart.getCartItemCount(req.user.id,function(err, count){
             res.render("returnItems",{hasLogin:true,cartCount:count,lineItemList:lineItems});
           })
-       
        })
     });
-    
 });
 
 router.post('/returnSubmit',auth.ensureLoggedIn(),
@@ -378,7 +383,6 @@ router.post('/returnSubmit',auth.ensureLoggedIn(),
         }
       }
       lineItem.findByMultiId(ids, 3, function(err,items){
-          
           //check userId,shipmentId
           var shipmentId = items[0].shipmentId;
 

@@ -3,7 +3,7 @@
     var orderInfo = {
         address:null,
         card:null,
-        cartItems:[],
+        items:[],
 
     }
     customerId = (customerId&&customerId!="guest")?customerId:"guest";
@@ -16,8 +16,8 @@
             $scope.orderInfo = orderInfo;
             $scope.taxRate = 0.08;
             $scope.totalBeforeTax = 0;
-            for(var i=0;i<orderInfo.cartItems.length;i++){
-                $scope.totalBeforeTax+=orderInfo.cartItems[i].price * orderInfo.cartItems[i].quantity;
+            for(var i=0;i<orderInfo.items.length;i++){
+                $scope.totalBeforeTax+=orderInfo.items[i].price * orderInfo.items[i].quantity;
             }
             $scope.estimatedTax = $scope.totalBeforeTax*$scope.taxRate;
             
@@ -303,7 +303,7 @@
                         .then(function(result) {
                             if(result){
                                 $scope.cartList.push(createCartItemFromProductDetails(result.data));
-                                orderInfo.cartItems = $scope.cartList;
+                                orderInfo.items = $scope.cartList;
                                 $scope.$emit('updateSummary');
                             }else{
                                 alert("Product not found");  
@@ -318,7 +318,7 @@
                         .then(function(result) {
                             if(result){
                                 $scope.cartList = result.data;
-                                orderInfo.cartItems = $scope.cartList;
+                                orderInfo.items = $scope.cartList;
                                 $scope.$emit('updateSummary');
                             }else{
                                 alert("Product not found");  
@@ -340,9 +340,8 @@
 		return {
 			restrict: 'E',
 			controller: function($scope,$http) {
-                
-                $scope.placeOrder=function(){
-                   var url='/api/placeOrder';
+                function placeCheckoutOrder(){
+                    var url='/api/placeOrder';
                     $http({
                         method:"POST",
                         url: url,
@@ -356,7 +355,7 @@
                         data: {
                             address:JSON.stringify($scope.orderInfo.address),
                             card:JSON.stringify($scope.orderInfo.card),
-                            cartItems:JSON.stringify($scope.orderInfo.cartItems)
+                            cartItems:JSON.stringify($scope.orderInfo.items)
                         }
                     }).then(function(result) {
                         if(result.data=="OK"){
@@ -375,10 +374,58 @@
                         console.error(result);
                     });
                 }
+                function placeSubcriptionOrder(){
+                    alert("This feature is coming soon.");
+                }
+                $scope.placeOrder=function(){
+                   if(isSubscription){
+                       placeSubcriptionOrder()
+                   }else{
+                       placeCheckoutOrder()
+                   }
+                }
 			},
 			templateUrl:'/public/modules/orderSummary.html'
 		};
 	});
+
+
+    app.directive('modSubscriptionProductReview',function() {
+		return {
+			restrict: 'E',
+            scope:{},
+			controller: function($scope,$http) {
+                
+                $scope.listCart=function(){
+                    $scope.item = [];
+                    if(sku){
+                        var url= "/api/getProductDetail?sku="+sku+"&timestamp="+ new Date();
+                        $http.get(url)
+                        .then(function(result) {
+                            if(result){
+                                $scope.item = result.data;
+                                $scope.item.productQuantity = $scope.item.quantity;
+                                $scope.item.quantity = 1;
+                                $scope.item.frequancy = "1m";
+                                orderInfo.items = [];
+                                orderInfo.items.push(result.data);
+                                $scope.$emit('updateSummary');
+                            }else{
+                                alert("Product not found");  
+                            }
+                        }); 
+                    }
+                }
+                $scope.listCart();
+
+                $scope.updateSummary=function(){
+                    $scope.$emit('updateSummary');
+                }
+			},
+			templateUrl:'/public/modules/subscriptionProductReview.html'
+		};
+	});
+
 
     app.directive('convertToNumber', function() {
         return {
