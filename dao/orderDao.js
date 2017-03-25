@@ -202,12 +202,16 @@ OrderDao.prototype.findById = function(customerId,orderId,callback){
     // +"INNER JOIN (SELECT receiverName FROM surprise.shipment) s "
     // +"ON c.orderId = s.orderId";
 
-    var sql="SELECT o.*, s.*, p.*"
+    var sql="SELECT o.*, s.*, op.*, l.*, p.description, p.picture"
         +" FROM surprise.Order o "
         +"     JOIN surprise.Shipment s "
         +"     ON s.customerId = o.customerId and s.orderId = o.id "
-        +"     JOIN surprise.orderpayment p "
-        +"     ON p.customerId = o.customerId and p.orderId = o.id "        
+        +"     JOIN surprise.orderpayment op "
+        +"     ON op.customerId = o.customerId and op.orderId = o.id "
+        +"     JOIN surprise.lineitem l "
+        +"     ON l.customerId = o.customerId and l.orderId = o.id "  
+        +"     JOIN surprise.product p "
+        +"     ON p.sku = l.productSKU "                       
         +" WHERE o.customerId=? and o.id=?" ;
 
     var values=[customerId,orderId];

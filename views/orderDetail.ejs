@@ -13,49 +13,107 @@
                         <div class="order-line-item gform-wrapper button">
                             <div class="order-line-item-header gform-row">
                                 <div class="gform-col-8">
-                                    Ordered on <%= item.createdTime %> | Order# <%= item.orderId %>
+                                    Ordered on <%= item.createdTime.toDateString() %> | Order# <%= item.orderId %>
                                 </div>
                             </div>
                             <div class="gform-row">
-
                                 <div class="gform-col-4">
-                                    <h3>Shipping Address</h3> 
-                                    <div class="order-line-item-info-description">
-                                        <%= item.receiverName %></BR>
-                                        <%= item.addressLine1 %>, <%= item.addressLine2 %></BR>
-                                        <%= item.city %>, <%= item.state %></BR>
+                                    <div class="order-col-left">
+                                        <h3>Shipping Address</h3> 
+                                        <div class="order-line-item-info-description">
+                                            <div class="order-line-height">
+                                                <%= item.receiverName %></BR>
+                                                <%= item.addressLine1 %>, <%= item.addressLine2 %></BR>
+                                                <%= item.city %>, <%= item.state %></BR>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>  
                                 <div class="gform-col-4">
                                     <h3>Payment Method</h3> 
                                     <div class="order-line-item-info-description">
-                                        <%= item.cardNumber %></BR>
+                                        <div class="order-line-height">
+                                            <%= item.cardNumber %></BR>
+                                        </div>
                                     </div>
                                 </div>        
                                 <div class="gform-col-4">
                                     <h3>Order Summary</h3> 
                                     <div class="order-line-item-info-description">
                                         <div class="gform-col-9">
-                                            Item(s) Subtotal: </BR>
-                                            Shipping & Handling: </BR>
-                                            Total before tax: </BR>
-                                            Estimated tax to be: </BR>
-                                            Grand Total: 
+                                            <div class="order-line-height">
+                                                Item(s) Subtotal: </BR>
+                                                Shipping & Handling: </BR>
+                                                Total before tax: </BR>
+                                                Estimated tax to be: </BR>
+                                                Grand Total: 
+                                            </div>
                                         </div>
                                         <div class="gform-col-3">
-                                            $<%= item.totalBeforeTax %> </BR>
-                                            $<%= item.shippingCost %> </BR>
-                                            $<%= item.totalBeforeTax + item.shippingCost %> </BR>
-                                            $<%= item.tax %> </BR>
-                                            $<%= item.amount %>
+                                            <div class="order-line-height">
+                                                $<%= item.totalBeforeTax %> </BR>
+                                                $<%= item.shippingCost %> </BR>
+                                                $<%= item.totalBeforeTax + item.shippingCost %> </BR>
+                                                $<%= item.tax %> </BR>
+                                                $<%= item.amount %>
+                                            </div>
                                         </div>                                        
                                     </div>    
                                 </div>                                                                                                                                                   
 
                             </div>
                         </div>
+
+
+                        <div class="order-line-item gform-wrapper button">
+                            <div class="gform-row">
+                                 <% if (item.status==2 && item.estimatedTime) { %>
+                                    <div class="order-line-item-status">Shipped  <span>arriving on <%=item.estimatedTime.toDateString() %></span></div>
+                                 <% } %>
+                                <% if (item.status==3 && item.deliveredTime) { %>
+                                    <div class="order-line-item-status">Delievered  <span> on <%=item.deliveredTime.toDateString() %></span></div>
+                                 <% } %>
+                                 <% if (item.status==4) { %>
+                                    <div class="order-line-item-status">Returning  </div>
+                                 <% } %>
+                                 <% if (item.status==5) { %>
+                                    <div class="order-line-item-status">Return received  </div>
+                                 <% } %>
+                                 <% if (item.status==6) { %>
+                                    <div class="order-line-item-status">Returned and refunded </div>
+                                 <% } %>
+                                 <% if (item.status<2) { %>
+                                    <div class="order-line-item-status">Preparing for shipment</div>
+                                 <% } %>
+                            </div>
+                            <div class="gform-row">
+                                <div class="order-line-item-img">
+                                    <a href="/productDetail?sku=<%= item.productSKU %>">
+                                    <img src="/public/image/<%= item.picture %>" width="150" height="150" alt="Product Details">
+                                    </a>
+                                </div>
+                                <div class="order-line-item-info">
+                                    <div class="order-line-item-info-name"><a href="/productDetail?sku=<%= item.sku %>"><%= item.productName %></a></div>
+                                    <div class="order-line-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.description %></a></div>
+                                    <div class="order-line-item-info-price">$<%= item.price %></div>
+                                </div>                                
+                                <div class="order-line-item-action">
+                                    <ul>
+                                        <li><button class="light"><a >Track package</a></button></li>                                   
+                                        <% if (item.status == 3) { %>
+                                            <li><button class="light"><a href="/returnItem?lineItemId=<%= item.id %>">Return item</a></button></li>
+                                        <% } %>
+                                        <% if (item.status>=3) { %>
+                                        <li> <button>Write a product review</button></li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
                     <% }); %>
-                </div>      
+                </div>                   
             </div>
         </section>
          <%- include('global/_footer'); %>
