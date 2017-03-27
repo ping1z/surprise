@@ -12,7 +12,7 @@ PS: Suggest Use [Visual Studio Code](http://code.visualstudio.com/) as and IDE f
 
 ## Import Schema to Mysql
 
-User Mysql Workbrench in import the schema file <path to dir>/surprise/schema/surprise-v2.3.mwb
+User Mysql Workbrench in import the schema file <path to dir>/surprise/schema/surprise-v4.0.mwb
 PS: please use the lastest version.
 
 Please use user:root  password:root123 as you mysql account.
