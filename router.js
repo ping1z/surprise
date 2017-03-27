@@ -18,6 +18,10 @@ var LineItemDao = require("./dao/lineItemDao.js");
 var lineItem = new LineItemDao();
 var ReturnDao = require("./dao/returnDao.js");
 var returnDao = new ReturnDao();
+var TaxRateDao = require("./dao/taxRateDao.js");
+var raxRateDao = new TaxRateDao();
+var SubscriptionDao = require("./dao/subscriptionDao.js");
+var subscription = new SubscriptionDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -343,6 +347,56 @@ router.get('/subscribe',auth.ensureLoggedIn(),
     
 });
 
+router.get('/listSubscription',auth.ensureLoggedIn(),
+  function(req, res){
+    subscription.findByCustomerId(req.user.id,function(err,subItems){
+        cart.getCartItemCount(req.user.id,function(err, count){
+            res.render("subscriptionList",{hasLogin:true,cartCount:count,subItemList:subItems});
+        })
+    });
+    
+});
+
+router.get('/subscriptionActive',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+
+    subscription.switchStatus(id, req.user.id, 0,1, function(err,r){
+        subscription.findByCustomerId(req.user.id,function(err,subItems){
+            cart.getCartItemCount(req.user.id,function(err, count){
+                res.render("subscriptionList",{hasLogin:true,cartCount:count,subItemList:subItems});
+            })
+        });
+    });
+});
+
+
+router.get('/subscriptionStop',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+
+     subscription.switchStatus(id, req.user.id, 1,0, function(err,r){
+        subscription.findByCustomerId(req.user.id,function(err,subItems){
+            cart.getCartItemCount(req.user.id,function(err, count){
+                res.render("subscriptionList",{hasLogin:true,cartCount:count,subItemList:subItems});
+            })
+        });
+    });
+});
+
+router.get('/subscriptionDelete',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+
+    subscription.deleteSubscription(id, req.user.id,function(err,rå){
+        subscription.findByCustomerId(req.user.id,function(err,subItems){
+            cart.getCartItemCount(req.user.id,function(err, count){
+                res.render("subscriptionList",{hasLogin:true,cartCount:count,subItemList:subItems});
+            })
+        });
+    });
+});
+
 router.get('/listOrder',auth.ensureLoggedIn(),
   function(req, res){
     lineItem.findByCustomerId(req.user.id,function(err,lineItems){
@@ -569,41 +623,95 @@ router.get('/api/listCart',auth.ensureLoggedIn(),
     }
 });
 
-router.post('/api/placeOrder',
+router.post('/api/placeSubscriptionOrder',auth.ensureLoggedIn(),
   function(req, res){
     try{
       var address = JSON.parse(req.body.address);
       var card = JSON.parse(req.body.card);
-      var cartItems = JSON.parse(req.body.cartItems);
-      
-      // calculate order info
-      var orderInfo = {
-        taxRate:0.08,
-        totalBeforeTax:0,
-        tax:0,
-        shippingCost:0,
-        total:0
-      };
+      var item = JSON.parse(req.body.item);
+      var customerId = req.user.id;
+      product.findOneBySku(item.sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }
 
-      for(var i=0;i<cartItems.length;i++){
-          orderInfo.totalBeforeTax+=cartItems[i].price * cartItems[i].quantity;
-      }
-      orderInfo.tax = orderInfo.totalBeforeTax * orderInfo.taxRate;
-      if(order.totalBeforeTax>50){
-          orderInfo.shippingCost = 0;
-      }else{
-              orderInfo.shippingCost = 1.0;
-      }
-      orderInfo.total = orderInfo.totalBeforeTax+orderInfo.tax + orderInfo.shippingCost;
-
-      var customerId = (req.user&&req.user.type=='customer')?req.user.id:0;
-      order.placeOrder(customerId, orderInfo, address, card, cartItems,function(){
-        res.send(200);
-      })
+          if(r.price!=item.price){
+            throw new Error('Ivalide product price='+item.price);
+          }
+          subscription.saveSubscription(customerId, address, card, item,function(e,r){
+             if(e){
+              var error={msg:e.message,stack:e.stack};
+                res.send(500,error);
+              }else{
+                res.send(200);
+              }
+          }); 
+      });
     }catch(e){
       var error={msg:e.message,stack:e.stack};
       res.send(500,error);
     }
 });
+
+router.post('/api/placeOrder',
+  function(req, res){
+    try{
+      var address = JSON.parse(req.body.address);
+      var card = JSON.parse(req.body.card);
+      var items = JSON.parse(req.body.items);
+      
+      raxRateDao.getTaxRate(address.state,function(err,rate){
+        var orderSummary = calculateOrderSummary(items,rate);
+        var customerId = (req.user&&req.user.type=='customer')?req.user.id:0;
+        order.placeOrder(customerId, orderSummary, address, card, items,function(){
+          res.send(200);
+        })
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.post('/api/getOrderSummary',
+  function(req, res){
+    try{
+      var address = JSON.parse(req.body.address);
+      var card = JSON.parse(req.body.card);
+      var items = JSON.parse(req.body.items);
+      
+      raxRateDao.getTaxRate(address.state,function(err,rate){
+        var orderSummary = calculateOrderSummary(items,rate);
+        res.send(orderSummary);
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+var calculateOrderSummary = function(items,rate){
+    // calculate order info
+    var orderSummary = {
+      taxRate:rate,
+      totalBeforeTax:0,
+      tax:0,
+      shippingCost:0,
+      total:0
+    };
+    for(var i=0;i<items.length;i++){
+        orderSummary.totalBeforeTax+=items[i].price * items[i].quantity;
+    }
+    orderSummary.tax = orderSummary.totalBeforeTax * orderSummary.taxRate;
+    if(orderSummary.totalBeforeTax>50){
+        orderSummary.shippingCost = 0;
+    }else{
+            orderSummary.shippingCost = 1.0;
+    }
+    orderSummary.total = orderSummary.totalBeforeTax+orderSummary.tax + orderSummary.shippingCost;
+
+    return orderSummary;
+}
 
 module.exports = router;

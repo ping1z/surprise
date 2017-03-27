@@ -13,7 +13,7 @@
                         Shipping
                     </div>
                     <div class="checkout-mod-summary-value">
-                        {{shippingCost | currency}}
+                        {{orderSummary.shippingCost | currency}}
                     </div>
                 </div>
                 <div class="gform-row">
@@ -21,7 +21,7 @@
                         Total before tax
                     </div>
                     <div class="checkout-mod-summary-value">
-                        {{totalBeforeTax | currency}}
+                        {{orderSummary.totalBeforeTax | currency}}
                     </div>
                 </div>
                 <div class="gform-row">
@@ -29,7 +29,7 @@
                         Estimated tax to be collected
                     </div>
                     <div class="checkout-mod-summary-value">
-                        {{estimatedTax | currency}}
+                        {{orderSummary.estimatedTax | currency}}
                     </div>
                 </div>
                 <div class="gform-row checkout-mod-summary-total">
@@ -37,7 +37,7 @@
                         Order total
                     </div>
                     <div class="checkout-mod-summary-value">
-                        {{total | currency}}
+                        {{orderSummary.total | currency}}
                     </div>
                 </div>
             </div>

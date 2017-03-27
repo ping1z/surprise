@@ -11,28 +11,41 @@
         window.location = "/";
     }
 
-    app.controller('mainController',['$scope',function($scope){
+    app.controller('mainController',['$scope','$http',function($scope, $http){
         $scope.updateSummary = function(){
-            $scope.orderInfo = orderInfo;
-            $scope.taxRate = 0.08;
-            $scope.totalBeforeTax = 0;
-            for(var i=0;i<orderInfo.items.length;i++){
-                $scope.totalBeforeTax+=orderInfo.items[i].price * orderInfo.items[i].quantity;
+            $scope.orderSummary = {};
+            if(orderInfo.address == null || orderInfo.items.length<=0){
+                return;
             }
-            $scope.estimatedTax = $scope.totalBeforeTax*$scope.taxRate;
-            
-            if($scope.total>50){
-                $scope.shippingCost = 0;
-            }else{
-                    $scope.shippingCost = 1.0;
-            }
-            $scope.total = $scope.totalBeforeTax+$scope.estimatedTax + $scope.shippingCost;
-
+            var url='/api/getOrderSummary';
+            $http({
+                method:"POST",
+                url: url,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                transformRequest: function(obj) {
+                    var str = [];
+                    for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                },
+                data: {
+                    address:JSON.stringify(orderInfo.address),
+                    card:JSON.stringify(orderInfo.card),
+                    items:JSON.stringify(orderInfo.items)
+                }
+            }).then(function(result) {
+                $scope.orderSummary = result.data;
+                console.log(result);
+                
+            },function(result) {
+                alert("Update order summary failed.\nPlease check the console log for more details.");
+                console.error(result);
+            });
         }
         $scope.$on('updateSummary', function(event, sku) {
             $scope.updateSummary();
         });
-        $scope.updateSummary();
+        //$scope.updateSummary();
 	}]);
 
     app.directive('modAddressSelector',function() {
@@ -353,9 +366,9 @@
                             return str.join("&");
                         },
                         data: {
-                            address:JSON.stringify($scope.orderInfo.address),
-                            card:JSON.stringify($scope.orderInfo.card),
-                            cartItems:JSON.stringify($scope.orderInfo.items)
+                            address:JSON.stringify(orderInfo.address),
+                            card:JSON.stringify(orderInfo.card),
+                            items:JSON.stringify(orderInfo.items)
                         }
                     }).then(function(result) {
                         if(result.data=="OK"){
@@ -374,12 +387,43 @@
                         console.error(result);
                     });
                 }
-                function placeSubcriptionOrder(){
-                    alert("This feature is coming soon.");
+                function placeSubscriptionOrder(){
+                    var url='/api/placeSubscriptionOrder';
+                    $http({
+                        method:"POST",
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        transformRequest: function(obj) {
+                            var str = [];
+                            for(var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                            return str.join("&");
+                        },
+                        data: {
+                            address:JSON.stringify(orderInfo.address),
+                            card:JSON.stringify(orderInfo.card),
+                            item:JSON.stringify(orderInfo.items[0])
+                        }
+                    }).then(function(result) {
+                        if(result.data=="OK"){
+                            if(customerId=="guest"){
+                                alert("Thank you!\n We will send you a email with the order information.");
+                                window.location = "/";
+                            }else{
+                                alert("Thank you!\n You Subscription order has been submitted successfully.")
+                                window.location = "/listSubscription";
+                            }
+                        }
+                        console.log(result);
+                        
+                    },function(result) {
+                        alert("Place order failed.\nPlease check the console log for more details.");
+                        console.error(result);
+                    });
                 }
                 $scope.placeOrder=function(){
                    if(isSubscription){
-                       placeSubcriptionOrder()
+                       placeSubscriptionOrder()
                    }else{
                        placeCheckoutOrder()
                    }
@@ -406,7 +450,7 @@
                                 $scope.item = result.data;
                                 $scope.item.productQuantity = $scope.item.quantity;
                                 $scope.item.quantity = 1;
-                                $scope.item.frequancy = "1m";
+                                $scope.item.frequency = "1m";
                                 orderInfo.items = [];
                                 orderInfo.items.push(result.data);
                                 $scope.$emit('updateSummary');

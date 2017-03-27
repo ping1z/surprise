@@ -50,12 +50,12 @@ OrderDao.prototype.saveGuestCard = function(connection, card, callback){
         callback && callback(card);
     });
 }
-OrderDao.prototype.saveOrderInfo = function(connection, customerId, order,address,card, cartItems, callback){
+OrderDao.prototype.saveOrderInfo = function(connection, customerId, order,address,card, items, callback){
     var trackingNumber = uuid.v1();
-    var sql="INSERT INTO surprise.Order (customerId,status,addressId,cardId,totalBeforeTax,tax,shippingCost,lineItemCount,trackingNumber, createdTime,lastModifiedTime)"
-            +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,?,NOW(),NOW())";
+    var sql="INSERT INTO surprise.Order (customerId,status,addressId,cardId,totalBeforeTax,tax,taxRate, shippingCost,lineItemCount,trackingNumber, createdTime,lastModifiedTime)"
+            +" VALUES ( ?, ?, ?, ?, ?, ?,?, ?, ?,?,NOW(),NOW())";
     var o = order;
-    var values=[customerId, 0, address.id, card.id, o.totalBeforeTax,o.tax,o.shippingCost,cartItems.length,trackingNumber];
+    var values=[customerId, 0, address.id, card.id, o.totalBeforeTax,o.tax,o.taxRate,o.shippingCost,items.length,trackingNumber];
     console.log(BaseDao.formatSQL(sql, values));
     connection.query(sql,values,function(error, result, fields){
         if (error) {
@@ -101,13 +101,13 @@ OrderDao.prototype.saveShipment = function(connection, customerId, order,address
     });
 }
 
-OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipmentId, cartItems, callback){
+OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipmentId, items, callback){
     var queries = "";
     
-    for(var i=0;i<cartItems.length;i++){
+    for(var i=0;i<items.length;i++){
         var sql="INSERT INTO surprise.LineItem (customerId, status,orderId,productSKU,shipmentId,productName,price,quantity,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,NOW(),NOW());";
-        var c = cartItems[i];
+        var c = items[i];
         var values=[customerId,0,order.id,c.sku,shipmentId,c.name, c.price, c.quantity];
         sql = BaseDao.formatSQL(sql, values);
         if(customerId!=0){
@@ -129,7 +129,7 @@ OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipm
 }
 
 
-OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartItems, callback){
+OrderDao.prototype.placeOrder = function(customerId, order, address, card, items, callback){
     var pool = this.pool;
     var _ = this;
     pool.getConnection(function(err, connection) {
@@ -141,13 +141,13 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                     address = a;
                     _.saveGuestCard(connection,card,function(c){
                         card = c;
-                        _.saveOrderInfo(connection,customerId,order,address,card,cartItems,function(o){
+                        _.saveOrderInfo(connection,customerId,order,address,card,items,function(o){
                             order = o;
                             _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                                 
                                 _.saveShipment(connection, customerId, order,address,function(shipmentId){
                                        
-                                    _.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
+                                    _.saveLineItems(connection, customerId, order, shipmentId, items, function(){
 
                                         connection.commit(function(err) {
                                             if (err) {
@@ -166,13 +166,13 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, cartI
                 });      
             }else{
 
-                _.saveOrderInfo(connection,customerId,order,address,card,cartItems,function(o){
+                _.saveOrderInfo(connection,customerId,order,address,card,items,function(o){
                     order = o;
                     _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
                         
                         _.saveShipment(connection, customerId, order,address,function(shipmentId){
                                 
-                            _.saveLineItems(connection, customerId, order, shipmentId, cartItems, function(){
+                            _.saveLineItems(connection, customerId, order, shipmentId, items, function(){
 
                                 connection.commit(function(err) {
                                     if (err) {
