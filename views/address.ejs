@@ -53,7 +53,26 @@
                         <div class="gform-col-4">
                             <div class="gform-input-group">
                                 <label for="state">State</label>
-                                <input type="text" name="state" value=<%= address.state %>>
+                                <select name="state"  value=<%= address.state %>>
+                                        <% if (address.state=="TX") { %>
+                                           <option value="TX"  selected="selected">Texas</option>
+                                        <% } %>
+                                        <% if (address.state!="TX") { %>
+                                           <option value="TX" >Texas</option>
+                                        <% } %>
+                                        <% if (address.state=="CA") { %>
+                                           <option value="CA"  selected="selected">California</option>
+                                        <% } %>
+                                        <% if (address.state!="CA") { %>
+                                           <option value="CA" >California</option>
+                                        <% } %>
+                                         <% if (address.state=="OTHERS") { %>
+                                           <option value="OTHERS"  selected="selected">Others</option>
+                                        <% } %>
+                                        <% if (address.state!="OTHERS") { %>
+                                           <option value="OTHERS" >Others</option>
+                                        <% } %>
+                                </select>
                             </div>
                         </div>
                     </div>

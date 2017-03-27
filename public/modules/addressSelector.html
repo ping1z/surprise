@@ -86,7 +86,11 @@
                 <div class="gform-col-4">
                     <div class="gform-input-group">
                         <label for="state">State</label>
-                        <input type="text" name="state" ng-model="newAddress.state">
+                        <select name="state" ng-model="newAddress.state">
+                                <option value="TX" >Texas</option>
+                                <option value="CA" >California</option>
+                                <option value="OTHERS" >Others</option>
+                        </select>
                     </div>
                 </div>
             </div>

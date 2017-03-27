@@ -5,6 +5,13 @@ var CardDao = function(){
 }
 
 CardDao.prototype = Object.create(BaseDao.prototype);
+CardDao.prototype.get = function(id, callback){
+    //columns, query, orderBy, limit, offset, callback
+    this.findOne(null, "`id`="+id,function(error, addr){
+        console.log(error);
+        callback && callback(error, addr);
+    });
+};
 CardDao.prototype.findById = function(id,customerId, callback){
     //columns, query, orderBy, limit, offset, callback
     this.findOne(null, "`id`=\""+id+"\" AND `customerId`=\""+customerId+"\"",function(error, addr){

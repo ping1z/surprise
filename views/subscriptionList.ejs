@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <%- include('global/_topBanner'); %>
+        <section class="main-content">
+            <div class="main-content-box">
+                 <div class="main-content-title">
+                    <h1>Your Subscriptions</h1>
+                </div>
+                <div class="order-line-item-list">
+                    <% subItemList.forEach(function(item){ %>
+                        <div class="order-line-item gform-wrapper button">
+                            <div class="order-line-item-header gform-row">
+                                <div class="gform-col-3">
+                                    NEXT ORDER DATE</BR><%= item.nextOrderTime.toDateString() %>
+                                </div>
+                                <div class="gform-col-3">
+                                    FREQUENCY</BR>
+                                    <% if (item.frequency=="1m") { %>
+                                        1 MONTH
+                                    <% } %>
+                                    <% if (item.frequency=="6m") { %>
+                                        6 MONTH
+                                    <% } %>
+                                    <% if (item.frequency=="1y") { %>
+                                        1 YEAR
+                                    <% } %>
+                                   
+                                </div>
+                            </div>
+                            
+                            <div class="gform-row">
+                                 <% if (item.status==1) { %>
+                                    <div class="order-line-item-status">Active  </div>
+                                 <% } %>
+                                 <% if (item.status==0) { %>
+                                    <div class="order-line-item-status"> Inactive  </div>
+                                 <% } %>
+                            </div>
+                            <div class="gform-row">
+                                <div class="order-line-item-img">
+                                    <a href="/productDetail?sku=<%= item.productSKU %>">
+                                    <img src="/public/image/<%= item.picture %>" width="150" height="150" alt="Product Details">
+                                    </a>
+                                </div>
+                                <div class="order-line-item-info">
+                                    <div class="order-line-item-info-name"><a href="/productDetail?sku=<%= item.sku %>"><%= item.name %></a></div>
+                                    <div class="order-line-item-info-description"><a href="/productDetail?sku=<%= item.sku %>"><%= item.description %></a></div>
+                                    <div class="order-line-item-info-price">$<%= item.price %></div>
+                                </div>
+                                <div class="order-line-item-action">
+                                    <ul>
+                                        <% if (item.status == 0) { %>
+                                            <li><button class="light"><a href="/subscriptionActive?id=<%= item.id %>">Active</a></button></li>
+                                        <% } %>
+                                         <% if (item.status == 1) { %>
+                                            <li><button class="light"><a href="/subscriptionStop?id=<%= item.id %>">Stop</a></button></li>
+                                        <% } %>
+                                        <li> <button><a href="/subscriptionDelete?id=<%= item.id %>">Delete</a></button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>      
+            </div>
+        </section>
+         <%- include('global/_footer'); %>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>
