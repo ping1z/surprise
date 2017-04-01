@@ -82,23 +82,23 @@
                             <div class="gform-col-4">
                                 <div class="gform-input-group">
                                     <label for="state">State</label>
-                                    <select name="state"  value=<%= address.state %>>
-                                        <% if (address.state=="TX") { %>
+                                    <select name="state"  value=<%= card.state %>>
+                                        <% if (card.state=="TX") { %>
                                            <option value="TX"  selected="selected">Texas</option>
                                         <% } %>
-                                        <% if (address.state!="TX") { %>
+                                        <% if (card.state!="TX") { %>
                                            <option value="TX" >Texas</option>
                                         <% } %>
-                                        <% if (address.state=="CA") { %>
+                                        <% if (card.state=="CA") { %>
                                            <option value="CA"  selected="selected">California</option>
                                         <% } %>
-                                        <% if (address.state!="CA") { %>
+                                        <% if (card.state!="CA") { %>
                                            <option value="CA" >California</option>
                                         <% } %>
-                                         <% if (address.state=="OTHERS") { %>
+                                         <% if (card.state=="OTHERS") { %>
                                            <option value="OTHERS"  selected="selected">Others</option>
                                         <% } %>
-                                        <% if (address.state!="OTHERS") { %>
+                                        <% if (card.state!="OTHERS") { %>
                                            <option value="OTHERS" >Others</option>
                                         <% } %>
                                 </select>
