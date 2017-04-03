@@ -10,7 +10,7 @@ auth.init(app);
 //initalize router module
 var router = require('./router');
 app.use('/', router);
-
+fsdfsf
 //initalize admin router module
 var routerAdmin = require('./router-admin');
 app.use('/', routerAdmin);
