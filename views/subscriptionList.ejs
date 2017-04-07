@@ -57,6 +57,7 @@
                                          <% if (item.status == 1) { %>
                                             <li><button class="light"><a href="/subscriptionStop?id=<%= item.id %>">Stop</a></button></li>
                                         <% } %>
+                                        <li> <button><a href="/subscriptionUpdate?id=<%= item.id %>">Update</a></button></li>
                                         <li> <button><a href="/subscriptionDelete?id=<%= item.id %>">Delete</a></button></li>
                                     </ul>
                                 </div>

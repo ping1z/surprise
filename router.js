@@ -654,6 +654,27 @@ router.post('/api/placeSubscriptionOrder',auth.ensureLoggedIn(),
     }
 });
 
+router.post('/api/updateSubscriptionOrder',auth.ensureLoggedIn(),
+  function(req, res){
+    try{
+      var address = JSON.parse(req.body.address);
+      var card = JSON.parse(req.body.card);
+      var item = JSON.parse(req.body.item);
+      var customerId = req.user.id;
+      subscription.updateSubscription(customerId, address, card, item,function(e,r){
+              if(e){
+                var error={msg:e.message,stack:e.stack};
+                  res.send(500,error);
+                }else{
+                  res.send(200);
+                }
+            }); 
+      }catch(e){
+        var error={msg:e.message,stack:e.stack};
+        res.send(500,error);
+      }
+});
+
 router.post('/api/placeOrder',
   function(req, res){
     try{

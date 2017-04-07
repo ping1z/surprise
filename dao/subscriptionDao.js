@@ -20,6 +20,18 @@ SubscriptionDao.prototype.saveSubscription = function(customerId, address, card,
     });
 };
 
+SubscriptionDao.prototype.updateSubscription = function(customerId, address, card, item, callback){
+    var sql="UPDATE surprise.Subscription SET quantity=?, frequency=?, addressId=?, cardId=?, lastModifiedTime=NOW()"
+        +" WHERE id=? AND customerId=?"
+    var i = item;
+    var values=[i.quantity, i.frequency, address.id, card.id, i.id, customerId];
+    var _=this;
+    _.execute(sql,values,function(error, res){
+        console.log("updateSubscription",error,res);
+        callback && callback(error, res);
+    });
+};
+
 SubscriptionDao.prototype.findByCustomerId = function(customerId,callback){
 
     var sql="SELECT s.*, p.name, p.description, p.contents, p.picture"
