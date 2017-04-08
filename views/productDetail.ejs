@@ -20,9 +20,11 @@
                         <div class="product-details-price">
                             <input type="radio" name="buy" value="buy" checked> Buy now <span class="product-details-price-currency">$<%= product.price %> </span>
                         </div>
+                        <% if (product.subscribePrice) { %>
                         <div class="product-details-price">
-                            <input type="radio" name="buy" value="subscribe"> Subscribe&Save <span class="product-details-price-currency">$<%= product.price %> </span>
-                        </div>
+                            <input type="radio" name="buy" value="subscribe"> Subscribe&Save <span class="product-details-price-currency">$<%= product.subscribePrice %> </span>
+                        </div>  
+                        <% } %>
                         <div class="product-details-action-group" name="buy">
                             <button>
                                 <a href="/checkout?sku=<%= product.sku %>">Buy Now</a>

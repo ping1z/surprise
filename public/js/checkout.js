@@ -339,7 +339,11 @@
                         }); 
                     }
                 }
-                $scope.listCart();
+                if(subscriptionId){
+                    $scope.getSubscription();
+                }else{
+                    $scope.listCart();
+                }
 
                 $scope.updateSummary=function(){
                     $scope.$emit('updateSummary');
@@ -421,9 +425,49 @@
                         console.error(result);
                     });
                 }
+
+                function updateSubscriptionOrder(){
+                    var url='/api/updateSubscriptionOrder';
+                    $http({
+                        method:"POST",
+                        url: url,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        transformRequest: function(obj) {
+                            var str = [];
+                            for(var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                            return str.join("&");
+                        },
+                        data: {
+                            address:JSON.stringify(orderInfo.address),
+                            card:JSON.stringify(orderInfo.card),
+                            item:JSON.stringify(orderInfo.items[0])
+                        }
+                    }).then(function(result) {
+                        if(result.data=="OK"){
+                            if(customerId=="guest"){
+                                alert("Thank you!\n We will send you a email with the order information.");
+                                window.location = "/";
+                            }else{
+                                alert("Thank you!\n You Subscription order has been submitted successfully.")
+                                window.location = "/listSubscription";
+                            }
+                        }
+                        console.log(result);
+                        
+                    },function(result) {
+                        alert("Place order failed.\nPlease check the console log for more details.");
+                        console.error(result);
+                    });
+                }
+
                 $scope.placeOrder=function(){
                    if(isSubscription){
-                       placeSubscriptionOrder()
+                       if(subscriptionId){
+                         updateSubscriptionOrder()
+                       }else{
+                         placeSubscriptionOrder()
+                       }
                    }else{
                        placeCheckoutOrder()
                    }
@@ -448,9 +492,23 @@
                         .then(function(result) {
                             if(result){
                                 $scope.item = result.data;
+                                $scope.item.price = $scope.item.subscribePrice;
                                 $scope.item.productQuantity = $scope.item.quantity;
                                 $scope.item.quantity = 1;
-                                $scope.item.frequency = "1m";
+                                $scope.item.frequency = 1;
+                                orderInfo.items = [];
+                                orderInfo.items.push(result.data);
+                                $scope.$emit('updateSummary');
+                            }else{
+                                alert("Product not found");  
+                            }
+                        }); 
+                    }else if(subscriptionId){
+                        var url= "/api/getSubscription?id="+subscriptionId+"&timestamp="+ new Date();
+                        $http.get(url)
+                        .then(function(result) {
+                            if(result){
+                                $scope.item = result.data;
                                 orderInfo.items = [];
                                 orderInfo.items.push(result.data);
                                 $scope.$emit('updateSummary');

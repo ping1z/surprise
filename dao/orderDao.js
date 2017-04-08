@@ -128,6 +128,27 @@ OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipm
     });
 }
 
+OrderDao.prototype.updateProductQuantity = function(connection, items, callback){
+    var queries = "";
+    
+    for(var i=0;i<items.length;i++){
+        var sql="UPDATE surprise.Product SET quantity=quantity-?"
+        +" WHERE sku=?;";
+        var c = items[i];
+        var values=[c.quantity,c.sku];
+        sql = BaseDao.formatSQL(sql, values);
+        queries+=sql
+    }
+    console.log(queries);
+    connection.query(queries,function(error, result, fields){
+        if (error) {
+            return connection.rollback(function() {
+                throw error;
+            });
+        }
+        callback && callback(result);
+    });
+}
 
 OrderDao.prototype.placeOrder = function(customerId, order, address, card, items, callback){
     var pool = this.pool;
@@ -137,51 +158,55 @@ OrderDao.prototype.placeOrder = function(customerId, order, address, card, items
             if (err) { throw err; }
             if(customerId == 0){
                 //save address
-                _.saveGuestAddress(connection,address,function(a){
-                    address = a;
-                    _.saveGuestCard(connection,card,function(c){
-                        card = c;
-                        _.saveOrderInfo(connection,customerId,order,address,card,items,function(o){
-                            order = o;
-                            _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
-                                
-                                _.saveShipment(connection, customerId, order,address,function(shipmentId){
-                                       
-                                    _.saveLineItems(connection, customerId, order, shipmentId, items, function(){
+                _.updateProductQuantity(connection, items, function(){
+                    _.saveGuestAddress(connection,address,function(a){
+                        address = a;
+                        _.saveGuestCard(connection,card,function(c){
+                            card = c;
+                            _.saveOrderInfo(connection,customerId,order,address,card,items,function(o){
+                                order = o;
+                                _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
+                                    
+                                    _.saveShipment(connection, customerId, order,address,function(shipmentId){
+                                        
+                                        _.saveLineItems(connection, customerId, order, shipmentId, items, function(){
 
-                                        connection.commit(function(err) {
-                                            if (err) {
-                                                return connection.rollback(function() {
-                                                    throw err;
-                                                });
-                                            }
-                                            connection.release();
-                                            callback && callback();
+                                            connection.commit(function(err) {
+                                                if (err) {
+                                                    return connection.rollback(function() {
+                                                        throw err;
+                                                    });
+                                                }
+                                                connection.release();
+                                                callback && callback();
+                                            });
                                         });
                                     });
                                 });
                             });
                         });
-                    });
-                });      
+                    });      
+                })
+                
             }else{
+                _.updateProductQuantity(connection, items, function(){
+                    _.saveOrderInfo(connection,customerId,order,address,card,items,function(o){
+                        order = o;
+                        _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
+                            
+                            _.saveShipment(connection, customerId, order,address,function(shipmentId){
+                                    
+                                _.saveLineItems(connection, customerId, order, shipmentId, items, function(){
 
-                _.saveOrderInfo(connection,customerId,order,address,card,items,function(o){
-                    order = o;
-                    _.saveOrderPayment(connection, customerId,order,card,function(paymentId){
-                        
-                        _.saveShipment(connection, customerId, order,address,function(shipmentId){
-                                
-                            _.saveLineItems(connection, customerId, order, shipmentId, items, function(){
-
-                                connection.commit(function(err) {
-                                    if (err) {
-                                        return connection.rollback(function() {
-                                            throw err;
-                                        });
-                                    }
-                                    connection.release();
-                                    callback && callback();
+                                    connection.commit(function(err) {
+                                        if (err) {
+                                            return connection.rollback(function() {
+                                                throw err;
+                                            });
+                                        }
+                                        connection.release();
+                                        callback && callback();
+                                    });
                                 });
                             });
                         });
