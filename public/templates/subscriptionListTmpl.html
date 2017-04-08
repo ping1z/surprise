@@ -1,0 +1,49 @@
+<div>
+    <div class="admin-module-header">
+        Return List 
+    </div>
+	<div class="admin-list-table-header">
+		<ul class="admin-list-table-page-action-group">
+			<li>
+				<label for="count">Page Size:</label>
+				<select name="count" ng-model="pageInfo.count" convert-to-number ng-change="render()">
+					<option value=5> 5 </option>
+					<option value=10> 10 </option>
+					<option value=50> 50 </option>
+				</select>
+			</li>
+		</ul>
+	</div>
+    <table class="admin-list-table">
+		<thead>
+			<tr>
+				<th>Status</th>
+				<th>SKU</th>
+				<th>Price</th>
+				<th>Quantity</th>
+                <th>Frequency</th>
+                <th>Next Order Time</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in list.items">
+				<td>{{item.status | subscriptionStatus }}</td>
+                <td>{{item.productSKU}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.quantity}}</td>
+				<td>{{item.frequency}} Month</td>
+                <td>{{item.nextOrderTime | date:'medium'}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="admin-list-table-footer">
+		<ul class="admin-list-table-nav-action-group">
+			<li ng-click="pre()" ng-hide="pageInfo.index==1">
+				<<
+			</li>
+			<li ng-click="next()" ng-hide="pageInfo.index>=pageInfo.totalPage">
+				>>
+			</li>
+		</ul>
+	</div>
+</div>

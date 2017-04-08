@@ -10,6 +10,8 @@ var LineItemDao = require("./dao/lineItemDao.js");
 var lineItem = new LineItemDao();
 var ReturnDao = require("./dao/returnDao.js");
 var returnDao = new ReturnDao();
+var SubscriptionDao = require("./dao/subscriptionDao.js");
+var subscription = new SubscriptionDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -465,6 +467,37 @@ router.get('/admin/api/return/refund',auth.ensureLoggedIn({type:"admin",redirect
           }
       });
     }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/admin/api/listSubscription',auth.ensureLoggedIn({type:"admin",redirectTo:"/admin/login"}),
+  function(req, res){
+    try{
+      var columns = req.query.columns;
+      var orderBy = "status asc, createdTime desc";
+      var page = req.query.page?parseInt(req.query.page):null;
+      var count = req.query.count?parseInt(req.query.count):null;
+      var filters = [];
+      if(req.query.status == "null")
+      {
+        res.send(200);
+        return;
+      }
+      if(req.query.status){
+        filters.push({key:"status",value:parseInt(req.query.status)});
+      }
+
+      subscription.findByFilter(columns,filters,orderBy,page,count,function(e, result){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }else{
+            res.send(result);
+          }
+      });
+     }catch(e){
       var error={msg:e.message,stack:e.stack};
       res.send(500,error);
     }
