@@ -274,7 +274,7 @@ router.get('/productDetail',
   function(req, res){
     var sku = req.query.sku;
     var hasLogin = (req.user&&req.user.type=='customer')?true:false;
-    product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
+    product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,subscribePrice,quantity,picture",function(e,r){
           if(!hasLogin){
               res.render("productDetail",{hasLogin:hasLogin,cartCount:0,product:r});
           }else{
@@ -342,7 +342,7 @@ router.get('/subscribe',auth.ensureLoggedIn(),
   function(req, res){
     var sku = req.query.sku?req.query.sku:null;
     cart.getCartItemCount(req.user.id,function(err, count){
-      res.render("subscribe",{sku:sku, customerId:req.user.id, isSubscription:true});
+      res.render("subscribe",{sku:sku, customerId:req.user.id, isSubscription:true, subscriptionId:''});
     })
     
 });
@@ -375,13 +375,23 @@ router.get('/subscriptionStop',auth.ensureLoggedIn(),
   function(req, res){
     var id = parseInt(req.query.id);
 
-     subscription.switchStatus(id, req.user.id, 1,0, function(err,r){
+    subscription.switchStatus(id, req.user.id, 1,0, function(err,r){
         subscription.findByCustomerId(req.user.id,function(err,subItems){
             cart.getCartItemCount(req.user.id,function(err, count){
                 res.render("subscriptionList",{hasLogin:true,cartCount:count,subItemList:subItems});
             })
         });
     });
+});
+
+router.get('/subscriptionEdit',auth.ensureLoggedIn(),
+  function(req, res){
+    var id = parseInt(req.query.id);
+
+    cart.getCartItemCount(req.user.id,function(err, count){
+      res.render("subscribe",{sku:'', customerId:req.user.id, isSubscription:true, subscriptionId:id});
+    })
+    
 });
 
 router.get('/subscriptionDelete',auth.ensureLoggedIn(),
@@ -588,7 +598,7 @@ router.get('/api/getProductDetail',
   function(req, res){
     try{
       var sku = req.query.sku;
-      product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
+      product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,subscribePrice,quantity,picture",function(e,r){
             if(e){
               var error={msg:e.message,stack:e.stack};
               res.send(500,error);
@@ -630,16 +640,47 @@ router.post('/api/placeSubscriptionOrder',auth.ensureLoggedIn(),
       var card = JSON.parse(req.body.card);
       var item = JSON.parse(req.body.item);
       var customerId = req.user.id;
-      product.findOneBySku(item.sku,"sku,name,description,occasion,department,gender,age,price,quantity,picture",function(e,r){
+      product.findOneBySku(item.sku,"sku,name,description,occasion,department,gender,age,price,subscribePrice,quantity,picture",function(e,r){
           if(e){
             var error={msg:e.message,stack:e.stack};
             res.send(500,error);
           }
 
-          if(r.price!=item.price){
+          if(r.subscribePrice!=item.price){
             throw new Error('Ivalide product price='+item.price);
           }
           subscription.saveSubscription(customerId, address, card, item,function(e,r){
+             if(e){
+              var error={msg:e.message,stack:e.stack};
+                res.send(500,error);
+              }else{
+                res.send(200);
+              }
+          }); 
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.post('/api/updateSubscriptionOrder',auth.ensureLoggedIn(),
+  function(req, res){
+    try{
+      var address = JSON.parse(req.body.address);
+      var card = JSON.parse(req.body.card);
+      var item = JSON.parse(req.body.item);
+      var customerId = req.user.id;
+      product.findOneBySku(item.productSKU,"sku,name,description,occasion,department,gender,age,price,subscribePrice,quantity,picture",function(e,r){
+          if(e){
+            var error={msg:e.message,stack:e.stack};
+            res.send(500,error);
+          }
+
+          if(r.subscribePrice!=item.price){
+            throw new Error('Ivalide product price='+item.price);
+          }
+          subscription.updateSubscription(customerId, address, card, item,function(e,r){
              if(e){
               var error={msg:e.message,stack:e.stack};
                 res.send(500,error);
@@ -667,6 +708,24 @@ router.post('/api/placeOrder',
         order.placeOrder(customerId, orderSummary, address, card, items,function(){
           res.send(200);
         })
+      });
+    }catch(e){
+      var error={msg:e.message,stack:e.stack};
+      res.send(500,error);
+    }
+});
+
+router.get('/api/getSubscription',
+  function(req, res){
+    try{
+      var id = req.query.id;
+      subscription.findOneById(id,function(e,r){
+            if(e){
+              var error={msg:e.message,stack:e.stack};
+              res.send(500,error);
+            }else{
+              res.send(200,r);
+            }
       });
     }catch(e){
       var error={msg:e.message,stack:e.stack};

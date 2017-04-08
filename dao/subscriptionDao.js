@@ -20,6 +20,21 @@ SubscriptionDao.prototype.saveSubscription = function(customerId, address, card,
     });
 };
 
+SubscriptionDao.prototype.updateSubscription = function(customerId, address, card, item, callback){
+    var sql="UPDATE surprise.Subscription SET quantity=?, frequency=?, addressId=?, cardId=?, lastModifiedTime=NOW()"
+        +" WHERE id=? AND customerId=?"
+    var i = item;
+    var values=[i.quantity, i.frequency, address.id, card.id, item.id, customerId];
+    sql = BaseDao.formatSQL(sql, values);
+    var _=this;
+    _.execute(sql,values,function(error, res){
+        console.log("updateSubscription",error,res);
+       
+        callback && callback(error, res);
+
+    });
+};
+
 SubscriptionDao.prototype.findByCustomerId = function(customerId,callback){
 
     var sql="SELECT s.*, p.name, p.description, p.contents, p.picture"
@@ -60,6 +75,20 @@ SubscriptionDao.prototype.deleteSubscription = function(id,customerId,callback){
 };
 
 
+SubscriptionDao.prototype.findOneById = function(id, callback){
+    var sql="SELECT s.* , p.name, p.description, p.contents, p.picture, p.quantity AS productQuantity FROM surprise.Subscription s "
+        +"     JOIN surprise.product p "
+        +"     ON p.sku = s.productSKU "
+        +" WHERE s.id=? LIMIT 1;";
+    var values=[id];
+    var _=this;
+    _.execute(sql,values, function(error, results){
+         var item = null;
+        if(results.length > 0)item = results[0];
+        callback && callback(error, results[0]);
+    });
+};
+
 SubscriptionDao.prototype.findOneAvaliable = function(callback){
 
     var sql="SELECT s.* , p.name, p.description, p.contents, p.picture FROM surprise.Subscription s "
@@ -76,18 +105,12 @@ SubscriptionDao.prototype.findOneAvaliable = function(callback){
 
 
 SubscriptionDao.prototype.updateNextOrderTimeStatus = function(id, frequency, callback){
-    var t = frequency.split("");
     
-    switch(t[1]){
-        case "d": t[1]=" DAY ";break;
-        case "m": t[1]=" MONTH ";break;
-        case "y": t[1]=" YEAD ";break;
-    }
-    var shiftTime = "INTERVAL "+t[0]+t[1];
-    var sql="UPDATE surprise.Subscription SET nextOrderTime=nextOrderTime+INTERVAL "+ +t[0]+t[1]+", lastModifiedTime=NOW()"
+    var sql="UPDATE surprise.Subscription SET nextOrderTime=nextOrderTime+INTERVAL "+ frequency +" MONTH, lastModifiedTime=NOW(), lastOrderTime=NOW()"
         +" WHERE id=?"
     var values=[id];
     var _=this;
+    console.log(BaseDao.formatSQL(sql, values));
     _.execute(sql,values,function(error, res){
         console.log("updateNextOrderTimeStatus",error,res);
         callback && callback(error, res);

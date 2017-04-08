@@ -17,18 +17,36 @@
                                 </div>
                                 <div class="gform-col-3">
                                     FREQUENCY</BR>
-                                    <% if (item.frequency=="1m") { %>
+                                    <% if (item.frequency==1) { %>
                                         1 MONTH
                                     <% } %>
-                                    <% if (item.frequency=="6m") { %>
+                                    <% if (item.frequency==2) { %>
+                                        2 MONTH
+                                    <% } %>
+                                     <% if (item.frequency==3) { %>
+                                        3 MONTH
+                                    <% } %>
+                                     <% if (item.frequency==4) { %>
+                                        4 MONTH
+                                    <% } %>
+                                     <% if (item.frequency==5) { %>
+                                        5 MONTH
+                                    <% } %>
+                                    <% if (item.frequency==6) { %>
                                         6 MONTH
                                     <% } %>
-                                    <% if (item.frequency=="1y") { %>
+                                    <% if (item.frequency==12) { %>
                                         1 YEAR
                                     <% } %>
                                    
                                 </div>
+                                <% if (item.lastOrderTime) { %>
+                                <div class="gform-col-3">
+                                    LAST ORDER DATE</BR><%= item.lastOrderTime.toDateString() %>
+                                </div>
+                                <% } %>
                             </div>
+
                             
                             <div class="gform-row">
                                  <% if (item.status==1) { %>
@@ -57,6 +75,7 @@
                                          <% if (item.status == 1) { %>
                                             <li><button class="light"><a href="/subscriptionStop?id=<%= item.id %>">Stop</a></button></li>
                                         <% } %>
+                                        <li> <button><a href="/subscriptionEdit?id=<%= item.id %>">Edit</a></button></li>
                                         <li> <button><a href="/subscriptionDelete?id=<%= item.id %>">Delete</a></button></li>
                                     </ul>
                                 </div>
