@@ -26,14 +26,19 @@
             return out;
         };
     })
+    app.filter('subscriptionStatus', function() {
+        return function(input) {
+            var out;
+            switch(input){
+                case 0 :out="Stopped";break;
+                case 1 :out="Actived";break;
+            }
+            return out;
+        };
+    })
 
     app.factory('MenuService',function(){
 		var modules=[
-				{
-					id:"dashboard",
-					name:"Dashboard",
-					url:"/admin",
-				},
 				{
 					id:"catalog",
 					name:"Catalog",
@@ -48,6 +53,11 @@
 					id:"return",
 					name:"Return",
 					url:"/admin/return",
+				},
+                {
+					id:"subscription",
+					name:"Subscription",
+					url:"/admin/subscription",
 				}
 			];
 		var curModuleIndex = 0;
@@ -519,6 +529,75 @@
                 
 			},
 			templateUrl:'/public/templates/returnInfoTmpl.html'
+		};
+	});
+
+
+    app.directive('moduleSubscription',function() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: function($scope) {
+                $scope.moduleInfo={
+					curSubmodule:"subscription-list",
+					returnId:null
+				};
+                $scope.filter = {
+                    status:-1
+                }
+                $scope.submitFilter=function(){
+                    $scope.$broadcast('renderList');
+                }
+			},
+			templateUrl:'/public/modules/subscription.html'
+		};
+	});
+
+    app.directive('subscriptionListTmpl',function(){
+		return {
+			restrict: 'E',
+			controller: function($scope,$http) {
+                $scope.pageInfo = {
+                   index:1,
+                   count:5,
+                   totalPage:100
+                }
+				$scope.$on('renderList', function(event, args) {
+                    console.log($scope.filter);
+                    $scope.render();
+                });
+                $scope.render = function(){
+                    var url = '/admin/api/listSubscription?';
+                    if($scope.filter.status!="-1"){
+                        url+="status="+$scope.filter.status+"&";
+                    }
+                    
+                    url+="page="+$scope.pageInfo.index+"&count="+$scope.pageInfo.count+"timestamp="+ new Date();
+                    $http.get(url)
+					.then(function(result) {
+                        $scope.list=result.data;
+                        $scope.pageInfo.index=result.data.page;
+                        $scope.pageInfo.totalPage=result.data.totalPage;
+				    }); 
+                }
+                $scope.render();
+
+                $scope.pre = function(){
+                    $scope.pageInfo.index-=1;
+                    $scope.pageInfo.index = $scope.pageInfo.index<0?0:$scope.pageInfo.index;
+                    $scope.render();
+                }
+                $scope.next = function(){
+                    $scope.pageInfo.index+=1;
+                    if($scope.pageInfo.index>$scope.pageInfo.totalPage){
+                        $scope.pageInfo.index = $scope.pageInfo.totalPage;
+                        return;
+                    }
+                    $scope.render();
+                }
+
+			},
+			templateUrl:'/public/templates/subscriptionListTmpl.html'
 		};
 	});
 
