@@ -32,12 +32,13 @@ var calculateOrderSummary = function(items,rate){
     return orderSummary;
 }
 
-function service(){
+function createSubscriptionOrderService(){
     subscription.findOneAvaliable(function(err,r){
         if(err){
             var error={msg:err.message,stack:err.stack};
         }
         if(r!=null){
+            console.log("Find 1: ",r);
             var subItem = r;
             subItem.sku = subItem.productSKU;
            
@@ -54,30 +55,28 @@ function service(){
                         var orderSummary = calculateOrderSummary([subItem],rate);
                         order.placeOrder(subItem.customerId, orderSummary, address, card, [subItem],function(){
                             subscription.updateNextOrderTimeStatus(subItem.id,subItem.frequency, function(e, r){
-                                return ;
+                                console.log("create");
+                                createSubscriptionOrderService();
                             });
                         })
                     });
                 })
             })
-
         }else{
-            return;
+            console.log("Finish");
         }
     })
 }
 
 var cronJob = require('cron').CronJob;
-var myJob = new cronJob('* * * * * *', function(){
-    console.log(1);
-    service();
+//00 00 3 * * *
+var myJob = new cronJob('*0 * * * * *', function(){
+    createSubscriptionOrderService();
 });
 
-// var myJob = new cronJob('00 00 3 * * *', function(){
-//     console.log(1);
-//     service();
-// });
 myJob.start();
+
+
 
 
 
