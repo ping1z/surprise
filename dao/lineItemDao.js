@@ -41,7 +41,7 @@ LineItemDao.prototype.findByCustomerId = function(customerId,callback){
         +"     ON p.sku = l.productSKU "
         +"     JOIN Shipment s "
         +"     ON s.orderId = l.orderId "
-        +" WHERE l.customerId=?";
+        +" WHERE l.customerId=? ORDER BY l.createdTime DESC ";
 
     var values=[customerId];
     var _=this;

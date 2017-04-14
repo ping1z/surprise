@@ -41,7 +41,7 @@ SubscriptionDao.prototype.findByCustomerId = function(customerId,callback){
         +" FROM surprise.Subscription s "
         +"     JOIN surprise.Product p "
         +"     ON p.sku = s.productSKU "
-        +" WHERE s.customerId=?";
+        +" WHERE s.customerId=? ORDER BY s.createdTime DESC";
 
     var values=[customerId];
     var _=this;
