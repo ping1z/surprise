@@ -75,7 +75,7 @@ ReturnDao.prototype.findOneWithJoinInfo = function(id,callback){
 
     var sql="SELECT r.*, p.name, p.description, p.contents, p.picture"
         +" FROM surprise.Return r "
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = r.productSKU "
         +" WHERE r.id=? Limit 1";
 
