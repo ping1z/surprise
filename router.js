@@ -646,8 +646,8 @@ router.post('/api/placeSubscriptionOrder',auth.ensureLoggedIn(),
             res.send(500,error);
           }
 
-          if(r.subscribePrice!=item.subscribePrice){
-            throw new Error('Ivalide product price='+item.subscribePrice);
+          if(r.subscribePrice!=item.price){
+            throw new Error('Ivalide product price='+item.price);
           }
           subscription.saveSubscription(customerId, address, card, item,function(e,r){
              if(e){
@@ -677,8 +677,8 @@ router.post('/api/updateSubscriptionOrder',auth.ensureLoggedIn(),
             res.send(500,error);
           }
 
-          if(r.subscribePrice!=item.subscribePrice){
-            throw new Error('Ivalide product price='+item.subscribePrice);
+          if(r.subscribePrice!=item.price){
+            throw new Error('Ivalide product price='+item.price);
           }
           subscription.updateSubscription(customerId, address, card, item,function(e,r){
              if(e){
