@@ -39,7 +39,7 @@ SubscriptionDao.prototype.findByCustomerId = function(customerId,callback){
 
     var sql="SELECT s.*, p.name, p.description, p.contents, p.picture"
         +" FROM surprise.Subscription s "
-        +"     JOIN surprise.product p "
+        +"     JOIN surprise.Product p "
         +"     ON p.sku = s.productSKU "
         +" WHERE s.customerId=?";
 
@@ -77,7 +77,7 @@ SubscriptionDao.prototype.deleteSubscription = function(id,customerId,callback){
 
 SubscriptionDao.prototype.findOneById = function(id, callback){
     var sql="SELECT s.* , p.name, p.description, p.contents, p.picture, p.quantity AS productQuantity FROM surprise.Subscription s "
-        +"     JOIN surprise.product p "
+        +"     JOIN surprise.Product p "
         +"     ON p.sku = s.productSKU "
         +" WHERE s.id=? LIMIT 1;";
     var values=[id];
@@ -92,7 +92,7 @@ SubscriptionDao.prototype.findOneById = function(id, callback){
 SubscriptionDao.prototype.findOneAvaliable = function(callback){
 
     var sql="SELECT s.* , p.name, p.description, p.contents, p.picture FROM surprise.Subscription s "
-        +"     JOIN surprise.product p "
+        +"     JOIN surprise.Product p "
         +"     ON p.sku = s.productSKU "
         +" WHERE s.status=1 AND s.nextOrderTime<=NOW() LIMIT 1;";
     var _=this;
