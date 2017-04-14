@@ -61,8 +61,23 @@ function service(){
                 })
             })
 
+        }else{
+            return;
         }
     })
 }
 
-service();
+var cronJob = require('cron').CronJob;
+var myJob = new cronJob('* * * * * *', function(){
+    console.log(1);
+    service();
+});
+
+// var myJob = new cronJob('00 00 3 * * *', function(){
+//     console.log(1);
+//     service();
+// });
+myJob.start();
+
+
+
