@@ -18,9 +18,9 @@ LineItemDao.prototype.findByMultiId = function(ids, status, callback){
 
     var sql="SELECT l.*, p.description, p.picture, p.contents, o.addressId, o.cardId"
         +" FROM surprise.LineItem l "
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = l.productSKU "
-        +"     JOIN surprise.order o "
+        +"     JOIN Order o "
         +"     ON o.id = l.orderId "
         +" WHERE l.status=? AND l.id IN(?)";
 
@@ -55,7 +55,7 @@ LineItemDao.prototype.findByShipmentId = function(shipmentId,callback){
 
     var sql="SELECT l.*, p.description, p.picture, p.contents"
         +" FROM surprise.LineItem l "
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = l.productSKU "
         +" WHERE l.shipmentId=?";
     var values=[shipmentId];

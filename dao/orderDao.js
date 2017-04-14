@@ -229,13 +229,13 @@ OrderDao.prototype.findById = function(customerId,orderId,callback){
 
     var sql="SELECT o.*, s.*, op.*, l.*, p.description, p.picture"
         +" FROM surprise.Order o "
-        +"     JOIN surprise.Shipment s "
+        +"     JOIN Shipment s "
         +"     ON s.customerId = o.customerId and s.orderId = o.id "
-        +"     JOIN surprise.orderpayment op "
+        +"     JOIN Orderpayment op "
         +"     ON op.customerId = o.customerId and op.orderId = o.id "
-        +"     JOIN surprise.lineitem l "
+        +"     JOIN Lineitem l "
         +"     ON l.customerId = o.customerId and l.orderId = o.id "  
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = l.productSKU "                       
         +" WHERE o.customerId=? and o.id=?" ;
 
