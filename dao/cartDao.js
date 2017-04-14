@@ -69,7 +69,7 @@ CartDao.prototype.findByCustomerId = function(customerId,callback){
     //columns, query, orderBy, limit, offset, callback
     var sql ="SELECT * FROM "+
     "(SELECT * FROM surprise.Cart WHERE `customerId`=?) c "
-    +"INNER JOIN (SELECT sku, name, description, occasion, department, gender, age, price, contents, quantity as productQuantity, picture FROM Product) p "
+    +"INNER JOIN (SELECT sku, name, description, occasion, department, gender, age, price, contents, quantity as productQuantity, picture FROM surprise.Product) p "
     +"ON c.productSKU = p.sku";
 
     var values=[customerId];
