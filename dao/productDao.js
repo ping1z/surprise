@@ -33,7 +33,7 @@ ProductDao.prototype.findOneBySku = function(sku, columns, callback){
 };
 
 ProductDao.prototype.create = function(name,description,occasion,department,gender,age,price,contents,quantity,picture,callback){
-    var sql="INSERT INTO surprise.Product (name,description,occasion,department,gender,age,price,contents,quantity,picture,createdTime,lastModifiedTime)"
+    var sql="INSERT INTO Product (name,description,occasion,department,gender,age,price,contents,quantity,picture,createdTime,lastModifiedTime)"
           +" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
     var values=[name,description,occasion,department,gender,age,price,contents,quantity,picture];
     var _=this;
@@ -44,7 +44,7 @@ ProductDao.prototype.create = function(name,description,occasion,department,gend
 };
 
 ProductDao.prototype.update = function(sku,name,description,occasion,department,gender,age,price,contents,quantity,picture,callback){
-    var sql="UPDATE surprise.Product SET name=?, description=?, occasion=?, department=?, gender=?, age=?, price=?, contents=?, quantity=?,picture=?,lastModifiedTime=NOW()"
+    var sql="UPDATE Product SET name=?, description=?, occasion=?, department=?, gender=?, age=?, price=?, contents=?, quantity=?,picture=?,lastModifiedTime=NOW()"
           +" WHERE sku=?";
     var values=[name,description,occasion,department,gender,age,price,contents,quantity,picture,sku];
     var _=this;
@@ -54,7 +54,7 @@ ProductDao.prototype.update = function(sku,name,description,occasion,department,
     });
 };
 ProductDao.prototype.delete = function(sku,callback){
-    var sql="DELETE FROM surprise.Product WHERE sku=?";
+    var sql="DELETE FROM Product WHERE sku=?";
     var values=[sku];
     var _=this;
     _.execute(sql,values,function(error, res){
@@ -64,7 +64,7 @@ ProductDao.prototype.delete = function(sku,callback){
 };
 
 ProductDao.prototype.search = function(keyword,callback){
-    var sql="SELECT sku,name,description,occasion,department,gender,age,price,quantity,picture FROM surprise.Product WHERE `name` LIKE '%"+keyword+"%' OR `description` LIKE '%"+keyword+"%';";
+    var sql="SELECT sku,name,description,occasion,department,gender,age,price,quantity,picture FROM Product WHERE `name` LIKE '%"+keyword+"%' OR `description` LIKE '%"+keyword+"%';";
     var _=this;
     _.execute(sql,[],function(error, res){
         console.log("search product",error,res);

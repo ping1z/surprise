@@ -26,7 +26,7 @@ CustomerDao.prototype.signUp = function(email, firstName, lastName, password,cal
     pool.getConnection(function(err, connection) {
         connection.beginTransaction(function(err) {
             if (err) { throw err; }
-            var sql="INSERT INTO surprise.Customer (email, firstName, lastName, createdTime)"
+            var sql="INSERT INTO Customer (email, firstName, lastName, createdTime)"
                 +" VALUES ( ?, ?, ?, NOW())"
             var values=[email,firstName,lastName];
             connection.query(sql,values,function(error, results, fields){
@@ -43,7 +43,7 @@ CustomerDao.prototype.signUp = function(email, firstName, lastName, password,cal
                 }
                 var newCustomId = results.insertId;
                 
-                sql="INSERT INTO surprise.User (customerId, password)"
+                sql="INSERT INTO User (customerId, password)"
                 +" VALUES ( ?, ?)"
                 values=[newCustomId,password];
                 connection.query(sql,values,function(e, r, f){

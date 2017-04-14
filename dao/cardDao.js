@@ -28,7 +28,7 @@ CardDao.prototype.findByCustomerId = function(id,callback){
 };
 
 CardDao.prototype.addCard = function(customerId,type, name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,callback){
-    var sql="INSERT INTO surprise.Card (customerId,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,isDefault)"
+    var sql="INSERT INTO Card (customerId,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,isDefault)"
           +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,0)";
     var values=[customerId,type, name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv];
     var _=this;
@@ -74,7 +74,7 @@ CardDao.prototype.setAsDefault = function(id,customerId,callback){
 };
 
 CardDao.prototype.listCard = function(id){
-   var sql="SELECT * FROM surprise.card"
+   var sql="SELECT * FROM Card"
           +" WHERE id=?";
     var values=[id];
     var _=this;

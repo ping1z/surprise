@@ -27,7 +27,7 @@ AddressDao.prototype.findByCustomerId = function(id,callback){
     });
 };
 AddressDao.prototype.addAddress = function(customerId,name,line1,line2,city,state,country,zipcode,telephone,callback){
-    var sql="INSERT INTO surprise.Address (customerId,name,line1,line2,city,state,country,zipcode,telephone,isDefault)"
+    var sql="INSERT INTO Address (customerId,name,line1,line2,city,state,country,zipcode,telephone,isDefault)"
           +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?,0)";
     var values=[customerId,name,line1,line2,city,state,country,zipcode,telephone,];
     var _=this;

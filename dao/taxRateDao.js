@@ -6,7 +6,7 @@ var TaxRateDao = function(){
 
 TaxRateDao.prototype = Object.create(BaseDao.prototype);
 TaxRateDao.prototype.getTaxRate = function(state,callback){
-    var sql="SELECT * FROM surprise.TaxRate WHERE id=? OR id='OTHERS'";
+    var sql="SELECT * FROM TaxRate WHERE id=? OR id='OTHERS'";
     var values=[state.toUpperCase()];
     var _=this;
     _.execute(sql,values,function(error, res){

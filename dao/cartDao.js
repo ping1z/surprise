@@ -6,7 +6,7 @@ var CartDao = function(){
 
 CartDao.prototype = Object.create(BaseDao.prototype);
 CartDao.prototype.getCartItemCount = function(customerId,callback){
-    var sql="SELECT Count(id) FROM surprise.Cart WHERE customerId=?";
+    var sql="SELECT Count(id) FROM Cart WHERE customerId=?";
     var values=[customerId];
     var _=this;
     _.execute(sql,values,function(error, res){
@@ -20,7 +20,7 @@ CartDao.prototype.addToCart = function(customerId,productSKU,callback){
     pool.getConnection(function(err, connection) {
         connection.beginTransaction(function(err) {
             if (err) { throw err; }
-            var sql="UPDATE surprise.Cart SET quantity=quantity+1,lastModifiedTime=NOW()"
+            var sql="UPDATE Cart SET quantity=quantity+1,lastModifiedTime=NOW()"
             +" WHERE customerId=? AND productSKU=?"
             var values=[customerId,productSKU];
             connection.query(sql,values,function(error, result, fields){
@@ -40,7 +40,7 @@ CartDao.prototype.addToCart = function(customerId,productSKU,callback){
                         callback && callback(err);
                     });
                 }else{
-                    var sql="INSERT INTO surprise.Cart (customerId,productSKU,quantity,createdTime,lastModifiedTime)"
+                    var sql="INSERT INTO Cart (customerId,productSKU,quantity,createdTime,lastModifiedTime)"
                         +" VALUES ( ?, ?, ?, NOW(),NOW())";
                     var values=[customerId,productSKU, 1];
                     connection.query(sql,values,function(e, r, f){
@@ -68,8 +68,8 @@ CartDao.prototype.addToCart = function(customerId,productSKU,callback){
 CartDao.prototype.findByCustomerId = function(customerId,callback){
     //columns, query, orderBy, limit, offset, callback
     var sql ="SELECT * FROM "+
-    "(SELECT * FROM surprise.Cart WHERE `customerId`=?) c "
-    +"INNER JOIN (SELECT sku, name, description, occasion, department, gender, age, price, contents, quantity as productQuantity, picture FROM surprise.product) p "
+    "(SELECT * FROM Cart WHERE `customerId`=?) c "
+    +"INNER JOIN (SELECT sku, name, description, occasion, department, gender, age, price, contents, quantity as productQuantity, picture FROM Product) p "
     +"ON c.productSKU = p.sku";
 
     var values=[customerId];

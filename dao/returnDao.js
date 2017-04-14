@@ -37,12 +37,12 @@ ReturnDao.prototype.initReturnItems = function(lineItems, callback){
             var queries = "";
             
             for(var i=0;i<lineItems.length;i++){
-                var sql="INSERT INTO surprise.Return (customerId, status, orderId,productSKU,lineItemId,returnQuantity,refundAmount,refundCardId, response, trackingNumber, returnMethod, createdTime,lastModifiedTime)"
+                var sql="INSERT INTO Return (customerId, status, orderId,productSKU,lineItemId,returnQuantity,refundAmount,refundCardId, response, trackingNumber, returnMethod, createdTime,lastModifiedTime)"
                     +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW());";
                 var i = lineItems[i];
                 var values=[i.customerId,0,i.orderId, i.productSKU, i.id, i.returnQuantity, i.refundAmount, i.cardId, i.response, trackingNumber, 0];
                 sql = BaseDao.formatSQL(sql, values);
-                var d="UPDATE surprise.LineItem SET status=4, lastModifiedTime=NOW()"
+                var d="UPDATE LineItem SET status=4, lastModifiedTime=NOW()"
                     +" WHERE id=?;"
                 values=[i.id]
                 sql += BaseDao.formatSQL(d, values);       
@@ -74,8 +74,8 @@ ReturnDao.prototype.initReturnItems = function(lineItems, callback){
 ReturnDao.prototype.findOneWithJoinInfo = function(id,callback){
 
     var sql="SELECT r.*, p.name, p.description, p.contents, p.picture"
-        +" FROM surprise.Return r "
-        +"     JOIN surprise.product p "
+        +" FROM Return r "
+        +"     JOIN Product p "
         +"     ON p.sku = r.productSKU "
         +" WHERE r.id=? Limit 1";
 
@@ -148,7 +148,7 @@ ReturnDao.prototype.confirmRefund = function(returnItem, callback){
         connection.beginTransaction(function(err) {
             if (err) { throw err; }
             _.setlineItemStatus(connection,returnItem.lineItemId,6,function(r){
-                var sql="UPDATE surprise.Return SET status=?, receivedTime=NOW(), lastModifiedTime=NOW()"
+                var sql="UPDATE Return SET status=?, receivedTime=NOW(), lastModifiedTime=NOW()"
                     +" WHERE id=?"
                 var values=[2, returnItem.id];
                 console.log(BaseDao.formatSQL(sql, values));
@@ -161,7 +161,7 @@ ReturnDao.prototype.confirmRefund = function(returnItem, callback){
                     }
                     var priceBeforeTax=returnItem.refundAmount/1.08;
                     var tax = returnItem.refundAmount-priceBeforeTax;
-                    sql="UPDATE surprise.Order SET totalBeforeTax=totalBeforeTax-?, tax=tax-?, lastModifiedTime=NOW()"
+                    sql="UPDATE Order SET totalBeforeTax=totalBeforeTax-?, tax=tax-?, lastModifiedTime=NOW()"
                         +" WHERE id=?"
                     values=[1, returnItem.orderId,priceBeforeTax,tax];
                     console.log(BaseDao.formatSQL(sql, values));

@@ -9,7 +9,7 @@ OrderDao.prototype = Object.create(BaseDao.prototype);
 
 
 OrderDao.prototype.findByCustomerId = function(id,callback){
-    var sql="SELECT * FROM surprise.Order WHERE `customerId`=?  ORDER BY `createdTime` desc ;" 
+    var sql="SELECT * FROM Order WHERE `customerId`=?  ORDER BY `createdTime` desc ;" 
     var values =[id];
     //columns, query, orderBy, limit, offset, callback
      var _=this;
@@ -20,7 +20,7 @@ OrderDao.prototype.findByCustomerId = function(id,callback){
 };
 
 OrderDao.prototype.saveGuestAddress = function(connection, address, callback){
-    var sql="INSERT INTO surprise.Address (customerId,name,line1,line2,city,state,country,zipcode,telephone,isDefault)"
+    var sql="INSERT INTO Address (customerId,name,line1,line2,city,state,country,zipcode,telephone,isDefault)"
         +" VALUES ( ?, ?, ?, ?, ?, ?, ?,?,?,0)";
     var a = address;
     var values=[0,a.name,a.line1,a.line2,a.city,a.state,a.country,a.zipcode,a.telephone];
@@ -36,7 +36,7 @@ OrderDao.prototype.saveGuestAddress = function(connection, address, callback){
     });
 }
 OrderDao.prototype.saveGuestCard = function(connection, card, callback){
-    var sql="INSERT INTO surprise.Card (customerId,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,isDefault)"
+    var sql="INSERT INTO Card (customerId,type,name,cardNumber,line1,line2,city,state,zipcode,expirationDate,cvv,isDefault)"
         +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,0)";
     var c = card;
     var values=[0,c.type,c.name,c.cardNumber,c.line1,c.line2,c.city,c.state,c.zipcode,c.expirationDate,c.cvv];
@@ -52,7 +52,7 @@ OrderDao.prototype.saveGuestCard = function(connection, card, callback){
 }
 OrderDao.prototype.saveOrderInfo = function(connection, customerId, order,address,card, items, callback){
     var trackingNumber = uuid.v1();
-    var sql="INSERT INTO surprise.Order (customerId,status,addressId,cardId,totalBeforeTax,tax,taxRate, shippingCost,lineItemCount,trackingNumber, createdTime,lastModifiedTime)"
+    var sql="INSERT INTO Order (customerId,status,addressId,cardId,totalBeforeTax,tax,taxRate, shippingCost,lineItemCount,trackingNumber, createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?,?, ?, ?,?,NOW(),NOW())";
     var o = order;
     var values=[customerId, 0, address.id, card.id, o.totalBeforeTax,o.tax,o.taxRate,o.shippingCost,items.length,trackingNumber];
@@ -69,7 +69,7 @@ OrderDao.prototype.saveOrderInfo = function(connection, customerId, order,addres
 }
 
 OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,card, callback){
-    var sql="INSERT INTO surprise.OrderPayment (customerId,status,orderId,amount,currencyType,cardId,cardType,cardNumber,cardOwnerName,cardExpirationDate, cardCVV,billingLine1,billingLine2,billingCity,billingState,billingCountry, billingZipcode,createdTime)"
+    var sql="INSERT INTO OrderPayment (customerId,status,orderId,amount,currencyType,cardId,cardType,cardNumber,cardOwnerName,cardExpirationDate, cardCVV,billingLine1,billingLine2,billingCity,billingState,billingCountry, billingZipcode,createdTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,NOW())";
     var o = order;
     var values=[customerId,0,order.id,order.total,"USD", card.id,card.type, card.cardNumber,card.name,card.expirationDate,card.cvv,card.line1,card.line2,card.city,card.state,"Unitied States",card.zipcode];
@@ -86,7 +86,7 @@ OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,car
 
 OrderDao.prototype.saveShipment = function(connection, customerId, order,address, callback){
     var trackingNumber = uuid.v1();
-    var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,packedTime,shippedTime,deliveredTime,estimatedTime,createdTime,lastModifiedTime)"
+    var sql="INSERT INTO shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,packedTime,shippedTime,deliveredTime,estimatedTime,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, null,null,null,null,NOW(),NOW())";
     var o = order;
     var values=[customerId,0,order.id,"COURIER","UPS", trackingNumber, address.name, address.line1, address.line2, address.city, address.state,"Unitied States",address.zipcode,address.telephone];
@@ -105,13 +105,13 @@ OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipm
     var queries = "";
     
     for(var i=0;i<items.length;i++){
-        var sql="INSERT INTO surprise.LineItem (customerId, status,orderId,productSKU,shipmentId,productName,price,quantity,createdTime,lastModifiedTime)"
+        var sql="INSERT INTO LineItem (customerId, status,orderId,productSKU,shipmentId,productName,price,quantity,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,NOW(),NOW());";
         var c = items[i];
         var values=[customerId,0,order.id,c.sku,shipmentId,c.name, c.price, c.quantity];
         sql = BaseDao.formatSQL(sql, values);
         if(customerId!=0){
-            var d ="DELETE FROM surprise.cart WHERE customerId=? AND productSKU=?;";
+            var d ="DELETE FROM Cart WHERE customerId=? AND productSKU=?;";
             values=[customerId,c.sku]
             sql += BaseDao.formatSQL(d, values);
         }
@@ -132,7 +132,7 @@ OrderDao.prototype.updateProductQuantity = function(connection, items, callback)
     var queries = "";
     
     for(var i=0;i<items.length;i++){
-        var sql="UPDATE surprise.Product SET quantity=quantity-?"
+        var sql="UPDATE Product SET quantity=quantity-?"
         +" WHERE sku=?;";
         var c = items[i];
         var values=[c.quantity,c.sku];
@@ -228,14 +228,14 @@ OrderDao.prototype.findById = function(customerId,orderId,callback){
     // +"ON c.orderId = s.orderId";
 
     var sql="SELECT o.*, s.*, op.*, l.*, p.description, p.picture"
-        +" FROM surprise.Order o "
-        +"     JOIN surprise.Shipment s "
+        +" FROM Order o "
+        +"     JOIN Shipment s "
         +"     ON s.customerId = o.customerId and s.orderId = o.id "
-        +"     JOIN surprise.orderpayment op "
+        +"     JOIN orderpayment op "
         +"     ON op.customerId = o.customerId and op.orderId = o.id "
-        +"     JOIN surprise.lineitem l "
+        +"     JOIN lineitem l "
         +"     ON l.customerId = o.customerId and l.orderId = o.id "  
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = l.productSKU "                       
         +" WHERE o.customerId=? and o.id=?" ;
 

@@ -54,7 +54,7 @@ ShipmentDao.prototype.findOneWithLineItems = function(id, callback){
     });
 };
 ShipmentDao.prototype.setlineItemStatus = function(connection, shipmentId,status, callback){
-    var sql="UPDATE surprise.LineItem SET status=?, lastModifiedTime=NOW()"
+    var sql="UPDATE LineItem SET status=?, lastModifiedTime=NOW()"
         +" WHERE shipmentId=?"
     var values=[status, shipmentId];
     
@@ -74,7 +74,7 @@ ShipmentDao.prototype.confirmPacked = function(id, callback){
         connection.beginTransaction(function(err) {
             if (err) { throw err; }
             _.setlineItemStatus(connection,id,1,function(r){
-                var sql="UPDATE surprise.Shipment SET status=?, packedTime=NOW(), lastModifiedTime=NOW()"
+                var sql="UPDATE Shipment SET status=?, packedTime=NOW(), lastModifiedTime=NOW()"
                     +" WHERE id=?"
                 var values=[1, id];
                 console.log(BaseDao.formatSQL(sql, values));
@@ -108,7 +108,7 @@ ShipmentDao.prototype.confirmShipped = function(id, callback){
         connection.beginTransaction(function(err) {
             if (err) { throw err; }
             _.setlineItemStatus(connection,id,2,function(r){
-                var sql="UPDATE surprise.Shipment SET status=?, shippedTime=NOW(), estimatedTime=NOW()+INTERVAL 2 DAY, lastModifiedTime=NOW()"
+                var sql="UPDATE Shipment SET status=?, shippedTime=NOW(), estimatedTime=NOW()+INTERVAL 2 DAY, lastModifiedTime=NOW()"
                     +" WHERE id=?"
                 var values=[2, id];
                 console.log(BaseDao.formatSQL(sql, values));
@@ -142,7 +142,7 @@ ShipmentDao.prototype.confirmDelivered = function(id, callback){
         connection.beginTransaction(function(err) {
             if (err) { throw err; }
             _.setlineItemStatus(connection,id,3,function(r){
-                var sql="UPDATE surprise.Shipment SET status=?, deliveredTime=NOW(), lastModifiedTime=NOW()"
+                var sql="UPDATE Shipment SET status=?, deliveredTime=NOW(), lastModifiedTime=NOW()"
                     +" WHERE id=?"
                 var values=[3, id];
                 console.log(BaseDao.formatSQL(sql, values));

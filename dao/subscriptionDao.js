@@ -21,7 +21,7 @@ SubscriptionDao.prototype.saveSubscription = function(customerId, address, card,
 };
 
 SubscriptionDao.prototype.updateSubscription = function(customerId, address, card, item, callback){
-    var sql="UPDATE surprise.Subscription SET quantity=?, frequency=?, addressId=?, cardId=?, lastModifiedTime=NOW()"
+    var sql="UPDATE Subscription SET quantity=?, frequency=?, addressId=?, cardId=?, lastModifiedTime=NOW()"
         +" WHERE id=? AND customerId=?"
     var i = item;
     var values=[i.quantity, i.frequency, address.id, card.id, item.id, customerId];
@@ -38,8 +38,8 @@ SubscriptionDao.prototype.updateSubscription = function(customerId, address, car
 SubscriptionDao.prototype.findByCustomerId = function(customerId,callback){
 
     var sql="SELECT s.*, p.name, p.description, p.contents, p.picture"
-        +" FROM surprise.Subscription s "
-        +"     JOIN surprise.product p "
+        +" FROM Subscription s "
+        +"     JOIN Product p "
         +"     ON p.sku = s.productSKU "
         +" WHERE s.customerId=?";
 
@@ -65,7 +65,7 @@ SubscriptionDao.prototype.switchStatus = function(id,customerId, fromS, toS, cal
 };
 
 SubscriptionDao.prototype.deleteSubscription = function(id,customerId,callback){
-   var sql="DELETE FROM surprise.Subscription WHERE id=? AND customerId=?";
+   var sql="DELETE FROM Subscription WHERE id=? AND customerId=?";
     var values=[id,customerId];
     var _=this;
     _.execute(sql,values,function(error, res){
@@ -77,7 +77,7 @@ SubscriptionDao.prototype.deleteSubscription = function(id,customerId,callback){
 
 SubscriptionDao.prototype.findOneById = function(id, callback){
     var sql="SELECT s.* , p.name, p.description, p.contents, p.picture, p.quantity AS productQuantity FROM surprise.Subscription s "
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = s.productSKU "
         +" WHERE s.id=? LIMIT 1;";
     var values=[id];
@@ -92,7 +92,7 @@ SubscriptionDao.prototype.findOneById = function(id, callback){
 SubscriptionDao.prototype.findOneAvaliable = function(callback){
 
     var sql="SELECT s.* , p.name, p.description, p.contents, p.picture FROM surprise.Subscription s "
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = s.productSKU "
         +" WHERE s.status=1 AND s.nextOrderTime<=NOW() LIMIT 1;";
     var _=this;
@@ -106,7 +106,7 @@ SubscriptionDao.prototype.findOneAvaliable = function(callback){
 
 SubscriptionDao.prototype.updateNextOrderTimeStatus = function(id, frequency, callback){
     
-    var sql="UPDATE surprise.Subscription SET nextOrderTime=nextOrderTime+INTERVAL "+ frequency +" MONTH, lastModifiedTime=NOW(), lastOrderTime=NOW()"
+    var sql="UPDATE Subscription SET nextOrderTime=nextOrderTime+INTERVAL "+ frequency +" MONTH, lastModifiedTime=NOW(), lastOrderTime=NOW()"
         +" WHERE id=?"
     var values=[id];
     var _=this;

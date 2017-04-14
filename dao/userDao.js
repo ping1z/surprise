@@ -12,7 +12,7 @@ UserDao.prototype.findByCustomerId = function(customerId,callback){
 };
 
 UserDao.prototype.createUser = function(customerId, password, callback) {
-    var sql="INSERT INTO surprise.User (customerId, password)"
+    var sql="INSERT INTO User (customerId, password)"
           +" VALUES (?, ?);"
     var values=[customerId, password];
     this.execute(sql,values,function(error, res){
