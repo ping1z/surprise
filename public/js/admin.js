@@ -414,7 +414,7 @@
                 }
                 
 			},
-			templateUrl:'/public/templates/ShipmentInfoTmpl.html'
+			templateUrl:'/public/templates/shipmentInfoTmpl.html'
 		};
 	});
 
