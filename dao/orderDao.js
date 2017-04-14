@@ -231,7 +231,7 @@ OrderDao.prototype.findById = function(customerId,orderId,callback){
         +" FROM surprise.Order o "
         +"     JOIN surprise.Shipment s "
         +"     ON s.customerId = o.customerId and s.orderId = o.id "
-        +"     JOIN Orderpayment op "
+        +"     JOIN surprise.OrderPayment op "
         +"     ON op.customerId = o.customerId and op.orderId = o.id "
         +"     JOIN surprise.Lineitem l "
         +"     ON l.customerId = o.customerId and l.orderId = o.id "  
