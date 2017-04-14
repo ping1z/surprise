@@ -37,9 +37,9 @@ LineItemDao.prototype.findByCustomerId = function(customerId,callback){
 
     var sql="SELECT l.*, p.description, p.picture, s.receiverName, s.trackingNumber, s.packedTime, s.shippedTime, s.deliveredTime, s.estimatedTime"
         +" FROM surprise.LineItem l "
-        +"     JOIN surprise.product p "
+        +"     JOIN Product p "
         +"     ON p.sku = l.productSKU "
-        +"     JOIN surprise.shipment s "
+        +"     JOIN Shipment s "
         +"     ON s.orderId = l.orderId "
         +" WHERE l.customerId=?";
 
