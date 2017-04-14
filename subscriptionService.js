@@ -69,8 +69,9 @@ function createSubscriptionOrderService(){
 }
 
 var cronJob = require('cron').CronJob;
-//00 00 3 * * *
-var myJob = new cronJob('*0 * * * * *', function(){
+//00 00 3 * * * 
+var myJob = new cronJob('*/5 * * * * *', function(){
+    console.log("start job...");
     createSubscriptionOrderService();
 });
 
