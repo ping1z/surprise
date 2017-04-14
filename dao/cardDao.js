@@ -74,7 +74,7 @@ CardDao.prototype.setAsDefault = function(id,customerId,callback){
 };
 
 CardDao.prototype.listCard = function(id){
-   var sql="SELECT * FROM surprise.card"
+   var sql="SELECT * FROM surprise.Card"
           +" WHERE id=?";
     var values=[id];
     var _=this;

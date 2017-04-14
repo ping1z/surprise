@@ -86,7 +86,7 @@ OrderDao.prototype.saveOrderPayment = function(connection, customerId, order,car
 
 OrderDao.prototype.saveShipment = function(connection, customerId, order,address, callback){
     var trackingNumber = uuid.v1();
-    var sql="INSERT INTO surprise.shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,packedTime,shippedTime,deliveredTime,estimatedTime,createdTime,lastModifiedTime)"
+    var sql="INSERT INTO surprise.Shipment (customerId,status,orderId,shippingMethod,shippingCompany,trackingNumber,receiverName,addressLine1,addressLine2,city,state,country,zipcode,telephone,packedTime,shippedTime,deliveredTime,estimatedTime,createdTime,lastModifiedTime)"
             +" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?,? , ?, ?, ?,?,?, null,null,null,null,NOW(),NOW())";
     var o = order;
     var values=[customerId,0,order.id,"COURIER","UPS", trackingNumber, address.name, address.line1, address.line2, address.city, address.state,"Unitied States",address.zipcode,address.telephone];
@@ -111,7 +111,7 @@ OrderDao.prototype.saveLineItems = function(connection, customerId, order, shipm
         var values=[customerId,0,order.id,c.sku,shipmentId,c.name, c.price, c.quantity];
         sql = BaseDao.formatSQL(sql, values);
         if(customerId!=0){
-            var d ="DELETE FROM surprise.cart WHERE customerId=? AND productSKU=?;";
+            var d ="DELETE FROM surprise.Cart WHERE customerId=? AND productSKU=?;";
             values=[customerId,c.sku]
             sql += BaseDao.formatSQL(d, values);
         }
