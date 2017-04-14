@@ -8,13 +8,13 @@ var LocalStrategy = require('passport-local').Strategy;
 //var bcrypt = require('bcrypt');
 
 // load up the models we need: CustomerDao model.
-var CustomerDao = require("./dao/CustomerDao.js");
+var CustomerDao = require("./dao/customerDao.js");
 
 // create a new instance
 var Customer = new CustomerDao();
 
 // load up the models we need: CustomerDao model.
-var AdminDao = require("./dao/AdminDao.js");
+var AdminDao = require("./dao/adminDao.js");
 
 // create a new instance
 var Admin = new AdminDao();
