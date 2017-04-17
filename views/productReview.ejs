@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <%- include('global/_head', {title:"Welecom to Surprise!"}); %>
+    <body>
+        <%- include('global/_topBanner'); %>
+        <section class="main-content">
+            <div class="main-content-box">
+                <div class="main-content-title" style="font-size:20px;font-weight:700;padding-left:25px;padding-top:10px;">
+                    Product Review
+                </div>
+                <div class="product-detail">
+                    <div class="product-review-left">
+                        <img src="/public/image/<%= product.picture %>" width="200" height="200" alt="Product Details">
+                    </div>
+                    <div class="product-detail-right">
+                        <div class="product-details-name">
+                            <%= product.productName %>
+                        </div>
+                        
+                        <div class="product-details-price">
+                            <strong>Quantity - <%= product.quantity %></strong>
+                        </div>
+                        <div class="product-details-price">
+                            <span class="product-details-price-currency">$<%= product.price %> </span>
+                        </div>
+                    </div>
+                    
+                </div>  
+
+                <div class="product-review-content">
+                    <form class="gform-wrapper" action="/saveProductReview" method="post"> 
+                        <input type="hidden" name="lineItemId" value=<%= product.id %>>
+                        <div class="gform-row">
+                            <div class="gform-col-3">
+                                <div class="gform-input-group">
+                                    <label for="rate">Rate</label>
+                                    <select name="rate">
+                                        <option value="1" >1</option>
+                                        <option value="2" >2</option>
+                                        <option value="3" >3</option>
+                                        <option value="4" >4</option>
+                                        <option value="5" >5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-12">
+                                <div class="gform-input-group">
+                                    <label for="comment">Comment</label>
+                                    <textarea name="comment" rows="4" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gform-row">
+                            <div class="gform-col-4">
+                                <button>Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>  
+            </div>
+        </section>
+        <%- include('global/_footer'); %>
+        <script type="text/javascript">
+
+        </script>
+    </body>
+</html>
