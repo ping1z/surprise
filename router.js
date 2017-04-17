@@ -22,6 +22,8 @@ var TaxRateDao = require("./dao/taxRateDao.js");
 var raxRateDao = new TaxRateDao();
 var SubscriptionDao = require("./dao/subscriptionDao.js");
 var subscription = new SubscriptionDao();
+var ReviewDao = require("./dao/reviewDao.js");
+var review = new ReviewDao();
 // If the req is needed to be pre-process, do it here.
 router.use(function timeLog (req, res, next) {
   next()
@@ -272,16 +274,47 @@ router.get('/searchProduct',
 
 router.get('/productDetail',
   function(req, res){
-    var sku = req.query.sku;
+    var sku = parseInt(req.query.sku);
     var hasLogin = (req.user&&req.user.type=='customer')?true:false;
     product.findOneBySku(sku,"sku,name,description,occasion,department,gender,age,price,subscribePrice,quantity,picture",function(e,r){
+        review.listReview(sku,10,function(e,reviews){
           if(!hasLogin){
-              res.render("productDetail",{hasLogin:hasLogin,cartCount:0,product:r});
+              res.render("productDetail",{hasLogin:hasLogin,cartCount:0,product:r, reviewList:reviews});
           }else{
               cart.getCartItemCount(req.user.id,function(err, count){
-                res.render("productDetail",{hasLogin:hasLogin,cartCount:count,product:r});
+                res.render("productDetail",{hasLogin:hasLogin,cartCount:count,product:r, reviewList:reviews});
               })
           }
+        });
+    });
+});
+
+router.get('/productReview',auth.ensureLoggedIn(),
+  function(req, res){
+    var lineItemId = parseInt(req.query.lineItemId);
+    lineItem.findOneById(lineItemId,function(e,r){
+        if(r.customerId != req.user.id || r.status<3){
+          res.redirect("/");
+        }
+        cart.getCartItemCount(req.user.id,function(err, count){
+          res.render("productReview",{hasLogin:true,cartCount:count,product:r});
+        })
+    });
+});
+
+router.post('/saveProductReview',auth.ensureLoggedIn(),
+  function(req, res){
+    var lineItemId = parseInt(req.body.lineItemId);
+    var rate = parseInt(req.body.rate);
+    var comment = req.body.comment
+    lineItem.findOneById(lineItemId,function(e,line){
+        if(line.customerId != req.user.id || line.status<3){
+          res.redirect("/");
+        }
+        review.saveReview(line.productSKU,req.user.id,req.user.firstName,rate,comment,function(e,r){
+            res.redirect("/productDetail?sku="+line.productSKU);
+        })
+
     });
 });
 

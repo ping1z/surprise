@@ -6,6 +6,22 @@ var LineItemDao = function(){
 
 LineItemDao.prototype = Object.create(BaseDao.prototype);
 
+LineItemDao.prototype.findOneById = function(id, callback){
+   var sql="SELECT l.*, p.description, p.picture"
+        +" FROM surprise.LineItem l "
+        +"     JOIN surprise.Product p "
+        +"     ON p.sku = l.productSKU "
+        +" WHERE l.id=? LIMIT 1 ";
+
+    var values=[id];
+    console.log(BaseDao.formatSQL(sql, values));
+    var _=this;
+    _.execute(sql,values,function(error, res){
+        console.log("findOneById",error,res);
+        callback && callback(error, res[0]);
+    });
+};
+
 LineItemDao.prototype.findOneByIdAndUser = function(id, customerId, callback){
     //columns, query, orderBy, limit, offset, callback
     this.findOne(null, "`id`="+id+" AND `customerId`="+ customerId,function(error, addr){

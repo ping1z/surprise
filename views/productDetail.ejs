@@ -51,7 +51,28 @@
                           <% } %>
                     </div>
                     
-                </div>    
+                </div>  
+
+                <div class="product-review-list">
+                    <ul>
+                        <% reviewList.forEach(function(item){ %>
+                        <li class="product-review-item">
+                            <div class="product-review-item-left">
+                                <img src="/public/image/rate-icon-<%= item.rate %>.png" width="50" height="50" alt="<%= item.rate %>" style="border:1px solid #ccc;border-radius:10px;">
+                            </div>
+                            <div class="product-review-item-right">
+                                <div>
+                                    <span class="product-review-item-customer">By <strong><%= item.customerName %></strong></span>
+                                    <span class="product-review-item-date">on <%=item.createdTime.toDateString() %></span>
+                                </div>
+                                <div class="product-review-item-comment">
+                                    <%= item.comment %>
+                                </div>
+                            </div>
+                        </li>  
+                         <% }); %>     
+                    </ul>
+                </div>  
             </div>
         </section>
         <%- include('global/_footer'); %>

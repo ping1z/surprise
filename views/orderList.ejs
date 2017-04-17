@@ -62,7 +62,7 @@
                                             <li><button class="light"><a href="/returnItem?lineItemId=<%= item.id %>">Return item</a></button></li>
                                         <% } %>
                                         <% if (item.status>=3) { %>
-                                        <li> <button>Write a product review</button></li>
+                                        <li> <button><a href="/productReview?lineItemId=<%= item.id %>">Write a product review</a></button></li>
                                         <% } %>
                                     </ul>
                                 </div>
