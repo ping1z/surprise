@@ -2,11 +2,13 @@
 
 This repository is a school project for practising database design and web programming. 
 Use [Node.js](https://nodejs.org/en/)with [Express.js](https://expressjs.com/) framework.
-Use [Mysql](https://www.mysql.com/) as database.
+Use [Mysql](https://www.mysql.com/) as main database.
+Also use [Mongodb](https://www.mongodb.com/) to store part of the data.
 
 ## Dependence
 Install Node.js v6.9.4.
 Install Mysql and Mysql workbrench.
+Install Mongodb v3.4.3
 
 PS: Suggest Use [Visual Studio Code](http://code.visualstudio.com/) as and IDE for this project.
 
