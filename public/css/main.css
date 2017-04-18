@@ -632,6 +632,15 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     padding:0 25px;
 
 }
+.product-review-title{
+    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #111;
+    margin-bottom: 10px;
+
+}
 .product-review-item{
     width:100%;
     min-height:60px;
