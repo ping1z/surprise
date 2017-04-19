@@ -30,17 +30,14 @@
                 <div class="product-review-content">
                     <form class="gform-wrapper" action="/saveProductReview" method="post"> 
                         <input type="hidden" name="lineItemId" value=<%= product.id %>>
+                        <input type="hidden" name="rate">
                         <div class="gform-row">
                             <div class="gform-col-3">
                                 <div class="gform-input-group">
                                     <label for="rate">Rate</label>
-                                    <select name="rate">
-                                        <option value="1" >1</option>
-                                        <option value="2" >2</option>
-                                        <option value="3" >3</option>
-                                        <option value="4" >4</option>
-                                        <option value="5" >5</option>
-                                    </select>
+                                    <div class="gform-input-rating">
+                                        <span data-rate="5">☆</span><span data-rate="4">☆</span><span data-rate="3">☆</span><span data-rate="2">☆</span><span data-rate="1">☆</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,6 +61,23 @@
         <%- include('global/_footer'); %>
         <script type="text/javascript">
 
+            $(".gform-input-rating span").on('click',function(e){
+                var newRate = $(this).data('rate');
+                //console.log(rate);
+                $('input[name=rate]').val(newRate);
+
+                
+                $.each($(".gform-input-rating span"), function( index, value ) {
+                    var rate = $(this).data('rate');
+                    console.log(rate);
+                    if(rate<=newRate){
+                        $(this).addClass('checked');
+                        
+                    }else{
+                         $(this).removeClass('checked');
+                    }
+                });
+            });
         </script>
     </body>
 </html>
