@@ -156,6 +156,28 @@ a{color: inherit;text-decoration: inherit;cursor: inherit;cursor: pointer;}
     border-bottom:1px solid #ddd;
     margin:0;
 }
+
+.gform-input-rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.gform-input-rating  > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+  font-size: 2.25em;
+}
+.gform-input-rating  > span:hover:before,
+.gform-input-rating  > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+}
+
+.gform-input-rating  > span.checked:before{
+   content: "\2605";
+   position: absolute;
+}
+
 .top-banner{
     position:relative;
     background-color:#fff;
